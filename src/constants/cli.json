@@ -1,0 +1,93 @@
+{
+  "welcome": "Welcome to John Doe's Portfolio CLI!\nType '/help' to see available commands.",
+  "help": "Available commands:\n\n- /help: Show this help message\n- /about: Display information about me\n- /projects: List all projects\n- /project [number]: Show details for a specific project\n- /skills: List my skills by category\n- /contact: Show contact information\n- /clear: Clear the terminal\n- /gui: Switch to GUI mode\n\nEaster Egg Commands:\n- /joke: Tell a random joke\n- /ascii: Display ASCII art\n- /quote: Get a random quote\n- /game: Play a simple game",
+  "commands": {
+    "help": {
+      "description": "Show available commands",
+      "usage": "/help"
+    },
+    "about": {
+      "description": "Display information about me",
+      "usage": "/about"
+    },
+    "projects": {
+      "description": "List all projects",
+      "usage": "/projects"
+    },
+    "project": {
+      "description": "Show details for a specific project",
+      "usage": "/project [number]",
+      "example": "/project 1"
+    },
+    "skills": {
+      "description": "List my skills by category",
+      "usage": "/skills"
+    },
+    "contact": {
+      "description": "Show contact information",
+      "usage": "/contact"
+    },
+    "clear": {
+      "description": "Clear the terminal",
+      "usage": "/clear"
+    },
+    "gui": {
+      "description": "Switch to GUI mode",
+      "usage": "/gui"
+    }
+  },
+  "loading": {
+    "projects": "Loading project database",
+    "skills": "Analyzing skill matrix",
+    "about": "Retrieving personal information"
+  },
+  "customFunctions": {
+    "joke": {
+      "type": "joke",
+      "setup": "Why do programmers prefer dark mode?",
+      "punchline": "Because light attracts bugs!"
+    },
+    "quote": {
+      "type": "random",
+      "options": [
+        "The best way to predict the future is to invent it. - Alan Kay",
+        "Code is like humor. When you have to explain it, it's bad. - Cory House",
+        "First, solve the problem. Then, write the code. - John Johnson",
+        "The most disastrous thing that you can ever learn is your first programming language. - Alan Kay",
+        "Programming isn't about what you know; it's about what you can figure out. - Chris Pine"
+      ]
+    },
+    "ascii": {
+      "type": "ascii",
+      "art": "  _____     _____    _____   _____   _____   _____   _     _   _     _   _   _ \n /     \\   /     \\  /     \\ /     \\ /     \\ /     \\ | \\   | | | \\   | | | \\ | |\n|  ___  | | | | | | \\_____/ \\_____/| |___| | \\_____/| |\\  | | | |   | | | | | |\n| |   | | | | | | |   | |     | |  | |   | |   | |  | | \\ | | | |   | | | | | |\n| |   | | | | | | |   | |     | |  | |   | |   | |  | |  \\| | | |   | | | | | |\n| |___| | | |_| | |   | |     | |  | |___| |   | |  | |   \\ | \\ \\_/ /  | |_| |\n \\_____/   \\_____/    |_|     |_|   \\_____/    |_|  |_|    \\_|  \\___/    \\___/ "
+    },
+    "game": {
+      "type": "text",
+      "content": "Let's play a game of Rock, Paper, Scissors!\n\nType one of the following:\n/rock\n/paper\n/scissors"
+    },
+    "rock": {
+      "type": "random",
+      "options": [
+        "You chose rock. I chose paper. I win!",
+        "You chose rock. I chose scissors. You win!",
+        "You chose rock. I chose rock. It's a tie!"
+      ]
+    },
+    "paper": {
+      "type": "random",
+      "options": [
+        "You chose paper. I chose scissors. I win!",
+        "You chose paper. I chose rock. You win!",
+        "You chose paper. I chose paper. It's a tie!"
+      ]
+    },
+    "scissors": {
+      "type": "random",
+      "options": [
+        "You chose scissors. I chose rock. I win!",
+        "You chose scissors. I chose paper. You win!",
+        "You chose scissors. I chose scissors. It's a tie!"
+      ]
+    }
+  }
+}

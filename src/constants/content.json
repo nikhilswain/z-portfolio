@@ -1,0 +1,128 @@
+{
+  "name": "John Doe",
+  "title": "Full Stack Developer",
+  "about": {
+    "summary": "I'm a passionate full stack developer with expertise in modern web technologies. I love building intuitive and performant applications that solve real-world problems.",
+    "photo": "/placeholder.img?height=400&width=400",
+    "bio": [
+      "With over 5 years of experience in web development, I've worked on a variety of projects from small business websites to complex enterprise applications.",
+      "I'm particularly interested in React, TypeScript, and serverless architectures. I enjoy learning new technologies and sharing my knowledge with the community."
+    ],
+    "education": [
+      {
+        "degree": "Master of Computer Science",
+        "institution": "University of Technology",
+        "year": "2018 - 2020"
+      },
+      {
+        "degree": "Bachelor of Software Engineering",
+        "institution": "State University",
+        "year": "2014 - 2018"
+      }
+    ],
+    "experience": [
+      {
+        "position": "Senior Frontend Developer",
+        "company": "Tech Solutions Inc.",
+        "duration": "2021 - Present",
+        "description": "Leading the frontend development team, implementing new features, and optimizing performance."
+      },
+      {
+        "position": "Full Stack Developer",
+        "company": "Digital Innovations",
+        "duration": "2018 - 2021",
+        "description": "Developed and maintained web applications using React, Node.js, and MongoDB."
+      },
+      {
+        "position": "Junior Web Developer",
+        "company": "WebCraft Agency",
+        "duration": "2016 - 2018",
+        "description": "Built responsive websites and implemented UI designs for various clients."
+      }
+    ]
+  },
+  "projects": [
+    {
+      "title": "E-commerce Platform",
+      "description": "A full-featured e-commerce platform with product management, cart functionality, and payment processing.",
+      "image": "/placeholder.img?height=500&width=800",
+      "technologies": ["React", "Node.js", "MongoDB", "Stripe", "Redux"],
+      "link": "https://example.com/ecommerce",
+      "github": "https://github.com/johndoe/ecommerce",
+      "featured": true
+    },
+    {
+      "title": "Task Management App",
+      "description": "A collaborative task management application with real-time updates and team features.",
+      "image": "/placeholder.img?height=500&width=800",
+      "technologies": ["React", "Firebase", "Tailwind CSS", "TypeScript"],
+      "link": "https://example.com/taskapp",
+      "github": "https://github.com/johndoe/taskapp",
+      "featured": true
+    },
+    {
+      "title": "Weather Dashboard",
+      "description": "A weather application that displays current and forecasted weather data for any location.",
+      "image": "/placeholder.img?height=300&width=500",
+      "technologies": ["JavaScript", "OpenWeather API", "Chart.js"],
+      "link": "https://example.com/weather",
+      "github": "https://github.com/johndoe/weather"
+    },
+    {
+      "title": "Portfolio Website",
+      "description": "A personal portfolio website showcasing my projects and skills.",
+      "image": "/placeholder.img?height=300&width=500",
+      "technologies": ["Next.js", "Tailwind CSS", "Framer Motion"],
+      "link": "https://example.com/portfolio",
+      "github": "https://github.com/johndoe/portfolio"
+    },
+    {
+      "title": "Recipe Finder",
+      "description": "An application to search and save recipes based on ingredients and dietary preferences.",
+      "image": "/placeholder.img?height=300&width=500",
+      "technologies": ["React", "Spoonacular API", "CSS Modules"],
+      "link": "https://example.com/recipes",
+      "github": "https://github.com/johndoe/recipes"
+    },
+    {
+      "title": "Budget Tracker",
+      "description": "A personal finance application to track income, expenses, and savings goals.",
+      "image": "/placeholder.img?height=300&width=500",
+      "technologies": ["Vue.js", "Express", "PostgreSQL"],
+      "link": "https://example.com/budget",
+      "github": "https://github.com/johndoe/budget"
+    }
+  ],
+  "skills": {
+    "frontend": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Vue.js",
+      "Next.js",
+      "Tailwind CSS",
+      "Framer Motion"
+    ],
+    "backend": [
+      "Node.js",
+      "Express",
+      "Python",
+      "Django",
+      "GraphQL",
+      "REST API"
+    ],
+    "database": ["MongoDB", "PostgreSQL", "MySQL", "Firebase"],
+    "devops": ["Git", "GitHub Actions", "Docker", "AWS", "Vercel", "Netlify"],
+    "tools": ["VS Code", "Figma", "Postman", "Jest", "Cypress"]
+  },
+  "contact": {
+    "email": "john.doe@example.com",
+    "phone": "+1 (555) 123-4567",
+    "location": "San Francisco, CA",
+    "github": "https://github.com/johndoe",
+    "linkedin": "https://linkedin.com/in/johndoe",
+    "twitter": "https://twitter.com/johndoe"
+  }
+}
