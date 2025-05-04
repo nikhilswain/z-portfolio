@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  type ReactNode,
+  useEffect,
+} from "react";
 import portfolioData from "@/constants/content.json";
 import cliData from "@/constants/cli.json";
 
@@ -12,7 +18,12 @@ interface ModeContextType {
 const ModeContext = createContext<ModeContextType | undefined>(undefined);
 
 export function ModeProvider({ children }: { children: ReactNode }) {
-  const [currentMode, setCurrentMode] = useState<string>("gui");
+  const [currentMode, setCurrentMode] = useState<string>("select");
+
+  // Reset mode to 'select' on page reload
+  useEffect(() => {
+    setCurrentMode("select");
+  }, []);
 
   const value = {
     portfolioData,

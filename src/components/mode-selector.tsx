@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import {
   Card,
   CardContent,
@@ -12,18 +11,16 @@ import {
 import { Monitor, Terminal } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
+import { useMode } from "./mode-provider";
 
-interface ModeSelectorProps {
-  onSelect: (mode: string) => void;
-  isTransitioning: boolean;
-}
-
-export function ModeSelector({ onSelect, isTransitioning }: ModeSelectorProps) {
+export function ModeSelector() {
   const [activeCard, setActiveCard] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { setCurrentMode } = useMode();
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || isTransitioning) return;
 
     const cards = containerRef.current.querySelectorAll(".mode-card");
 
@@ -40,8 +37,13 @@ export function ModeSelector({ onSelect, isTransitioning }: ModeSelectorProps) {
 
   const handleCardClick = (mode: string) => {
     if (isTransitioning) return;
+    setIsTransitioning(true);
     setActiveCard(mode);
-    onSelect(mode);
+
+    // Delay mode switch until card animation completes
+    setTimeout(() => {
+      setCurrentMode(mode);
+    }, 500); // Match the duration in the transition class
   };
 
   return (
@@ -55,11 +57,13 @@ export function ModeSelector({ onSelect, isTransitioning }: ModeSelectorProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          whileHover={{ scale: 1.03 }}
+          whileHover={!isTransitioning ? { scale: 1.03 } : {}}
           className="mode-card relative"
         >
           <Card
-            className="h-full cursor-pointer border-2 border-zinc-800 hover:border-pink-500 bg-zinc-900 text-white overflow-hidden group"
+            className={`h-full cursor-pointer border-2 border-zinc-800 hover:border-pink-500 bg-zinc-900 text-white overflow-hidden group ${
+              isTransitioning ? "pointer-events-none" : ""
+            }`}
             onClick={() => handleCardClick("gui")}
           >
             {/* Glow effect */}
@@ -68,12 +72,13 @@ export function ModeSelector({ onSelect, isTransitioning }: ModeSelectorProps) {
             </div>
 
             {/* Content */}
-            <div
-              className={`transition-all duration-500 ${
+            <motion.div
+              animate={
                 activeCard === "gui"
-                  ? "scale-[2] opacity-0 pointer-events-none"
-                  : ""
-              }`}
+                  ? { scale: 2, opacity: 0 }
+                  : { scale: 1, opacity: 1 }
+              }
+              transition={{ duration: 0.5 }}
             >
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-pink-500">
@@ -94,7 +99,7 @@ export function ModeSelector({ onSelect, isTransitioning }: ModeSelectorProps) {
                   </div>
                 </div>
               </CardContent>
-            </div>
+            </motion.div>
           </Card>
         </motion.div>
 
@@ -102,11 +107,13 @@ export function ModeSelector({ onSelect, isTransitioning }: ModeSelectorProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          whileHover={{ scale: 1.03 }}
+          whileHover={!isTransitioning ? { scale: 1.03 } : {}}
           className="mode-card relative"
         >
           <Card
-            className="h-full cursor-pointer border-2 border-zinc-800 hover:border-cyan-500 bg-zinc-900 text-white overflow-hidden group"
+            className={`h-full cursor-pointer border-2 border-zinc-800 hover:border-cyan-500 bg-zinc-900 text-white overflow-hidden group ${
+              isTransitioning ? "pointer-events-none" : ""
+            }`}
             onClick={() => handleCardClick("cli")}
           >
             {/* Glow effect */}
@@ -115,12 +122,13 @@ export function ModeSelector({ onSelect, isTransitioning }: ModeSelectorProps) {
             </div>
 
             {/* Content */}
-            <div
-              className={`transition-all duration-500 ${
+            <motion.div
+              animate={
                 activeCard === "cli"
-                  ? "scale-[2] opacity-0 pointer-events-none"
-                  : ""
-              }`}
+                  ? { scale: 2, opacity: 0 }
+                  : { scale: 1, opacity: 1 }
+              }
+              transition={{ duration: 0.5 }}
             >
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-cyan-500">
@@ -147,7 +155,7 @@ export function ModeSelector({ onSelect, isTransitioning }: ModeSelectorProps) {
                   </div>
                 </div>
               </CardContent>
-            </div>
+            </motion.div>
           </Card>
         </motion.div>
       </div>

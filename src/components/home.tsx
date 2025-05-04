@@ -1,36 +1,53 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { ModeSelector } from "@/components/mode-selector";
-// import { ThemeProvider } from "@/components/theme-provider";
+import { GuiMode } from "@/components/gui-mode";
+import { CliMode } from "@/components/cli-mode";
+import { useMode } from "./mode-provider";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function Home() {
-  const navigate = useNavigate();
+  const { currentMode } = useMode();
+
   // Force dark mode
   useEffect(() => {
     document.documentElement.classList.add("dark");
   }, []);
 
-  const handleModeSelect = (mode: string) => {
-    // Navigate to the selected mode route
-    navigate(`/${mode.toLowerCase()}`);
-  };
-
   return (
-    // <ThemeProvider>
-    <div className="dark">
-      <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait">
+      {(!currentMode || currentMode === "select") && (
         <motion.div
           key="selector"
-          initial={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.5 }}
-          className="min-h-screen w-full"
+          transition={{ duration: 0.3 }}
         >
-          <ModeSelector onSelect={handleModeSelect} isTransitioning={false} />
+          <ModeSelector />
         </motion.div>
-      </AnimatePresence>
-    </div>
-    // </ThemeProvider>
+      )}
+      {currentMode === "gui" && (
+        <motion.div
+          key="gui"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <GuiMode />
+        </motion.div>
+      )}
+      {currentMode === "cli" && (
+        <motion.div
+          key="cli"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <CliMode />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }

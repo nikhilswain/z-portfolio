@@ -1,10 +1,8 @@
 ---
-import Home from '@/components/home';
 import Layout from '../layouts/Layout.astro';
-import { RouterIsland } from "@/components/router-island";
-
+import { PortfolioRoot } from '@/components/portfolio-root';
 ---
 
-<Layout >
-		<RouterIsland client:only />
+<Layout>
+  <PortfolioRoot client:only="react" />
 </Layout>

@@ -1,19 +1,14 @@
 "use client";
 
 import type React from "react";
-
 import { useState, useEffect, useRef } from "react";
 import { useMode } from "@/components/mode-provider";
 import { Button } from "@/components/ui/button";
 import { Monitor, X, Minus, Square } from "lucide-react";
 import { motion } from "framer-motion";
 
-interface CliModeProps {
-  onSwitchMode: () => void;
-}
-
-export function CliMode({ onSwitchMode }: CliModeProps) {
-  const { portfolioData, cliData } = useMode();
+export function CliMode() {
+  const { portfolioData, cliData, setCurrentMode } = useMode();
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<CommandResult[]>([
     { command: "", output: cliData.welcome },
@@ -133,7 +128,7 @@ export function CliMode({ onSwitchMode }: CliModeProps) {
       setIsProcessing(false);
       return;
     } else if (command === "/gui") {
-      onSwitchMode();
+      setCurrentMode("gui");
       return;
     } else if (command === "/about") {
       await simulateLoading(command);
@@ -255,7 +250,7 @@ export function CliMode({ onSwitchMode }: CliModeProps) {
               variant="ghost"
               size="icon"
               className="h-6 w-6 text-zinc-400 hover:text-zinc-200"
-              onClick={onSwitchMode}
+              onClick={() => setCurrentMode("gui")}
             >
               <X className="h-3 w-3" />
             </Button>
@@ -322,7 +317,7 @@ export function CliMode({ onSwitchMode }: CliModeProps) {
         variant="outline"
         size="icon"
         className="fixed top-4 right-4 border-pink-500 text-pink-500 hover:bg-pink-500/10"
-        onClick={onSwitchMode}
+        onClick={() => setCurrentMode("gui")}
         title="Switch to GUI Mode"
       >
         <Monitor className="h-4 w-4" />
