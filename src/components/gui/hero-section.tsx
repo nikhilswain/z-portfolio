@@ -32,7 +32,7 @@ export function HeroSection({ data, onSwitchMode }: HeroSectionProps) {
       <motion.div style={{ y: smoothY }} className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-pink-500/10 to-cyan-500/10 opacity-30"></div>
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(255,0,128,0.15),_transparent_70%)]"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,_rgba(255,255,255,0.05)_1px,_transparent_1px),_linear-gradient(to_bottom,_rgba(255,255,255,0.05)_1px,_transparent_1px)] bg-[size:40px_40px]"></div>
+        <div className="absolute inset-0 bg-grid-pattern bg-[length:40px_40px]"></div>
       </motion.div>
 
       <motion.div
@@ -63,7 +63,7 @@ export function HeroSection({ data, onSwitchMode }: HeroSectionProps) {
             <img
               src={data.about.photo || "/placeholder.svg?height=200&width=200"}
               alt={data.name}
-              className="object-cover"
+              className="absolute inset-0 w-full h-full object-cover"
             />
           </motion.div>
 

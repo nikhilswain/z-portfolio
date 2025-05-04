@@ -1,9 +1,9 @@
 {
-  "name": "John Doe",
-  "title": "Full Stack Developer",
+  "name": "Nikhil Kumar Swain",
+  "title": "Front End Developer",
   "about": {
     "summary": "I'm a passionate full stack developer with expertise in modern web technologies. I love building intuitive and performant applications that solve real-world problems.",
-    "photo": "https://placehold.co/?height=400&width=400",
+    "photo": "/src/assets/luffyGrin.jpg",
     "bio": [
       "With over 5 years of experience in web development, I've worked on a variety of projects from small business websites to complex enterprise applications.",
       "I'm particularly interested in React, TypeScript, and serverless architectures. I enjoy learning new technologies and sharing my knowledge with the community."
