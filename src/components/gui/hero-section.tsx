@@ -1,5 +1,3 @@
-"use client";
-
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Terminal, ChevronDown } from "lucide-react";

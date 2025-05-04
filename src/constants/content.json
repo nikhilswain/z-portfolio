@@ -28,7 +28,7 @@
         "description": "Leading the frontend development team, implementing new features, and optimizing performance."
       },
       {
-        "position": "Full Stack Developer",
+        "position": "Front End Developer",
         "company": "Digital Innovations",
         "duration": "2018 - 2021",
         "description": "Developed and maintained web applications using React, Node.js, and MongoDB."
@@ -45,7 +45,7 @@
     {
       "title": "E-commerce Platform",
       "description": "A full-featured e-commerce platform with product management, cart functionality, and payment processing.",
-      "image": "https://placehold.co/500x500",
+      "image": "https://placehold.co/500x800",
       "technologies": ["React", "Node.js", "MongoDB", "Stripe", "Redux"],
       "link": "https://example.com/ecommerce",
       "github": "https://github.com/johndoe/ecommerce",
@@ -54,7 +54,7 @@
     {
       "title": "Task Management App",
       "description": "A collaborative task management application with real-time updates and team features.",
-      "image": "https://placehold.co/500x500",
+      "image": "https://placehold.co/500x800",
       "technologies": ["React", "Firebase", "Tailwind CSS", "TypeScript"],
       "link": "https://example.com/taskapp",
       "github": "https://github.com/johndoe/taskapp",
@@ -117,6 +117,18 @@
     "devops": ["Git", "GitHub Actions", "Docker", "AWS", "Vercel", "Netlify"],
     "tools": ["VS Code", "Figma", "Postman", "Jest", "Cypress"]
   },
+  "funFacts": [
+    "I once coded for 36 hours straight to win a hackathon!",
+    "My first computer was a Commodore 64 that I got from a garage sale.",
+    "I can type at a speed of 120 words per minute.",
+    "I've contributed to over 15 open-source projects.",
+    "I learned to code by building a game when I was 12 years old.",
+    "I collect vintage programming books from the 80s and 90s.",
+    "My workspace has 3 monitors and over 20 plants.",
+    "I've mentored more than 50 junior developers throughout my career.",
+    "My favorite debugging tool is still good old console.log().",
+    "I once fixed a critical bug while on vacation at the beach."
+  ],
   "contact": {
     "email": "john.doe@example.com",
     "phone": "+1 (555) 123-4567",
