@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useMode } from "@/components/mode-provider";
 import { HeroSection } from "@/components/gui/hero-section";
 import { AboutSection } from "./gui/about-section";
+import { SkillsSection } from "./gui/skills-section";
 
 export function GuiMode() {
   const { portfolioData, setCurrentMode } = useMode();
@@ -28,6 +29,7 @@ export function GuiMode() {
     <div className="min-h-screen bg-black text-white overflow-x-hidden">
       <HeroSection data={portfolioData} onSwitchMode={handleSwitchMode} />
       <AboutSection data={portfolioData?.about} />
+      <SkillsSection data={portfolioData?.skills} />
     </div>
   );
 }

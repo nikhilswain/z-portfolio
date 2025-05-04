@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { BackgroundBeams } from "@/components/ui/background-beams";
+import { TextReveal } from "@/components/ui/text-reveal";
 
 interface AboutSectionProps {
   data: {
@@ -36,30 +37,18 @@ export function AboutSection({ data }: AboutSectionProps) {
             <div className="w-24 h-1 bg-gradient-to-r from-pink-500 to-cyan-500 mx-auto"></div>
           </motion.div>
 
-          {/* Bio Paragraphs with Parallax */}
-          <div className="max-w-3xl mx-auto space-y-8 mt-12">
+          {/* Bio Paragraphs with TextReveal */}
+          <div className="max-w-3xl mx-auto space-y-32 mt-12">
             {data?.bio?.map((paragraph, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
-                viewport={{ once: true, margin: "-100px" }}
-                className="relative"
+                viewport={{ once: true }}
+                className="relative m-0"
               >
-                <motion.p
-                  className="text-lg text-zinc-300 leading-relaxed text-center relative z-10"
-                  whileHover={{ scale: 1.01 }}
-                >
-                  {paragraph}
-                </motion.p>
-
-                {/* Highlight effect on hover */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-pink-500/0 via-pink-500/5 to-cyan-500/0 rounded-lg opacity-0"
-                  whileHover={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                ></motion.div>
+                <TextReveal className="overflow-hidden">{paragraph}</TextReveal>
               </motion.div>
             ))}
           </div>
@@ -135,7 +124,7 @@ export function AboutSection({ data }: AboutSectionProps) {
                         viewport={{ once: true }}
                         whileHover={{ y: -5 }}
                       >
-                        <div className="bg-zinc-900/50 backdrop-blur-sm p-6 rounded-lg border border-zinc-800 hover:border-pink-500/30 transition-all duration-300 shadow-lg">
+                        <div className="bg-zinc-900/50 backdrop-blur-sm p-6 rounded-lg border border-zinc-800 hover:border-pink-500/30 transition-all duration-300 shadow-lg cursor-none">
                           <h4 className="text-xl font-bold text-white mb-1">
                             {exp.position}
                           </h4>
@@ -200,7 +189,7 @@ export function AboutSection({ data }: AboutSectionProps) {
                         viewport={{ once: true }}
                         whileHover={{ y: -5 }}
                       >
-                        <div className="bg-zinc-900/50 backdrop-blur-sm p-6 rounded-lg border border-zinc-800 hover:border-cyan-500/30 transition-all duration-300 shadow-lg">
+                        <div className="bg-zinc-900/50 backdrop-blur-sm p-6 rounded-lg border border-zinc-800 hover:border-cyan-500/30 transition-all duration-300 shadow-lg cursor-none">
                           <h4 className="text-xl font-bold text-white mb-1">
                             {edu.degree}
                           </h4>

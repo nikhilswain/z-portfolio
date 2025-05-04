@@ -1,6 +1,6 @@
 {
   "name": "Nikhil Kumar Swain",
-  "title": "Front End Developer",
+  "title": "Full Stack Developer",
   "about": {
     "summary": "I'm a passionate full stack developer with expertise in modern web technologies. I love building intuitive and performant applications that solve real-world problems.",
     "photo": "/src/assets/luffyGrin.jpg",
@@ -10,34 +10,34 @@
     ],
     "education": [
       {
-        "degree": "Master of Computer Science",
-        "institution": "University of Technology",
-        "year": "2018 - 2020"
+        "degree": "Master of Computer Applications",
+        "institution": "Graphic Era University",
+        "year": "2022 - 2024"
       },
       {
-        "degree": "Bachelor of Software Engineering",
-        "institution": "State University",
-        "year": "2014 - 2018"
+        "degree": "Bachelor of Computer Applications",
+        "institution": "Graphic Era University",
+        "year": "2019 - 2022"
       }
     ],
     "experience": [
       {
-        "position": "Senior Frontend Developer",
-        "company": "Tech Solutions Inc.",
-        "duration": "2021 - Present",
-        "description": "Leading the frontend development team, implementing new features, and optimizing performance."
+        "position": "Lead Frontend Developer",
+        "company": "Adsita Pvt. Ltd.",
+        "duration": "Apr 2023 - Mar 2025",
+        "description": "Leading the frontend development team, implementing new features, and optimizing performance. Creating custom CMS"
       },
       {
-        "position": "Front End Developer",
-        "company": "Digital Innovations",
-        "duration": "2018 - 2021",
-        "description": "Developed and maintained web applications using React, Node.js, and MongoDB."
+        "position": "Full Stack Engineer",
+        "company": "Yugam Technologies",
+        "duration": "Aug 2022 - Mar 2023",
+        "description": "Developed custom npm libraries. Responsible for the frontend of CODMA a css generator web app."
       },
       {
-        "position": "Junior Web Developer",
-        "company": "WebCraft Agency",
-        "duration": "2016 - 2018",
-        "description": "Built responsive websites and implemented UI designs for various clients."
+        "position": "Front End Developer Intern",
+        "company": "Yugam Technologies",
+        "duration": "Feb 2022 - Aug 2022",
+        "description": "Built responsive websites and implemented UI designs."
       }
     ]
   },
@@ -100,28 +100,20 @@
       "JavaScript",
       "TypeScript",
       "React",
-      "Vue.js",
       "Next.js",
       "Tailwind CSS",
+      "Astro",
       "Framer Motion"
     ],
-    "backend": [
-      "Node.js",
-      "Express",
-      "Python",
-      "Django",
-      "GraphQL",
-      "REST API"
-    ],
-    "database": ["MongoDB", "PostgreSQL", "MySQL", "Firebase"],
-    "devops": ["Git", "GitHub Actions", "Docker", "AWS", "Vercel", "Netlify"],
+    "backend": ["NestJS", "Node.js", "Express", "GraphQL", "REST API"],
+    "database": ["MongoDB", "PostgreSQL", "Supabase"],
+    "devops": ["Git", "GitHub Actions", "Docker", "Vercel", "Netlify"],
     "tools": ["VS Code", "Figma", "Postman", "Jest", "Cypress"]
   },
   "funFacts": [
     "I once coded for 36 hours straight to win a hackathon!",
     "My first computer was a Commodore 64 that I got from a garage sale.",
-    "I can type at a speed of 120 words per minute.",
-    "I've contributed to over 15 open-source projects.",
+    "I can type at a speed of 90 words per minute.",
     "I learned to code by building a game when I was 12 years old.",
     "I collect vintage programming books from the 80s and 90s.",
     "My workspace has 3 monitors and over 20 plants.",
