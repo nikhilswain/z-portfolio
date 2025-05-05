@@ -13,6 +13,11 @@ export default defineConfig({
     // ssr: {
     //   noExternal: ["react", "react-dom"],
     // },
+    resolve: {
+      alias: import.meta.env.PROD
+        ? { "react-dom/server": "react-dom/server.edge" }
+        : undefined,
+    },
   },
   integrations: [
     react({
