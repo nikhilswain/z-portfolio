@@ -10,9 +10,9 @@ export default defineConfig({
   adapter: cloudflare(),
   vite: {
     plugins: [tailwindcss()],
-    ssr: {
-      noExternal: ["react", "react-dom"],
-    },
+    // ssr: {
+    //   noExternal: ["react", "react-dom"],
+    // },
   },
   integrations: [
     react({
