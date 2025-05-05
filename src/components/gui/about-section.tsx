@@ -54,7 +54,7 @@ export function AboutSection({ data }: AboutSectionProps) {
           </div>
 
           {/* Experience & Education Timeline */}
-          <div className="relative mt-32">
+          <div className="relative mt-32 px-0 lg:px-16">
             {/* Section Title */}
             <motion.div
               initial={{ opacity: 0 }}

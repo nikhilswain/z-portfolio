@@ -113,7 +113,7 @@
   "funFacts": [
     {
       "title": "Coffee Consumed",
-      "fact": "1800+ Cups"
+      "fact": "1843"
     },
     {
       "title": "Lines Of Code",
@@ -134,7 +134,8 @@
       "https://open.spotify.com/embed/track/0oFeqtKx3jf2Xq2RJEcR8L?si=aa76b6d2b75c469a",
       "https://open.spotify.com/embed/track/1rDgAHDX95RmylxjgVW9tN?si=50c53e301048420f",
       "https://open.spotify.com/embed/track/1n1y2kFPISpF9WGD3JaFo5?si=b9362cf405b149d7"
-    ]
+    ],
+    "currentGame": "Neir Replicant"
   },
   "contact": {
     "email": "nikhilswain36@gmail.com",

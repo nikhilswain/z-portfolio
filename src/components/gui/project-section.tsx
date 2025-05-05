@@ -27,7 +27,7 @@ export function ProjectsSection({ data }: ProjectsSectionProps) {
   const regularProjects = data.filter((project) => !project.featured);
 
   return (
-    <section className="py-24 bg-black">
+    <section className="py-24 bg-black px-0 lg:px-16">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0 }}
