@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { ModeProvider } from "./mode-provider";
 import Home from "./home";
