@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useRef, useState } from "react";
 
 interface Icon {
@@ -69,18 +71,18 @@ export function IconCloud({ icons, images }: IconCloudProps) {
           };
         } else if (icons) {
           // Create a temporary canvas element
-          const tempCanvas = document.createElement('canvas');
+          const tempCanvas = document.createElement("canvas");
           tempCanvas.width = 100;
           tempCanvas.height = 100;
-          const tempCtx = tempCanvas.getContext('2d');
-          
+          const tempCtx = tempCanvas.getContext("2d");
+
           if (tempCtx) {
             // Draw a colored circle as fallback
             tempCtx.beginPath();
             tempCtx.arc(50, 50, 40, 0, Math.PI * 2);
             tempCtx.fillStyle = index % 2 === 0 ? "#ec4899" : "#22d3ee";
             tempCtx.fill();
-            
+
             // Scale down to the target size
             offCtx.drawImage(tempCanvas, 0, 0, 40, 40);
             imagesLoadedRef.current[index] = true;

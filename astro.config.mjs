@@ -6,12 +6,14 @@ import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
+  output: "server", // Changed from "hybrid" to "server"
   adapter: cloudflare(),
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [react({
-    include: ['**/react/*', '**/components/**/*.tsx']
-  })],
+  integrations: [
+    react({
+      include: ["**/react/*", "**/components/**/*.tsx"],
+    }),
+  ],
 });

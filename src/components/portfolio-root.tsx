@@ -1,3 +1,5 @@
+'use client';
+
 import { ModeProvider } from "./mode-provider";
 import Home from "./home";
 import { SmoothCursor } from "./ui/smooth-cursor";
