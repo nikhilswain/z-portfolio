@@ -10,9 +10,6 @@ export default defineConfig({
   adapter: cloudflare(),
   vite: {
     plugins: [tailwindcss()],
-    // ssr: {
-    //   noExternal: ["react", "react-dom"],
-    // },
     resolve: {
       alias: import.meta.env.PROD
         ? { "react-dom/server": "react-dom/server.edge" }

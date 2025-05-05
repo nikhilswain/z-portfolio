@@ -5,6 +5,8 @@ import { AboutSection } from "@/components/gui/about-section";
 import { SkillsSection } from "@/components/gui/skills-section";
 import { ProjectsSection } from "@/components/gui/project-section";
 import { ContactSection } from "@/components/gui/contact-section";
+import FunFactSection from "@/components/gui/fun-fact-section";
+import { HobbiesAndInterests } from "@/components/gui/hobbies-interests";
 
 export function GuiMode() {
   const { portfolioData, setCurrentMode } = useMode();
@@ -31,6 +33,8 @@ export function GuiMode() {
       <AboutSection data={portfolioData?.about} />
       <SkillsSection data={portfolioData?.skills} />
       <ProjectsSection data={portfolioData?.projects} />
+      <FunFactSection data={portfolioData?.funFacts} />
+      <HobbiesAndInterests data={portfolioData?.hobbies} />
       <ContactSection data={portfolioData?.contact} />
     </div>
   );

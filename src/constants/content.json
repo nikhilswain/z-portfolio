@@ -111,16 +111,31 @@
     "tools": ["VS Code", "Figma", "Postman", "Jest", "Cypress"]
   },
   "funFacts": [
-    "I once coded for 36 hours straight to win a hackathon!",
-    "My first computer was a Commodore 64 that I got from a garage sale.",
-    "I can type at a speed of 90 words per minute.",
-    "I learned to code by building a game when I was 12 years old.",
-    "I collect vintage programming books from the 80s and 90s.",
-    "My workspace has 3 monitors and over 20 plants.",
-    "I've mentored more than 50 junior developers throughout my career.",
-    "My favorite debugging tool is still good old console.log().",
-    "I once fixed a critical bug while on vacation at the beach."
+    {
+      "title": "Coffee Consumed",
+      "fact": "1800+ Cups"
+    },
+    {
+      "title": "Lines Of Code",
+      "fact": "1.2M"
+    },
+    {
+      "title": "Game Played",
+      "fact": "352"
+    },
+    {
+      "title": "Spotify Hours",
+      "fact": "4,320"
+    }
   ],
+  "hobbies": {
+    "gamingCategories": ["RPG", "Strategy", "Action", "Indie"],
+    "musicPlaylists": [
+      "https://open.spotify.com/embed/track/0oFeqtKx3jf2Xq2RJEcR8L?si=aa76b6d2b75c469a",
+      "https://open.spotify.com/embed/track/1rDgAHDX95RmylxjgVW9tN?si=50c53e301048420f",
+      "https://open.spotify.com/embed/track/1n1y2kFPISpF9WGD3JaFo5?si=b9362cf405b149d7"
+    ]
+  },
   "contact": {
     "email": "nikhilswain36@gmail.com",
     "phone": "+917608854939",
