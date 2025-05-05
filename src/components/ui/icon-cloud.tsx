@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { renderToString } from "react-dom/server";
 
 interface Icon {
   x: number;
@@ -40,6 +39,7 @@ export function IconCloud({ icons, images }: IconCloudProps) {
   const iconCanvasesRef = useRef<HTMLCanvasElement[]>([]);
   const imagesLoadedRef = useRef<boolean[]>([]);
 
+  // Initialize offscreen canvases for icons/images
   useEffect(() => {
     if (!icons && !images) return;
 
@@ -60,29 +60,31 @@ export function IconCloud({ icons, images }: IconCloudProps) {
           img.src = items[index] as string;
           img.onload = () => {
             offCtx.clearRect(0, 0, offscreen.width, offscreen.height);
-
-            // Create circular clipping path
             offCtx.beginPath();
             offCtx.arc(20, 20, 20, 0, Math.PI * 2);
             offCtx.closePath();
             offCtx.clip();
-
-            // Draw the image
             offCtx.drawImage(img, 0, 0, 40, 40);
-
             imagesLoadedRef.current[index] = true;
           };
-        } else {
-          // Handle SVG icons
-          offCtx.scale(0.4, 0.4);
-          const svgString = renderToString(item as React.ReactElement);
-          const img = new Image();
-          img.src = "data:image/svg+xml;base64," + btoa(svgString);
-          img.onload = () => {
-            offCtx.clearRect(0, 0, offscreen.width, offscreen.height);
-            offCtx.drawImage(img, 0, 0);
+        } else if (icons) {
+          // Create a temporary canvas element
+          const tempCanvas = document.createElement('canvas');
+          tempCanvas.width = 100;
+          tempCanvas.height = 100;
+          const tempCtx = tempCanvas.getContext('2d');
+          
+          if (tempCtx) {
+            // Draw a colored circle as fallback
+            tempCtx.beginPath();
+            tempCtx.arc(50, 50, 40, 0, Math.PI * 2);
+            tempCtx.fillStyle = index % 2 === 0 ? "#ec4899" : "#22d3ee";
+            tempCtx.fill();
+            
+            // Scale down to the target size
+            offCtx.drawImage(tempCanvas, 0, 0, 40, 40);
             imagesLoadedRef.current[index] = true;
-          };
+          }
         }
       }
       return offscreen;
