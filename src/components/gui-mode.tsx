@@ -1,10 +1,10 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { useMode } from "@/components/mode-provider";
 import { HeroSection } from "@/components/gui/hero-section";
-import { AboutSection } from "./gui/about-section";
-import { SkillsSection } from "./gui/skills-section";
+import { AboutSection } from "@/components/gui/about-section";
+import { SkillsSection } from "@/components/gui/skills-section";
+import { ProjectsSection } from "@/components/gui/project-section";
+import { ContactSection } from "@/components/gui/contact-section";
 
 export function GuiMode() {
   const { portfolioData, setCurrentMode } = useMode();
@@ -30,6 +30,8 @@ export function GuiMode() {
       <HeroSection data={portfolioData} onSwitchMode={handleSwitchMode} />
       <AboutSection data={portfolioData?.about} />
       <SkillsSection data={portfolioData?.skills} />
+      <ProjectsSection data={portfolioData?.projects} />
+      <ContactSection data={portfolioData?.contact} />
     </div>
   );
 }

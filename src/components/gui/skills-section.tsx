@@ -243,7 +243,7 @@ export function SkillsSection({ data }: SkillsSectionProps) {
                   {skills.map((skill, skillIndex) => (
                     <motion.div
                       key={skillIndex}
-                      className="bg-zinc-900 px-3 py-1 rounded-md text-sm text-zinc-300 hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-cyan-500/20 hover:text-white transition-colors duration-300 cursor-default"
+                      className="bg-zinc-900 px-3 py-1 rounded-md text-sm text-zinc-300 hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-cyan-500/20 hover:text-white transition-colors duration-300 cursor-none"
                       whileHover={{ scale: 1.05, y: -2 }}
                     >
                       {skill}
