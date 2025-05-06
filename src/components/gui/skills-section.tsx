@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { MagicCard } from "@/components/ui/magic-card";
 import { Code, Terminal, Coffee, Gamepad, Music, Heart } from "lucide-react";
 import { IconCloud } from "@/components/ui/icon-cloud";
+import { ShowOnScreenSize } from "@/lib/useScreenSize";
 
 const slugs = [
   "typescript",
@@ -66,31 +67,35 @@ export function SkillsSection({ data }: SkillsSectionProps) {
         </motion.div>
 
         {/* View mode toggle */}
-        <div className="flex items-center justify-center mb-8">
-          <div className="bg-zinc-800 rounded-lg p-2 flex items-center gap-3">
-            <span
-              className={`text-sm ${
-                skillViewMode === "grid" ? "text-pink-400" : "text-zinc-400"
-              }`}
-            >
-              Grid View
-            </span>
-            <Switch
-              checked={skillViewMode === "orbital"}
-              onCheckedChange={(checked) =>
-                setSkillViewMode(checked ? "orbital" : "grid")
-              }
-              className="data-[state=checked]:bg-pink-500"
-            />
-            <span
-              className={`text-sm ${
-                skillViewMode === "orbital" ? "text-pink-400" : "text-zinc-400"
-              }`}
-            >
-              Orbital View
-            </span>
+        <ShowOnScreenSize mobile={false} tablet={false}>
+          <div className="flex items-center justify-center mb-8">
+            <div className="bg-zinc-800 rounded-lg p-2 flex items-center gap-3">
+              <span
+                className={`text-sm ${
+                  skillViewMode === "grid" ? "text-pink-400" : "text-zinc-400"
+                }`}
+              >
+                Grid View
+              </span>
+              <Switch
+                checked={skillViewMode === "orbital"}
+                onCheckedChange={(checked) =>
+                  setSkillViewMode(checked ? "orbital" : "grid")
+                }
+                className="data-[state=checked]:bg-pink-500"
+              />
+              <span
+                className={`text-sm ${
+                  skillViewMode === "orbital"
+                    ? "text-pink-400"
+                    : "text-zinc-400"
+                }`}
+              >
+                Orbital View
+              </span>
+            </div>
           </div>
-        </div>
+        </ShowOnScreenSize>
 
         {/* 3D Skill Hexagons - Orbital View */}
         {skillViewMode === "orbital" && (
@@ -195,7 +200,7 @@ export function SkillsSection({ data }: SkillsSectionProps) {
         {/* Skill cards - Grid View (always shown on mobile) */}
         <div
           className={`grid sm:grid-cols-2 lg:grid-cols-3 gap-6 ${
-            skillViewMode === "orbital" ? "md:hidden" : ""
+            skillViewMode === "orbital" ? "lg:hidden" : ""
           }`}
         >
           {Object.entries(data).map(([category, skills], index) => (

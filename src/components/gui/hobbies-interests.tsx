@@ -536,7 +536,7 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
 
               <p className="text-zinc-300 mb-6">
                 Music is an essential part of my creative process. Here are some
-                of my favorite playlists that keep me in the zone while coding.
+                of my favorite songs that keep me in the zone while coding.
               </p>
 
               <div className="space-y-6">
