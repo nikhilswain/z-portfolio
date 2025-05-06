@@ -2,7 +2,7 @@
 
 import { ModeProvider } from "./mode-provider";
 import Home from "./home";
-import { SmoothCursor } from "./ui/smooth-cursor";
+// import { SmoothCursor } from "./ui/smooth-cursor";
 import { useScreenSize } from "@/lib/useScreenSize";
 
 export function PortfolioRoot() {
@@ -10,7 +10,7 @@ export function PortfolioRoot() {
   return (
     <ModeProvider>
       <Home />
-      {isLaptopOrDesktop && <SmoothCursor />}
+      {/* {isLaptopOrDesktop && <SmoothCursor />} */}
     </ModeProvider>
   );
 }

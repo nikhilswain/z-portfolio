@@ -176,13 +176,12 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
       className="min-h-screen py-24 bg-gradient-to-b from-zinc-900 to-black relative px-0 lg:px-16"
       key={showKonamiCode ? "modal-open" : "modal-close"}
       ref={viewportRef}
-      tabIndex={-1} // Make it focusable
+      tabIndex={-1}
     >
       {/* Konami Code Easter Egg */}
-      <AnimatePresence>
+      <AnimatePresence key={showKonamiCode ? "modal-open" : "modal-close"}>
         {showKonamiCode && (
           <motion.div
-            key={showKonamiCode ? "modal" : "modal-closed"}
             initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
             animate={{ opacity: 1, backdropFilter: "blur(8px)" }}
             exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
@@ -258,7 +257,7 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.6 }}
-                  className="grid grid-cols-2 sm:grid-cols-4 gap-6 mb-8"
+                  className="grid grid-cols-2 justify-center sm:grid-cols-4 gap-6 mb-8"
                   onMouseMove={(e) => {
                     const rect = e.currentTarget.getBoundingClientRect();
                     const mouseX = e.clientX - rect.left;
@@ -295,7 +294,7 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
                   }}
                 >
                   <motion.a
-                    href="https://discord.gg/gamertag"
+                    href="https://discord.com/users/568448885450866712"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, z: 30 }}
@@ -320,11 +319,11 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
                       </svg>
                     </motion.div>
                     <span className="font-bold text-white">Discord</span>
-                    <span className="text-xs text-zinc-400">@gamertag</span>
+                    <span className="text-xs text-zinc-400">zero.02</span>
                   </motion.a>
 
                   <motion.a
-                    href="https://steamcommunity.com/id/gamertag"
+                    href="https://steamcommunity.com/profiles/76561199438372590/"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, z: 30 }}
@@ -354,11 +353,11 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
                       </svg>
                     </motion.div>
                     <span className="font-bold text-white">Steam</span>
-                    <span className="text-xs text-zinc-400">gamertag</span>
+                    <span className="text-xs text-zinc-400">zero</span>
                   </motion.a>
 
                   <motion.a
-                    href="https://open.spotify.com/user/gamertag"
+                    href="https://open.spotify.com/user/fp0swtvc1n1gqzeglkg7jga22?si=1de762b285264030"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, z: 30 }}
@@ -385,13 +384,11 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
                       </svg>
                     </motion.div>
                     <span className="font-bold text-white">Spotify</span>
-                    <span className="text-xs text-zinc-400">
-                      Gaming Playlist
-                    </span>
+                    <span className="text-xs text-zinc-400">zero</span>
                   </motion.a>
 
                   <motion.a
-                    href="https://www.twitch.tv/gamertag"
+                    href="#"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.1, z: 30 }}
@@ -403,19 +400,15 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8 text-purple-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
+                        width="24"
+                        height="24"
+                        viewBox="1 1 998.013 998.025"
                       >
-                        <path d="M21 2H3v16h5v4l4-4h5l4-4V2zm-10 9V7m5 4V7" />
+                        <path d="M500.006 1C224.852 1 1 224.855 1 500.014s223.852 499.011 499.006 499.011c275.155 0 499.007-223.852 499.007-499.011C999.014 224.855 775.161 1 500.006 1zm0 933.393c-239.517 0-434.374-194.862-434.374-434.379 0-239.521 194.858-434.382 434.374-434.382 239.513 0 434.375 194.862 434.375 434.382 0 239.516-194.861 434.379-434.375 434.379zm169.532-579.932h3.938v-19.075h7.098v-3.368h-18.117v3.368h7.082l-.001 19.075zm17.319-17.342h.072l6.225 17.342h3.207l6.224-17.342h.088v17.342h3.698v-22.442h-5.436l-6.016 17.554h-.104l-6.162-17.554h-5.524v22.442h3.729v-17.342zm-113.33-5.12H328.04l-37.246 59.858h245.203l37.53-59.858zm50.168.571L473.623 571.533H307.159l38.405-59.908h99.771l38.111-59.881H252.794l-38.104 59.881h54.642l-75.813 119.61h316.389l116.86-184.295 42.609 64.684h-38.42l-36.386 59.909h113.773l39.506 59.702h72.576L623.695 332.57z" />
                       </svg>
                     </motion.div>
-                    <span className="font-bold text-white">Twitch</span>
-                    <span className="text-xs text-zinc-400">@gamertag</span>
+                    <span className="font-bold text-white">EA Sports</span>
+                    <span className="text-xs text-zinc-400">n1kh1lswa</span>
                   </motion.a>
                 </motion.div>
 
@@ -428,7 +421,7 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
                   <p className="text-zinc-400 mb-6">
                     Currently playing:{" "}
                     <span className="text-pink-400 font-semibold">
-                      Cyberpunk 2077
+                      Nier Replicant
                     </span>
                   </p>
                 </motion.div>
