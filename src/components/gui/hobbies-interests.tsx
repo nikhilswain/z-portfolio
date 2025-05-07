@@ -1,6 +1,11 @@
 import { Coffee, Gamepad, Music, Code } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import {
+  CardContainer,
+  CardBody,
+  CardItem,
+} from "@/components/ui/parllax-card-3d";
 
 import type { JSX } from "react";
 
@@ -65,9 +70,6 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
     },
   };
 
-  // Reference to the viewport
-  const viewportRef = useRef<HTMLDivElement>(null);
-
   // Add a ref for the modal
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -100,6 +102,8 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
         setShowKonamiCode(true);
         setLastActivation(now);
         setKonamiSequence([]);
+        // Lock body scroll when modal is open
+        document.body.style.overflow = "hidden";
       }
 
       // Close modal with ESC key
@@ -124,24 +128,10 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
 
   // Function to close the modal
   const closeModal = () => {
-    // First hide the modal
     setShowKonamiCode(false);
-
-    // Mark that the modal was just closed to prevent immediate reactivation
     setModalClosed(true);
-
-    // Reset sequence when closing
     setKonamiSequence([]);
-
-    // Reset the last activation timestamp to allow reactivation after cool down
     setLastActivation(0);
-
-    // Force focus back to the main window to ensure keyboard events are captured
-    if (viewportRef.current) {
-      viewportRef.current.focus();
-    }
-
-    // Ensure document body isn't locked
     document.body.style.overflow = "auto";
   };
 
@@ -158,8 +148,6 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
 
     if (showKonamiCode) {
       document.addEventListener("mousedown", handleClickOutside);
-      // Lock body scroll when modal is open
-      document.body.style.overflow = "hidden";
     }
 
     return () => {
@@ -175,261 +163,193 @@ export const HobbiesAndInterests = ({ data }: HobbiesAndInterestsProps) => {
     <section
       className="min-h-screen py-24 bg-gradient-to-b from-zinc-900 to-black relative px-0 lg:px-16"
       key={showKonamiCode ? "modal-open" : "modal-close"}
-      ref={viewportRef}
-      tabIndex={-1}
     >
       {/* Konami Code Easter Egg */}
-      <AnimatePresence key={showKonamiCode ? "modal-open" : "modal-close"}>
-        {showKonamiCode && (
+      {showKonamiCode && (
+        <div className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70">
           <motion.div
-            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            animate={{ opacity: 1, backdropFilter: "blur(8px)" }}
-            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            className="fixed inset-0 z-[1000] flex items-center justify-center bg-black/70"
+            ref={modalRef}
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0.8 }}
+            transition={{ type: "spring", duration: 0.5 }}
+            className="relative w-full max-w-3xl rounded-xl border-4 border-pink-500/50 p-8 overflow-hidden"
           >
-            <motion.div
-              ref={modalRef}
-              initial={{ scale: 0, rotate: -10 }}
-              animate={{ scale: 1, rotate: 0 }}
-              exit={{ scale: 0, rotate: 10 }}
-              transition={{ type: "spring", duration: 0.8 }}
-              className="relative w-full max-w-3xl bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-xl border-4 border-pink-500/50 p-8 overflow-hidden"
-            >
-              {/* Comic-style elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-pink-500/10 rounded-full -translate-y-32 translate-x-32"></div>
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/10 rounded-full translate-y-32 -translate-x-32"></div>
+            {/* Background image with overlay */}
+            <div
+              className="absolute inset-0 z-2" 
+              style={{
+                backgroundImage: "url('/genshin-impact.jpg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                opacity: 0.3,
+              }}
+            />
 
-              {/* Comic-style corner */}
-              <div className="absolute top-0 left-0 w-24 h-24 bg-pink-500 -translate-x-12 -translate-y-12 rotate-45"></div>
-              <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500 translate-x-12 -translate-y-12 rotate-45"></div>
+            {/* Gradient overlay */}
+            <div className="absolute inset-0 z-[1] bg-gradient-to-br from-zinc-900 to-zinc-800/95" />
 
-              {/* Close button */}
-              {/* <motion.button
-                className="absolute top-4 right-4 z-20 w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 text-pink-400 hover:bg-pink-500 hover:text-white transition-colors duration-300"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  closeModal();
-                }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </motion.button> */}
+            {/* Comic-style elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-pink-500/10 rounded-full -translate-y-32 translate-x-32 z-[2]"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/10 rounded-full translate-y-32 -translate-x-32 z-[2]"></div>
 
-              <div className="relative z-10">
-                <motion.div
-                  initial={{ y: -50 }}
-                  animate={{ y: 0 }}
-                  transition={{ type: "spring", delay: 0.2 }}
-                >
-                  <h2 className="text-4xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-cyan-500">
-                    🎮 GAMER MODE ACTIVATED! 🎮
-                  </h2>
-                </motion.div>
+            {/* Comic-style corner */}
+            <div className="absolute top-0 left-0 w-24 h-24 bg-pink-500 -translate-x-12 -translate-y-12 rotate-45 z-[2]"></div>
+            <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500 translate-x-12 -translate-y-12 rotate-45 z-[2]"></div>
 
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="mb-8 text-center"
-                >
-                  <p className="text-xl text-zinc-300">
-                    I'm a passionate gamer too! Let's connect and play together.
-                  </p>
-                  <p className="text-sm text-zinc-500 mt-2">
-                    Press ESC to close the modal
-                  </p>
-                </motion.div>
+            {/* Content */}
+            <div className="relative z-[3]">
+              <h2 className="text-4xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-cyan-500">
+                🎮 GAMER MODE ACTIVATED! 🎮
+              </h2>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6 }}
-                  className="grid grid-cols-2 justify-center sm:grid-cols-4 gap-6 mb-8"
-                  onMouseMove={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    const mouseX = e.clientX - rect.left;
-                    const mouseY = e.clientY - rect.top;
-
-                    // Update all icons with parallax effect
-                    const icons = document.querySelectorAll(".game-icon");
-                    icons.forEach((icon) => {
-                      const iconRect = (
-                        icon as HTMLElement
-                      ).getBoundingClientRect();
-                      const iconCenterX =
-                        iconRect.left + iconRect.width / 2 - rect.left;
-                      const iconCenterY =
-                        iconRect.top + iconRect.height / 2 - rect.top;
-
-                      const distanceX = mouseX - iconCenterX;
-                      const distanceY = mouseY - iconCenterY;
-
-                      // Inverse movement for parallax effect (closer items move more)
-                      const moveX = distanceX * -0.03;
-                      const moveY = distanceY * -0.03;
-                      (icon as HTMLElement).style.transform =
-                        `translate(${moveX}px, ${moveY}px)`;
-                    });
-                  }}
-                  onMouseLeave={() => {
-                    // Reset all icons when mouse leaves
-                    const icons = document.querySelectorAll(".game-icon");
-                    icons.forEach((icon) => {
-                      (icon as HTMLElement).style.transform =
-                        "translate(0px, 0px)";
-                    });
-                  }}
-                >
-                  <motion.a
-                    href="https://discord.com/users/568448885450866712"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1, z: 30 }}
-                    className="flex flex-col items-center bg-zinc-800/80 p-4 rounded-lg border-2 border-indigo-500/50 transform transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/20 group"
-                  >
-                    <motion.div
-                      className="game-icon w-16 h-16 flex items-center justify-center bg-indigo-500/20 rounded-full mb-3 group-hover:shadow-lg group-hover:shadow-indigo-500/30"
-                      whileHover={{ scale: 1.2, z: 40 }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8 text-indigo-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M9 9h.01M15 9h.01M9 15a3 3 0 0 0 6 0" />
-                        <path d="M7.5 4h9a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5h-9a5 5 0 0 1-5-5V9a5 5 0 0 1 5-5Z" />
-                      </svg>
-                    </motion.div>
-                    <span className="font-bold text-white">Discord</span>
-                    <span className="text-xs text-zinc-400">zero.02</span>
-                  </motion.a>
-
-                  <motion.a
-                    href="https://steamcommunity.com/profiles/76561199438372590/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1, z: 30 }}
-                    className="flex flex-col items-center bg-zinc-800/80 p-4 rounded-lg border-2 border-blue-500/50 transform transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group"
-                  >
-                    <motion.div
-                      className="game-icon w-16 h-16 flex items-center justify-center bg-blue-500/20 rounded-full mb-3 group-hover:shadow-lg group-hover:shadow-blue-500/30"
-                      whileHover={{ scale: 1.2, z: 40 }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8 text-blue-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M14 12a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
-                        <path d="M12 2a10 10 0 1 0 10 10 10 10 0 0 0-10-10Z" />
-                        <path d="M12 14a2 2 0 1 0 0-4" />
-                        <path d="M12 14v7" />
-                        <path d="M10 7v.01" />
-                        <path d="M14 7v.01" />
-                        <path d="M12 14v.01" />
-                      </svg>
-                    </motion.div>
-                    <span className="font-bold text-white">Steam</span>
-                    <span className="text-xs text-zinc-400">zero</span>
-                  </motion.a>
-
-                  <motion.a
-                    href="https://open.spotify.com/user/fp0swtvc1n1gqzeglkg7jga22?si=1de762b285264030"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1, z: 30 }}
-                    className="flex flex-col items-center bg-zinc-800/80 p-4 rounded-lg border-2 border-green-500/50 transform transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 group"
-                  >
-                    <motion.div
-                      className="game-icon w-16 h-16 flex items-center justify-center bg-green-500/20 rounded-full mb-3 group-hover:shadow-lg group-hover:shadow-green-500/30"
-                      whileHover={{ scale: 1.2, z: 40 }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8 text-green-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <circle cx="12" cy="12" r="10" />
-                        <circle cx="12" cy="12" r="4" />
-                        <path d="M12 8v8" />
-                        <path d="M8 12h8" />
-                      </svg>
-                    </motion.div>
-                    <span className="font-bold text-white">Spotify</span>
-                    <span className="text-xs text-zinc-400">zero</span>
-                  </motion.a>
-
-                  <motion.a
-                    href="#"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1, z: 30 }}
-                    className="flex flex-col items-center bg-zinc-800/80 p-4 rounded-lg border-2 border-purple-500/50 transform transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 group"
-                  >
-                    <motion.div
-                      className="game-icon w-16 h-16 flex items-center justify-center bg-purple-500/20 rounded-full mb-3 group-hover:shadow-lg group-hover:shadow-purple-500/30"
-                      whileHover={{ scale: 1.2, z: 40 }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="1 1 998.013 998.025"
-                      >
-                        <path d="M500.006 1C224.852 1 1 224.855 1 500.014s223.852 499.011 499.006 499.011c275.155 0 499.007-223.852 499.007-499.011C999.014 224.855 775.161 1 500.006 1zm0 933.393c-239.517 0-434.374-194.862-434.374-434.379 0-239.521 194.858-434.382 434.374-434.382 239.513 0 434.375 194.862 434.375 434.382 0 239.516-194.861 434.379-434.375 434.379zm169.532-579.932h3.938v-19.075h7.098v-3.368h-18.117v3.368h7.082l-.001 19.075zm17.319-17.342h.072l6.225 17.342h3.207l6.224-17.342h.088v17.342h3.698v-22.442h-5.436l-6.016 17.554h-.104l-6.162-17.554h-5.524v22.442h3.729v-17.342zm-113.33-5.12H328.04l-37.246 59.858h245.203l37.53-59.858zm50.168.571L473.623 571.533H307.159l38.405-59.908h99.771l38.111-59.881H252.794l-38.104 59.881h54.642l-75.813 119.61h316.389l116.86-184.295 42.609 64.684h-38.42l-36.386 59.909h113.773l39.506 59.702h72.576L623.695 332.57z" />
-                      </svg>
-                    </motion.div>
-                    <span className="font-bold text-white">EA Sports</span>
-                    <span className="text-xs text-zinc-400">n1kh1lswa</span>
-                  </motion.a>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                  className="text-center"
-                >
-                  <p className="text-zinc-400 mb-6">
-                    Currently playing:{" "}
-                    <span className="text-pink-400 font-semibold">
-                      Nier Replicant
-                    </span>
-                  </p>
-                </motion.div>
+              <div className="mb-8 text-center">
+                <p className="text-xl text-zinc-300">
+                  I'm a passionate gamer too! Let's connect and play together.
+                </p>
+                <p className="text-sm text-zinc-300 mt-2">
+                  Press ESC to close the modal
+                </p>
               </div>
-            </motion.div>
+
+              <div className="grid grid-cols-2 justify-center sm:grid-cols-4 gap-6 mb-8">
+                <motion.a
+                  href="https://discord.com/users/568448885450866712"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center bg-zinc-800/80 p-4 rounded-lg border-2 border-indigo-500/50 transform transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/20 group"
+                >
+                  <CardContainer className="inter-var">
+                    <CardBody className="w-16 h-16 [transform-style:preserve-3d] flex items-center justify-center">
+                      <CardItem
+                        translateZ={100}
+                        className="game-icon w-16 h-16 flex items-center justify-center bg-indigo-500/20 rounded-full group-hover:shadow-lg group-hover:shadow-indigo-500/30"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-8 w-8 text-indigo-400"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M9 9h.01M15 9h.01M9 15a3 3 0 0 0 6 0" />
+                          <path d="M7.5 4h9a5 5 0 0 1 5 5v6a5 5 0 0 1-5 5h-9a5 5 0 0 1-5-5V9a5 5 0 0 1 5-5Z" />
+                        </svg>
+                      </CardItem>
+                    </CardBody>
+                  </CardContainer>
+                  <span className="font-bold text-white mt-3">Discord</span>
+                  <span className="text-xs text-zinc-400">zero.02</span>
+                </motion.a>
+
+                <motion.a
+                  href="https://steamcommunity.com/profiles/76561199438372590/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center bg-zinc-800/80 p-4 rounded-lg border-2 border-blue-500/50 transform transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group"
+                >
+                  <CardContainer className="inter-var">
+                    <CardBody className="w-16 h-16 [transform-style:preserve-3d] flex items-center justify-center">
+                      <CardItem
+                        translateZ={100}
+                        className="game-icon w-16 h-16 flex items-center justify-center bg-blue-500/20 rounded-full group-hover:shadow-lg group-hover:shadow-blue-500/30"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-8 w-8 text-blue-400"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M14 12a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />
+                          <path d="M12 2a10 10 0 1 0 10 10 10 10 0 0 0-10-10Z" />
+                          <path d="M12 14a2 2 0 1 0 0-4" />
+                          <path d="M12 14v7" />
+                          <path d="M10 7v.01" />
+                          <path d="M14 7v.01" />
+                          <path d="M12 14v.01" />
+                        </svg>
+                      </CardItem>
+                    </CardBody>
+                  </CardContainer>
+
+                  <span className="font-bold text-white mt-3">Steam</span>
+                  <span className="text-xs text-zinc-400">zero</span>
+                </motion.a>
+
+                <motion.a
+                  href="https://open.spotify.com/user/fp0swtvc1n1gqzeglkg7jga22?si=1de762b285264030"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center bg-zinc-800/80 p-4 rounded-lg border-2 border-green-500/50 transform transition-all duration-300 hover:shadow-lg hover:shadow-green-500/20 group"
+                >
+                  <CardContainer className="inter-var">
+                    <CardBody className="w-16 h-16 [transform-style:preserve-3d] flex items-center justify-center">
+                      <CardItem
+                        translateZ={100}
+                        className="game-icon w-16 h-16 flex items-center justify-center bg-green-500/20 rounded-full group-hover:shadow-lg group-hover:shadow-green-500/30"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-8 w-8 text-green-400"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx="12" cy="12" r="10" />
+                          <circle cx="12" cy="12" r="4" />
+                          <path d="M12 8v8" />
+                          <path d="M8 12h8" />
+                        </svg>
+                      </CardItem>
+                    </CardBody>
+                  </CardContainer>
+
+                  <span className="font-bold text-white mt-3">Spotify</span>
+                  <span className="text-xs text-zinc-400">zero</span>
+                </motion.a>
+
+                <motion.a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex flex-col items-center bg-zinc-800/80 p-4 rounded-lg border-2 border-purple-500/50 transform transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/20 group"
+                >
+                  <CardContainer className="inter-var">
+                    <CardBody className="w-16 h-16 [transform-style:preserve-3d] flex items-center justify-center">
+                      <CardItem
+                        translateZ={100}
+                        className="game-icon w-16 h-16 flex items-center justify-center bg-purple-500/20 rounded-full group-hover:shadow-lg group-hover:shadow-purple-500/30"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="1 1 998.013 998.025"
+                        >
+                          <path d="M500.006 1C224.852 1 1 224.855 1 500.014s223.852 499.011 499.006 499.011c275.155 0 499.007-223.852 499.007-499.011C999.014 224.855 775.161 1 500.006 1zm0 933.393c-239.517 0-434.374-194.862-434.374-434.379 0-239.521 194.858-434.382 434.374-434.382 239.513 0 434.375 194.862 434.375 434.382 0 239.516-194.861 434.379-434.375 434.379zm169.532-579.932h3.938v-19.075h7.098v-3.368h-18.117v3.368h7.082l-.001 19.075zm17.319-17.342h.072l6.225 17.342h3.207l6.224-17.342h.088v17.342h3.698v-22.442h-5.436l-6.016 17.554h-.104l-6.162-17.554h-5.524v22.442h3.729v-17.342zm-113.33-5.12H328.04l-37.246 59.858h245.203l37.53-59.858zm50.168.571L473.623 571.533H307.159l38.405-59.908h99.771l38.111-59.881H252.794l-38.104 59.881h54.642l-75.813 119.61h316.389l116.86-184.295 42.609 64.684h-38.42l-36.386 59.909h113.773l39.506 59.702h72.576L623.695 332.57z" />
+                        </svg>
+                      </CardItem>
+                    </CardBody>
+                  </CardContainer>
+
+                  <span className="font-bold text-white mt-3">EA Sports</span>
+                  <span className="text-xs text-zinc-400">n1kh1lswa</span>
+                </motion.a>
+              </div>
+            </div>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
 
       <div className="container mx-auto px-4">
         <motion.div

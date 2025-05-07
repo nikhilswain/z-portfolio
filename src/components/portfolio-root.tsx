@@ -2,11 +2,11 @@
 
 import { ModeProvider } from "./mode-provider";
 import Home from "./home";
-// import { SmoothCursor } from "./ui/smooth-cursor";
+import { SmoothCursor } from "./ui/smooth-cursor";
 import { useScreenSize } from "@/lib/useScreenSize";
 
 export function PortfolioRoot() {
-  const { isLaptopOrDesktop } = useScreenSize();
+  // const { isLaptopOrDesktop } = useScreenSize();
   return (
     <ModeProvider>
       <Home />
