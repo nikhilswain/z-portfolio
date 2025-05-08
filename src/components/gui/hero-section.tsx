@@ -1,7 +1,7 @@
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Terminal, ChevronDown } from "lucide-react";
-
+import { Terminal, ChevronDown, FileText } from "lucide-react";
+import { RippleButton } from "@/components/ui/ripple-button";
 interface HeroSectionProps {
   data: {
     name: string;
@@ -24,6 +24,10 @@ export function HeroSection({ data, onSwitchMode }: HeroSectionProps) {
   const heroY = useTransform(scrollYProgress, [0, 0.5], [0, 200]);
   const springConfig = { stiffness: 100, damping: 30, mass: 0.5 };
   const smoothY = useSpring(heroY, springConfig);
+
+  const goToResume = () => {
+    window.open("/resume", "_blank");
+  };
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden">
@@ -74,6 +78,21 @@ export function HeroSection({ data, onSwitchMode }: HeroSectionProps) {
           <p className="max-w-2xl mx-auto text-zinc-300 leading-relaxed mb-12">
             {data.about.summary}
           </p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="flex justify-center my-12 cursor-pointer"
+          >
+            <RippleButton onClick={goToResume} rippleColor="#ADD8E6">
+              <div className="flex items-center justify-center">
+                <FileText className="mr-2 h-4 w-4" />
+                View Resume
+              </div>
+            </RippleButton>
+          </motion.div>
 
           <motion.div
             animate={{ y: [0, 10, 0] }}

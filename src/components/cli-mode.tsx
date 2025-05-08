@@ -6,6 +6,7 @@ import { useMode } from "@/components/mode-provider";
 import { Button } from "@/components/ui/button";
 import { Monitor, X, Minus, Square } from "lucide-react";
 import { motion } from "framer-motion";
+import { fetchProgrammingJoke } from "@/pages/api/programmingJokes";
 
 export function CliMode() {
   const { portfolioData, cliData, setCurrentMode } = useMode();
@@ -43,7 +44,7 @@ export function CliMode() {
 
     const loadingMessage =
       loadingMessages[command as keyof typeof loadingMessages];
-    
+
     // Only show loading for specific commands that have loading messages
     if (loadingMessage) {
       setHistory((prev) => [
@@ -83,7 +84,8 @@ export function CliMode() {
         } else if (customFunction.type === "ascii") {
           output = customFunction.art;
         } else if (customFunction.type === "joke") {
-          output = `${customFunction.setup}\n\n${customFunction.punchline}`;
+          const jokeFunction = await fetchProgrammingJoke();
+          output = `${jokeFunction.setup}\n\n${jokeFunction.punchline}`;
         }
       } catch (error) {
         output = `Error executing command: ${error}`;
@@ -150,7 +152,9 @@ export function CliMode() {
       output = portfolioData.projects[projectIndex]
         ? `Title: ${portfolioData.projects[projectIndex].title}\nDescription: ${
             portfolioData.projects[projectIndex].description
-          }\nTechnologies: ${portfolioData.projects[projectIndex].technologies.join(
+          }\nTechnologies: ${portfolioData.projects[
+            projectIndex
+          ].technologies.join(
             ", "
           )}\nLink: ${portfolioData.projects[projectIndex].link}`
         : "Project not found. Use '/projects' to see available projects.";

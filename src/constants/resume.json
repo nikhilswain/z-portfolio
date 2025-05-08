@@ -1,0 +1,105 @@
+{
+  "name": "Nikhil Kumar Swain",
+  "title": "Frontend Developer",
+  "summary": "Frontend Developer specializing in building scalable web applications, optimizing performance, and integrating APIs. Experienced in creating efficient and maintainable user interfaces.",
+  "contact": {
+    "portfolio": "nikhil swain",
+    "location": "Vill. Kerual, P/O - Rudrapur, Tehsil - Jagatpur, Cuttack, Odisha",
+    "phone": "+917608854939",
+    "email": "nikhilswain36@gmail.com",
+    "social": {
+      "twitter": "@iamn1khil",
+      "github": "nikhilswain"
+    }
+  },
+  "experience": [
+    {
+      "title": "Web Development",
+      "details": "Experienced in building accessible and scalable web applications using modern front-end and back-end technologies.",
+      "projects": [
+        "A Next.js app integrating Discord API for message automation via webhooks.",
+        "Interactive, cross-browser web components using vanilla JavaScript.",
+        "A Node.js backend with MySQL and Sequelize for client-employee mapping and effort tracking.",
+        "A pseudo e-commerce platform with full cart and checkout functionality (excluding payments)."
+      ]
+    },
+    {
+      "title": "Yugam Technologies - Frontend Developer (Intern)",
+      "duration": "February 2022 - July 2022",
+      "description": "Developed Codma, a CSS auto-generation platform, by building interactive tools for real-time style updates. Designed key frontend pages, including signup, login, and profile."
+    },
+    {
+      "title": "Yugam Technologies - Full Stack Engineer",
+      "duration": "August 2022 - March 2023",
+      "description": "Worked on a website builder with drag-and-drop plugins, live content editing, and dynamic CSS updates. Implemented plugin handling and interactive UI features for seamless customization."
+    },
+    {
+      "title": "Adstia Pvt Ltd - Lead Frontend Developer",
+      "duration": "April 2023 - Present",
+      "description": "Led multiple projects, including site deployment automation via a custom panel and Netlify integration. Served as the core developer for building a panel to manage multiple websites efficiently.",
+      "projects": [
+        "Developed WeCall CMS, a custom-built content management system.",
+        "Built micro-frontend architecture for plugin setups within the CMS editor.",
+        "Designed an automated quiz form rendering system, allowing users to create quizzes through a flowchart-based interface.",
+        "Integrated Builder.io CMS, creating custom plugins and components for rapid site creation.",
+        "Developed themes and templates, allowing users to customize text and instantly generate their own websites.",
+        "Wrote Jest test cases for high-order functions and components to ensure reliability and performance."
+      ],
+      "keyProject": {
+        "title": "Key Project: Analytics Dashboard (Lead Frontend Developer)",
+        "points": [
+          "Built a Jira-like ticketing system for issue tracking and task management.",
+          "Managed real-time call record data on the frontend, ensuring seamless updates and high performance.",
+          "Developed custom components for data visualization, dynamic filtering, and user interactions.",
+          "Integrated Syncfusion Data Grid, Charts, and Calendar components for efficient data handling and timeline management."
+        ]
+      }
+    }
+  ],
+  "skills": [
+    "HTML",
+    "CSS",
+    "JAVASCRIPT",
+    "REACT",
+    "NEXTJS",
+    "SOLIDJS",
+    "ASTRO",
+    "JEST",
+    "NODEJS/EXPRESS",
+    "MONGO DB",
+    "PostgreSQL",
+    "SUPABASE",
+    "MYSQL",
+    "SEQUELIZE",
+    "GSAP",
+    "TAILWIND CSS",
+    "DISCORD JS"
+  ],
+  "tools": [
+    "GIT/GITHUB",
+    "VS CODE",
+    "FIGMA",
+    "WHIMSICAL",
+    "LINUX",
+    "NETLIFY",
+    "HEROKU",
+    "VERCEL"
+  ],
+  "achievements": [
+    {
+      "title": "Featured in an Article",
+      "description": "Because of my frontend tips and tricks that I post on twitter I was featured in an article by HostGator.",
+      "link": "https://www.hostgator.com/blog/10-twitter-accounts-to-learn-to-code/"
+    },
+    {
+      "title": "css-shorthands got featured by many platforms",
+      "description": "A simple site I created for CSS shorthands got featured in various places.",
+      "link": "css-shorthand"
+    },
+    {
+      "title": "Articles about Web Development",
+      "description": "I occasionally write articles on Medium.",
+      "link": "@nikhilswain36"
+    }
+  ]
+}
