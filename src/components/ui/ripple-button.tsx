@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import React, { useEffect, useState } from "react";
 import type { MouseEvent } from "react";
@@ -29,7 +31,9 @@ export const RippleButton = React.forwardRef<
 
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
       createRipple(event);
-      onClick?.(event);
+      setTimeout(() => {
+        onClick?.(event);
+      }, 200);
     };
 
     const createRipple = (event: MouseEvent<HTMLButtonElement>) => {
