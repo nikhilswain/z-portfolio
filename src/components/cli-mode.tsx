@@ -40,6 +40,7 @@ export function CliMode() {
       "/projects": cliData.loading.projects,
       "/skills": cliData.loading.skills,
       "/contact": cliData.loading.contact,
+      "/resume": cliData.loading.resume,
     };
 
     const loadingMessage =
@@ -172,6 +173,9 @@ export function CliMode() {
       output = Object.entries(portfolioData.contact)
         .map(([method, value]: [string, any]) => `${method}: ${value}`)
         .join("\n");
+    } else if (command === "/resume") {
+      await simulateLoading(command);
+      window.open("/resume", "_blank");
     } else {
       output = `Command not found: ${command}. Type '/help' for available commands.`;
       isError = true;

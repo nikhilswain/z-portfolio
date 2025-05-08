@@ -5,10 +5,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 export function ResumePage() {
-  const handleBack = () => {
-    window.history.back();
-  };
-
   return (
     <div className="dark">
       <ModeProvider>

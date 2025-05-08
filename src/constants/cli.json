@@ -1,6 +1,6 @@
 {
   "welcome": "Welcome to Nikhil Kumar Swain's Portfolio CLI!\nType '/help' to see available commands.",
-  "help": "Available commands:\n\n- /help: Show this help message\n- /about: Display information about me\n- /projects: List all projects\n- /project [number]: Show details for a specific project\n- /skills: List my skills by category\n- /contact: Show contact information\n- /clear: Clear the terminal\n- /gui: Switch to GUI mode\n\nEaster Egg Commands:\n- /joke: Tell a random joke\n- /ascii: Display ASCII art\n- /quote: Get a random quote\n- /game: Play a simple game",
+  "help": "Available commands:\n\n- /help: Show this help message\n- /about: Display information about me\n- /resume: Redirect to resume page\n- /projects: List all projects\n- /project [number]: Show details for a specific project\n- /skills: List my skills by category\n- /contact: Show contact information\n- /clear: Clear the terminal\n- /gui: Switch to GUI mode\n\nEaster Egg Commands:\n- /joke: Tell a random joke\n- /ascii: Display ASCII art\n- /quote: Get a random quote\n- /game: Play a simple game",
   "commands": {
     "help": {
       "description": "Show available commands",
@@ -9,6 +9,10 @@
     "about": {
       "description": "Display information about me",
       "usage": "/about"
+    },
+    "resume": {
+      "description": "Visit my resume page",
+      "usage": "/resume"
     },
     "projects": {
       "description": "List all projects",
@@ -40,7 +44,8 @@
     "projects": "Loading project database",
     "skills": "Analyzing skill matrix",
     "about": "Retrieving personal information",
-    "contact": "Fetching contact details"
+    "contact": "Fetching contact details",
+    "resume": "Redirecting to resume page"
   },
   "customFunctions": {
     "joke": {
@@ -60,7 +65,7 @@
     },
     "ascii": {
       "type": "ascii",
-      "art": "  _____     _____    _____   _____   _____   _____   _     _   _     _   _   _ \n /     \\   /     \\  /     \\ /     \\ /     \\ /     \\ | \\   | | | \\   | | | \\ | |\n|  ___  | | | | | | \\_____/ \\_____/| |___| | \\_____/| |\\  | | | |   | | | | | |\n| |   | | | | | | |   | |     | |  | |   | |   | |  | | \\ | | | |   | | | | | |\n| |   | | | | | | |   | |     | |  | |   | |   | |  | |  \\| | | |   | | | | | |\n| |___| | | |_| | |   | |     | |  | |___| |   | |  | |   \\ | \\ \\_/ /  | |_| |\n \\_____/   \\_____/    |_|     |_|   \\_____/    |_|  |_|    \\_|  \\___/    \\___/ "
+      "art": "zzzzzzzzzzzzzzzzz    eeeeeeeeeeee    rrrrr   rrrrrrrrr      ooooooooooo   \n z:::::::::::::::z  ee::::::::::::ee  r::::rrr:::::::::r   oo:::::::::::oo \n z::::::::::::::z  e::::::eeeee:::::eer:::::::::::::::::r o:::::::::::::::o\n zzzzzzzz::::::z  e::::::e     e:::::err::::::rrrrr::::::ro:::::ooooo:::::o\n       z::::::z   e:::::::eeeee::::::e r:::::r     r:::::ro::::o     o::::o\n      z::::::z    e:::::::::::::::::e  r:::::r     rrrrrrro::::o     o::::o\n     z::::::z     e::::::eeeeeeeeeee   r:::::r            o::::o     o::::o\n    z::::::z      e:::::::e            r:::::r            o::::o     o::::o\n   z::::::zzzzzzzze::::::::e           r:::::r            o:::::ooooo:::::o\n  z::::::::::::::z e::::::::eeeeeeee   r:::::r            o:::::::::::::::o\n z:::::::::::::::z  ee:::::::::::::e   r:::::r             oo:::::::::::oo \n zzzzzzzzzzzzzzzzzz    eeeeeeeeeeeeee   rrrrrrr               ooooooooooo"
     },
     "game": {
       "type": "text",
