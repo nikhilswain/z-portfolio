@@ -38,20 +38,24 @@ export function CliMode() {
       "/about": cliData.loading.about,
       "/projects": cliData.loading.projects,
       "/skills": cliData.loading.skills,
+      "/contact": cliData.loading.contact,
     };
 
     const loadingMessage =
-      loadingMessages[command as keyof typeof loadingMessages] ||
-      "Processing...";
+      loadingMessages[command as keyof typeof loadingMessages];
+    
+    // Only show loading for specific commands that have loading messages
+    if (loadingMessage) {
+      setHistory((prev) => [
+        ...prev,
+        { command, output: loadingMessage, isLoading: true },
+      ]);
+      setIsProcessing(true);
+      return new Promise((resolve) => setTimeout(resolve, 600));
+    }
 
-    setHistory((prev) => [
-      ...prev,
-      { command, output: loadingMessage, isLoading: true },
-    ]);
-    setIsProcessing(true);
-
-    // Simulate processing time
-    return new Promise((resolve) => setTimeout(resolve, 1200));
+    // For other commands, don't show loading
+    return Promise.resolve();
   };
 
   // Custom function handler
@@ -88,8 +92,9 @@ export function CliMode() {
 
       setHistory((prev) => {
         const newHistory = [...prev];
+        // Only remove loading message if it exists
         if (isProcessing) {
-          newHistory.pop(); // Remove loading message
+          newHistory.pop();
         }
         return [...newHistory, { command, output, isError }];
       });
@@ -120,7 +125,6 @@ export function CliMode() {
       // Custom function was executed
       return;
     } else if (command === "/help") {
-      await simulateLoading(command);
       output = cliData.help;
     } else if (command === "/clear") {
       setHistory([]);
@@ -143,19 +147,14 @@ export function CliMode() {
         .join("");
     } else if (command.startsWith("/project ")) {
       const projectIndex = Number.parseInt(command.split(" ")[1]) - 1;
-      await simulateLoading(command);
-      if (portfolioData.projects[projectIndex]) {
-        const project = portfolioData.projects[projectIndex];
-        output = `Title: ${project.title}\nDescription: ${
-          project.description
-        }\nTechnologies: ${project.technologies.join(", ")}\nLink: ${
-          project.link
-        }`;
-      } else {
-        output =
-          "Project not found. Use '/projects' to see available projects.";
-        isError = true;
-      }
+      output = portfolioData.projects[projectIndex]
+        ? `Title: ${portfolioData.projects[projectIndex].title}\nDescription: ${
+            portfolioData.projects[projectIndex].description
+          }\nTechnologies: ${portfolioData.projects[projectIndex].technologies.join(
+            ", "
+          )}\nLink: ${portfolioData.projects[projectIndex].link}`
+        : "Project not found. Use '/projects' to see available projects.";
+      isError = !portfolioData.projects[projectIndex];
     } else if (command === "/skills") {
       await simulateLoading(command);
       output = Object.entries(portfolioData.skills)
@@ -174,11 +173,11 @@ export function CliMode() {
       isError = true;
     }
 
-    // Remove loading message and add actual output
+    // Update history with the output
     setHistory((prev) => {
       const newHistory = [...prev];
+      // Only remove loading message if we had shown one
       if (isProcessing) {
-        // Replace the loading message with the actual output
         newHistory.pop();
       }
       return [...newHistory, { command, output, isError }];

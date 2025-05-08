@@ -21,7 +21,7 @@ export const TextReveal: FC<TextRevealProps> = ({ children, className }) => {
   const words = children.split(" ");
 
   return (
-    <div ref={targetRef} className={cn("relative z-0 h-[20vh]", className)}>
+    <div ref={targetRef} className={cn("relative z-0 h-[30vh] md:h-[20vh]", className)}>
       <div className="sticky top-1/3 flex items-center justify-center">
         <span className="flex flex-wrap p-4 text-2xl font-bold text-black/20 dark:text-white/20">
           {words.map((word, i) => {

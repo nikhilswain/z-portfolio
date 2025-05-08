@@ -1,5 +1,5 @@
 {
-  "welcome": "Welcome to John Doe's Portfolio CLI!\nType '/help' to see available commands.",
+  "welcome": "Welcome to Nikhil Kumar Swain's Portfolio CLI!\nType '/help' to see available commands.",
   "help": "Available commands:\n\n- /help: Show this help message\n- /about: Display information about me\n- /projects: List all projects\n- /project [number]: Show details for a specific project\n- /skills: List my skills by category\n- /contact: Show contact information\n- /clear: Clear the terminal\n- /gui: Switch to GUI mode\n\nEaster Egg Commands:\n- /joke: Tell a random joke\n- /ascii: Display ASCII art\n- /quote: Get a random quote\n- /game: Play a simple game",
   "commands": {
     "help": {
@@ -39,7 +39,8 @@
   "loading": {
     "projects": "Loading project database",
     "skills": "Analyzing skill matrix",
-    "about": "Retrieving personal information"
+    "about": "Retrieving personal information",
+    "contact": "Fetching contact details"
   },
   "customFunctions": {
     "joke": {

@@ -143,7 +143,7 @@ export function ContactSection({ data }: ContactSectionProps) {
                       whileHover={{ x: 5 }}
                     >
                       <div className="w-10 h-10 flex items-center justify-center bg-zinc-800 rounded-md text-pink-400 border border-pink-500/30">
-                        <item.icon className="h-5 w-5" />
+                        <item.icon className="h-5 w-5 min-w-[35px]" />
                       </div>
                       <div>
                         <div className="font-medium text-zinc-400 text-xs uppercase tracking-wider">
@@ -163,7 +163,7 @@ export function ContactSection({ data }: ContactSectionProps) {
                           }
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-white hover:text-pink-400 transition-colors duration-300"
+                          className="text-white hover:text-pink-400 transition-colors duration-300 break-words word-wrap break-all"
                         >
                           {item.value}
                         </a>
@@ -265,7 +265,7 @@ export function ContactSection({ data }: ContactSectionProps) {
                         <Textarea
                           id="message"
                           name="message"
-                          rows={4}
+                          rows={8}
                           value={formData.message}
                           onChange={handleChange}
                           required
@@ -308,7 +308,7 @@ export function ContactSection({ data }: ContactSectionProps) {
                       whileHover={{ scale: 1.03, y: -2 }}
                       whileTap={{ scale: 0.97 }}
                       className="w-full mt-4 bg-gradient-to-r from-pink-600 to-cyan-600 hover:from-pink-700 hover:to-cyan-700 text-white py-3 rounded-md font-bold relative overflow-hidden group"
-                      disabled={status === 'loading'}
+                      disabled={status === "loading"}
                     >
                       <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-pink-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0"></div>
                       <div className="absolute inset-0 w-3/4 h-full bg-gradient-to-r from-pink-600/50 to-transparent animate-[shimmer_2s_infinite] z-0"></div>
@@ -326,18 +326,20 @@ export function ContactSection({ data }: ContactSectionProps) {
                           <line x1="22" y1="2" x2="11" y2="13"></line>
                           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                         </svg>
-                        {status === 'loading' ? 'TRANSMITTING...' : 'TRANSMIT MESSAGE'}
+                        {status === "loading"
+                          ? "TRANSMITTING..."
+                          : "TRANSMIT MESSAGE"}
                       </span>
                     </motion.button>
 
                     {/* Status Messages */}
-                    {status !== 'idle' && (
+                    {status !== "idle" && (
                       <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="mt-4 p-3 rounded-md font-mono text-sm flex items-center gap-2"
                       >
-                        {status === 'loading' && (
+                        {status === "loading" && (
                           <div className="bg-yellow-500/10 border border-yellow-500/30 text-yellow-500 w-full">
                             <div className="flex items-center p-2">
                               <span className="inline-block w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span>
@@ -345,19 +347,21 @@ export function ContactSection({ data }: ContactSectionProps) {
                             </div>
                           </div>
                         )}
-                        {status === 'success' && (
+                        {status === "success" && (
                           <div className="bg-green-500/10 border border-green-500/30 text-green-500 w-full">
                             <div className="flex items-center p-2">
                               <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-                              Message transmitted successfully! Thank you for reaching out.
+                              Message transmitted successfully! Thank you for
+                              reaching out.
                             </div>
                           </div>
                         )}
-                        {status === 'error' && (
+                        {status === "error" && (
                           <div className="bg-red-500/10 border border-red-500/30 text-red-500 w-full">
                             <div className="flex items-center p-2">
                               <span className="inline-block w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span>
-                              {errorMessage || 'Failed to send message. Please try again.'}
+                              {errorMessage ||
+                                "Failed to send message. Please try again."}
                             </div>
                           </div>
                         )}
