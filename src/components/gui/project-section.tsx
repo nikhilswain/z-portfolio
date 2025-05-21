@@ -92,14 +92,16 @@ export function ProjectsSection({ data }: ProjectsSectionProps) {
                       asChild
                       className="bg-pink-600 hover:bg-pink-700 text-white"
                     >
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        View Project
-                      </a>
+                      {project.link && (
+                        <a
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ExternalLink className="mr-2 h-4 w-4" />
+                          View Project
+                        </a>
+                      )}
                     </Button>
                     {project.github && (
                       <Button

@@ -133,7 +133,7 @@ export function SkillsSection({ data }: SkillsSectionProps) {
                   >
                     <motion.div
                       whileHover={{ scale: 1.2, rotate: 10, zIndex: 10 }}
-                      className="w-24 h-24 flex items-center justify-center bg-gradient-to-br from-pink-500/20 to-cyan-500/20 border border-pink-500/30 text-white rounded-xl shadow-lg cursor-none relative group"
+                      className="w-24 h-24 flex items-center justify-center bg-gradient-to-br from-pink-500/20 to-cyan-500/20 border border-pink-500/30 text-white rounded-xl shadow-lg  relative group"
                     >
                       {category === "frontend" && (
                         <Code className="h-8 w-8 text-pink-400" />
@@ -248,7 +248,7 @@ export function SkillsSection({ data }: SkillsSectionProps) {
                   {skills.map((skill, skillIndex) => (
                     <motion.div
                       key={skillIndex}
-                      className="bg-zinc-900 px-3 py-1 rounded-md text-sm text-zinc-300 hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-cyan-500/20 hover:text-white transition-colors duration-300 cursor-none"
+                      className="bg-zinc-900 px-3 py-1 rounded-md text-sm text-zinc-300 hover:bg-gradient-to-r hover:from-pink-500/20 hover:to-cyan-500/20 hover:text-white transition-colors duration-300 "
                       whileHover={{ scale: 1.05, y: -2 }}
                     >
                       {skill}
