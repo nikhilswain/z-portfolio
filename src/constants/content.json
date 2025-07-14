@@ -43,9 +43,9 @@
   },
   "projects": [
     {
-      "title": "zira",
-      "description": "Zira is a Kanban board app for organizing tasks with workspaces, rich cards, activity tracking, and local data storage.",
-      "image": "https://placehold.co/500x800?text=Under+Construction",
+      "title": "zist",
+      "description": "Zist is a Kanban board app for organizing tasks with workspaces, rich cards, activity tracking, and local data storage.",
+      "image": "/zist.png",
       "technologies": [
         "React",
         "TypeScript",
@@ -54,16 +54,7 @@
         "Tailwind CSS",
         "Chart.js"
       ],
-      "link": "",
-      "github": "",
-      "featured": true
-    },
-    {
-      "title": "Resume Parser",
-      "description": "An app where you can upload your resume and instantly get the key information extracted for you.",
-      "image": "https://placehold.co/500x800?text=Under+Construction",
-      "technologies": ["React", "Tailwind CSS", "TypeScript"],
-      "link": "",
+      "link": "https://zist.pages.dev",
       "github": "",
       "featured": true
     },
