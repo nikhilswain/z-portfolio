@@ -50,12 +50,39 @@
         "React",
         "TypeScript",
         "Astro",
+        "Shadcn",
         "IndexedDB",
         "Tailwind CSS",
         "Chart.js"
       ],
       "link": "https://zist.pages.dev",
       "github": "",
+      "featured": true
+    },
+    {
+      "title": "zketch",
+      "description": "Zketch is a canvas based drawing app with freehand sketching, multiple brush types, zoom/pan, and undo/redo support. You can save your work in a local vault or export it as images for easy sharing.",
+      "image": "/zketch.png",
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Astro",
+        "IndexedDB",
+        "Dexie.js",
+        "Tailwind CSS",
+        "Canvas API"
+      ],
+      "link": "https://zketch.pages.dev",
+      "github": "https://github.com/nikhilswain/zketch",
+      "featured": true
+    },
+    {
+      "title": "Z Color Picker",
+      "description": "Z Color Picker is a lightweight React library for fast, cross-device color selection with eyedropper support. It supports all major color formats, offers full customization, and comes with TypeScript support.",
+      "image": "/zcolorpicker.png",
+      "technologies": ["npm library", "React", "TypeScript", "Vite"],
+      "link": "https://www.npmjs.com/package/@zzro/z-color-picker",
+      "github": "https://github.com/nikhilswain/z-color-picker",
       "featured": true
     },
     {
