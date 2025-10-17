@@ -86,6 +86,14 @@
       "featured": true
     },
     {
+      "title": "token-portfolio",
+      "description": "An app to track crypto tokens, view portfolio value, and connect a wallet — built for speed, simplicity, and full control over the design.",
+      "image": "/tokenPortfolio.png",
+      "technologies": ["React", "TypeScript", "CSS", "Wagmi", "RainbowKit"],
+      "link": "https://token-portfolio-lime.vercel.app/",
+      "github": "https://github.com/nikhilswain/token-portfolio"
+    },
+    {
       "title": "css-shorthands",
       "description": "A curated list of useful CSS shorthand properties with syntax-highlighted code examples using Prism.js.",
       "image": "/cssshorthand.webp",
