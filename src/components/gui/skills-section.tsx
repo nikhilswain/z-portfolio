@@ -43,7 +43,7 @@ interface SkillsSectionProps {
 
 export function SkillsSection({ data }: SkillsSectionProps) {
   const [skillViewMode, setSkillViewMode] = useState<"grid" | "orbital">(
-    "orbital"
+    "grid"
   );
 
   const images = slugs.map(

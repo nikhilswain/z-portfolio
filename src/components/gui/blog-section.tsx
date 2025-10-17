@@ -59,7 +59,7 @@ export function BlogSection({ data }: BlogSectionProps) {
 
         {/* Search and filter */}
         <div className="mb-12 max-w-xl mx-auto">
-          <div className="relative mb-6">
+          {/* <div className="relative mb-6">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
             <Input
               type="text"
@@ -68,7 +68,7 @@ export function BlogSection({ data }: BlogSectionProps) {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 bg-zinc-800 border-zinc-700 text-white"
             />
-          </div>
+          </div> */}
 
           <div className="flex flex-wrap gap-2 justify-center">
             <Badge
@@ -80,7 +80,7 @@ export function BlogSection({ data }: BlogSectionProps) {
             {allTags.map((tag) => (
               <Badge
                 key={tag}
-                className={`cursor-pointer ${selectedTag === tag ? "bg-pink-500 hover:bg-pink-600" : "bg-zinc-800 hover:bg-zinc-700"}`}
+                className={`cursor-pointer ${selectedTag === tag ? "bg-pink-500 hover:bg-pink-600" : "bg-zinc-400 hover:bg-zinc-500"}`}
                 onClick={() => setSelectedTag(tag === selectedTag ? null : tag)}
               >
                 {tag}
