@@ -98,9 +98,7 @@ export function ResumeView() {
                   {exp.duration && (
                     <p className="text-zinc-500 text-sm mb-2">{exp.duration}</p>
                   )}
-                  <p className="text-zinc-400 mb-2">
-                    {exp.description || exp.details}
-                  </p>
+                  <p className="text-zinc-400 mb-2">{exp?.description}</p>
                   {exp.projects && (
                     <ul className="list-disc pl-5 text-zinc-400 space-y-1">
                       {exp.projects.map((proj, i) => (
@@ -114,12 +112,56 @@ export function ResumeView() {
                         {exp.keyProject.title}
                       </h5>
                       <ul className="list-disc pl-5 text-zinc-400 space-y-1">
-                        {exp.keyProject.points.map((pt, i) => (
+                        {exp.keyProject.highlights.map((pt, i) => (
                           <li key={i}>{pt}</li>
                         ))}
                       </ul>
                     </div>
                   )}
+                </div>
+              ))}
+            </div>
+
+            {/* Education */}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-4 border-b border-zinc-800 pb-2">
+                EDUCATION
+              </h3>
+              {resume.education.map((edu, i) => (
+                <div key={i} className="mb-4">
+                  <div className="flex items-center justify-between flex-wrap gap-4">
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-medium mb-1">{edu.degree}</h4>
+                      <p>-</p>
+                      <p className="text-zinc-400 mb-1">{edu.institution}</p>
+                    </div>
+                    <p className="text-zinc-500 text-sm">{edu.duration}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Sample Projects */}
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-4 border-b border-zinc-800 pb-2">
+                PROJECTS
+              </h3>
+              {resume.projects.map((proj, i) => (
+                <div key={i} className="mb-6">
+                  {/* name, type, description, link */}
+                  <h4 className="font-medium mb-1">
+                    {proj.name}{" "}
+                    <span className="text-zinc-500 text-sm">({proj.type})</span>
+                  </h4>
+                  <p className="text-zinc-400 mb-1">{proj.description}</p>
+                  <a
+                    href={proj.link}
+                    className="text-blue-300 text-sm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    View Project
+                  </a>
                 </div>
               ))}
             </div>

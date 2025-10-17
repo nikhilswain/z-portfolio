@@ -1,105 +1,146 @@
 {
   "name": "Nikhil Kumar Swain",
   "title": "Frontend Developer",
-  "summary": "Frontend Developer specializing in building scalable web applications, optimizing performance, and integrating APIs. Experienced in creating efficient and maintainable user interfaces.",
+  "summary": "Frontend Developer specializing in React, Next.js, and TypeScript, focused on building scalable, high-performance web applications. Experienced in developing responsive UIs, integrating RESTful APIs, and ensuring cross-browser compatibility. Familiar with Node.js/NestJS and relational/non-relational databases, delivering maintainable, testable, and production-ready solutions across the full stack.",
   "contact": {
-    "portfolio": "nikhil swain",
-    "location": "Vill. Kerual, P/O - Rudrapur, Tehsil - Jagatpur, Cuttack, Odisha",
-    "phone": "+917608854939",
+    "portfolio": "https://z-portfolio.pages.dev",
+    "location": "Vill. Kerual, P/O - Rudrapur, Tehsil - Jagatpur, Cuttack, Odisha, India",
+    "phone": "+91 7608854939",
     "email": "nikhilswain36@gmail.com",
     "social": {
       "twitter": "@iamn1khil",
-      "github": "nikhilswain"
+      "github": "nikhilswain",
+      "linkedin": "https://linkedin.com/in/nikhil-kumar-swain-408110152"
     }
   },
   "experience": [
     {
-      "title": "Web Development",
-      "details": "Experienced in building accessible and scalable web applications using modern front-end and back-end technologies.",
-      "projects": [
-        "A Next.js app integrating Discord API for message automation via webhooks.",
-        "Interactive, cross-browser web components using vanilla JavaScript.",
-        "A Node.js backend with MySQL and Sequelize for client-employee mapping and effort tracking.",
-        "A pseudo e-commerce platform with full cart and checkout functionality (excluding payments)."
+      "title": "Lead Frontend Developer",
+      "company": "Adstia Pvt Ltd",
+      "duration": "April 2023 - Present",
+      "description": "Leading frontend architecture and product development for multiple SaaS tools and CMS platforms.",
+      "responsibilities": [
+        "Led development of WeCall CMS, architecting a plugin-based micro-frontend system for modular content editing.",
+        "Built a Netlify-integrated deployment panel allowing non-technical users to launch multiple websites easily.",
+        "Developed a flowchart-style quiz builder reducing manual configuration by 50%.",
+        "Integrated Builder.io CMS with custom plugins for rapid site creation.",
+        "Developed themes and templates with live customization for instant site generation.",
+        "Implemented Jest unit tests to ensure component stability and prevent regression bugs."
+      ],
+      "keyProject": {
+        "title": "Analytics Dashboard (Lead Frontend Developer)",
+        "highlights": [
+          "Developed a Jira-like ticketing system for issue and task tracking.",
+          "Integrated real-time call record data with seamless frontend updates.",
+          "Built custom components for data visualization and dynamic filtering.",
+          "Used Syncfusion Data Grid and Charts for efficient data display and timeline management."
+        ]
+      }
+    },
+    {
+      "title": "Full Stack Engineer",
+      "company": "Yugam Technologies",
+      "duration": "August 2022 - March 2023",
+      "description": "Worked on website builder and code-generation platforms with real-time UI interaction.",
+      "responsibilities": [
+        "Developed Codma, a CSS shorthand generation platform with live preview and user profile management.",
+        "Built a drag-and-drop website builder supporting live content editing and plugin handling.",
+        "Integrated Node.js backend APIs for dynamic updates and live synchronization."
       ]
     },
     {
-      "title": "Yugam Technologies - Frontend Developer (Intern)",
+      "title": "Frontend Developer Intern",
+      "company": "Yugam Technologies",
       "duration": "February 2022 - July 2022",
-      "description": "Developed Codma, a CSS auto-generation platform, by building interactive tools for real-time style updates. Designed key frontend pages, including signup, login, and profile."
+      "description": "Built interactive tools for real-time CSS updates and designed key pages including login, signup, and profile."
+    }
+  ],
+  "education": [
+    {
+      "degree": "Masters in Computer Applications",
+      "institution": "Graphic Era University",
+      "duration": "2022 - 2024"
     },
     {
-      "title": "Yugam Technologies - Full Stack Engineer",
-      "duration": "August 2022 - March 2023",
-      "description": "Worked on a website builder with drag-and-drop plugins, live content editing, and dynamic CSS updates. Implemented plugin handling and interactive UI features for seamless customization."
+      "degree": "Bachelors in Computer Applications",
+      "institution": "Graphic Era University",
+      "duration": "2019 - 2022"
     },
     {
-      "title": "Adstia Pvt Ltd - Lead Frontend Developer",
-      "duration": "April 2023 - Present",
-      "description": "Led multiple projects, including site deployment automation via a custom panel and Netlify integration. Served as the core developer for building a panel to manage multiple websites efficiently.",
-      "projects": [
-        "Developed WeCall CMS, a custom-built content management system.",
-        "Built micro-frontend architecture for plugin setups within the CMS editor.",
-        "Designed an automated quiz form rendering system, allowing users to create quizzes through a flowchart-based interface.",
-        "Integrated Builder.io CMS, creating custom plugins and components for rapid site creation.",
-        "Developed themes and templates, allowing users to customize text and instantly generate their own websites.",
-        "Wrote Jest test cases for high-order functions and components to ensure reliability and performance."
-      ],
-      "keyProject": {
-        "title": "Key Project: Analytics Dashboard (Lead Frontend Developer)",
-        "points": [
-          "Built a Jira-like ticketing system for issue tracking and task management.",
-          "Managed real-time call record data on the frontend, ensuring seamless updates and high performance.",
-          "Developed custom components for data visualization, dynamic filtering, and user interactions.",
-          "Integrated Syncfusion Data Grid, Charts, and Calendar components for efficient data handling and timeline management."
-        ]
-      }
+      "degree": "High School",
+      "institution": "High School",
+      "duration": "2016 - 2019"
     }
   ],
   "skills": [
     "HTML",
     "CSS",
-    "JAVASCRIPT",
-    "REACT",
-    "NEXTJS",
-    "SOLIDJS",
-    "ASTRO",
-    "JEST",
-    "NODEJS/EXPRESS",
-    "MONGO DB",
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Next.js",
+    "Redux / Zustand / MobX",
+    "Node.js",
+    "Express",
+    "NestJS",
+    "MongoDB",
+    "MySQL",
     "PostgreSQL",
-    "SUPABASE",
-    "MYSQL",
-    "SEQUELIZE",
+    "Supabase",
+    "Sequelize",
+    "Tailwind CSS",
+    "SASS",
     "GSAP",
-    "TAILWIND CSS",
-    "DISCORD JS"
+    "Framer Motion",
+    "Jest",
+    "REST APIs",
+    "Performance Optimization"
   ],
   "tools": [
-    "GIT/GITHUB",
-    "VS CODE",
-    "FIGMA",
-    "WHIMSICAL",
-    "LINUX",
-    "NETLIFY",
-    "HEROKU",
-    "VERCEL"
+    "Git / GitHub",
+    "VS Code",
+    "Figma",
+    "Whimsical",
+    "Linux",
+    "Netlify",
+    "Vercel",
+    "Heroku"
+  ],
+  "projects": [
+    {
+      "name": "Zist",
+      "type": "Kanban Task Management App",
+      "description": "Organizes tasks with workspaces, rich cards, activity tracking, and local data storage for seamless productivity.",
+      "link": "https://zist.pages.dev"
+    },
+    {
+      "name": "Zketch",
+      "type": "Canvas Drawing App",
+      "description": "Supports freehand sketching with multiple brush types, zoom/pan, undo/redo, and local or image exports.",
+      "link": "https://zketch.pages.dev"
+    },
+    {
+      "name": "Z Color Picker",
+      "type": "React Color Selection Library",
+      "description": "Lightweight library for color selection with eyedropper support and full TypeScript support.",
+      "link": "https://www.npmjs.com/package/@zzro/z-color-picker"
+    }
   ],
   "achievements": [
     {
-      "title": "Featured in an Article",
-      "description": "Because of my frontend tips and tricks that I post on twitter I was featured in an article by HostGator.",
+      "title": "Featured in HostGator Article",
+      "description": "Recognized among '10 Twitter Accounts to Learn to Code' for sharing frontend development insights.",
       "link": "https://www.hostgator.com/blog/10-twitter-accounts-to-learn-to-code/"
     },
     {
-      "title": "css-shorthands got featured by many platforms",
-      "description": "A simple site I created for CSS shorthands got featured in various places.",
-      "link": "css-shorthand"
+      "title": "CSS-Shorthands Featured",
+      "description": "A simple site I created for CSS shorthand references got featured on multiple web platforms.",
+      "link": "https://css-shorthand"
     },
     {
-      "title": "Articles about Web Development",
-      "description": "I occasionally write articles on Medium.",
-      "link": "@nikhilswain36"
+      "title": "Web Development Articles",
+      "description": "Regularly publish articles on Medium about frontend practices and web optimization.",
+      "link": "https://medium.com/@nikhilswain36"
     }
   ]
 }
