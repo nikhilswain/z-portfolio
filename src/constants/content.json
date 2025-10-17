@@ -89,7 +89,22 @@
       "title": "token-portfolio",
       "description": "An app to track crypto tokens, view portfolio value, and connect a wallet — built for speed, simplicity, and full control over the design.",
       "image": "/tokenPortfolio.png",
-      "technologies": ["React", "TypeScript", "CSS", "Wagmi", "RainbowKit"],
+      "technologies": [
+        "React",
+        "TypeScript",
+        "CSS",
+        "Wagmi",
+        "RainbowKit",
+        "CoinGecko API"
+      ],
+      "link": "https://token-portfolio-lime.vercel.app/",
+      "github": "https://github.com/nikhilswain/token-portfolio"
+    },
+    {
+      "title": "shape-editor",
+      "description": "A web-based shape editor that allows users to create, edit, and combine SVG shapes using various tools and boolean operations.",
+      "image": "/shapeEditor.png",
+      "technologies": ["React", "TypeScript", "SVG/Canvas API", "Styled CSS"],
       "link": "https://token-portfolio-lime.vercel.app/",
       "github": "https://github.com/nikhilswain/token-portfolio"
     },
