@@ -172,7 +172,7 @@ export function ProjectsSection({ data }: ProjectsSectionProps) {
                 </CardItem>
 
                 <CardItem translateZ="40" className="flex flex-wrap gap-2 mt-4">
-                  {project.technologies.slice(0, 3).map((tech, techIndex) => (
+                  {project.technologies.map((tech, techIndex) => (
                     <Badge
                       key={techIndex}
                       variant="secondary"
@@ -181,14 +181,6 @@ export function ProjectsSection({ data }: ProjectsSectionProps) {
                       {tech}
                     </Badge>
                   ))}
-                  {project.technologies.length > 3 && (
-                    <Badge
-                      variant="outline"
-                      className="border-zinc-700 text-zinc-400"
-                    >
-                      +{project.technologies.length - 3}
-                    </Badge>
-                  )}
                 </CardItem>
 
                 <div className="flex justify-between items-center mt-8">

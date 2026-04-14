@@ -99,9 +99,9 @@ export function ResumeView() {
                     <p className="text-zinc-500 text-sm mb-2">{exp.duration}</p>
                   )}
                   <p className="text-zinc-400 mb-2">{exp?.description}</p>
-                  {exp.projects && (
+                  {exp.responsibilities && (
                     <ul className="list-disc pl-5 text-zinc-400 space-y-1">
-                      {exp.projects.map((proj, i) => (
+                      {exp.responsibilities.map((proj, i) => (
                         <li key={i}>{proj}</li>
                       ))}
                     </ul>

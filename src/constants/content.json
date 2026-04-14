@@ -86,6 +86,28 @@
       "featured": true
     },
     {
+      "title": "Algo Visualizer",
+      "description": "An interactive algorithm visualizer that shows how algorithms work internally, step by step. It combines visual execution with synchronized code to make the logic, flow, and behavior easy to understand.",
+      "image": "/algo-visualizer.png",
+      "technologies": ["React", "TypeScript", "Tailwind CSS"],
+      "link": "https://algo-visualizer.ze-ro.workers.dev/",
+      "github": "https://github.com/nikhilswain/algo-visualizer"
+    },
+    {
+      "title": "Previewz",
+      "description": "Previewz is a local-first personal gallery where you can save images, videos, and links, and preview them instantly. It includes hidden vaults to keep your private content secure and fully under your control.",
+      "image": "/previewz.png",
+      "technologies": [
+        "React",
+        "Astro",
+        "TypeScript",
+        "Tailwind CSS",
+        "Framer Motion"
+      ],
+      "link": "https://previewz.ze-ro.workers.dev/",
+      "github": "https://github.com/nikhilswain/Previewz"
+    },
+    {
       "title": "token-portfolio",
       "description": "An app to track crypto tokens, view portfolio value, and connect a wallet — built for speed, simplicity, and full control over the design.",
       "image": "/tokenPortfolio.png",
