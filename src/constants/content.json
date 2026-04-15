@@ -86,6 +86,13 @@
       "featured": true
     },
     {
+      "title": "Yoink",
+      "description": "A browser extension that extracts original-quality media URLs from Twitter/X and Instagram. Videos, images, reels — just click Yoink and grab the direct CDN link.",
+      "image": "/yoink.png",
+      "technologies": ["JavaScript", "WebExtensions API", "CSS"],
+      "github": "https://github.com/nikhilswain/yoink"
+    },
+    {
       "title": "Algo Visualizer",
       "description": "An interactive algorithm visualizer that shows how algorithms work internally, step by step. It combines visual execution with synchronized code to make the logic, flow, and behavior easy to understand.",
       "image": "/algo-visualizer.png",
