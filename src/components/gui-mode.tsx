@@ -35,7 +35,7 @@ export function GuiMode() {
       <SkillsSection data={portfolioData?.skills} />
       <ProjectsSection data={portfolioData?.projects} />
       <FunFactSection data={portfolioData?.funFacts} />
-      <BlogSection data={portfolioData?.blog} />
+      <BlogSection data={portfolioData?.medium} />
       <HobbiesAndInterests data={portfolioData?.hobbies} />
       <ContactSection data={portfolioData?.contact} />
     </div>

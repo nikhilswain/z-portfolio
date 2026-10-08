@@ -43,6 +43,7 @@
   },
   "projects": [
     {
+      "id": "zist",
       "title": "zist",
       "description": "Zist is a Kanban board app for organizing tasks with workspaces, rich cards, activity tracking, and local data storage.",
       "image": "/zist.png",
@@ -60,6 +61,7 @@
       "featured": true
     },
     {
+      "id": "zketch",
       "title": "zketch",
       "description": "Zketch is a canvas based drawing app with freehand sketching, multiple brush types, zoom/pan, and undo/redo support. You can save your work in a local vault or export it as images for easy sharing.",
       "image": "/zketch.png",
@@ -77,6 +79,7 @@
       "featured": true
     },
     {
+      "id": "z-color-picker",
       "title": "Z Color Picker",
       "description": "Z Color Picker is a lightweight React library for fast, cross-device color selection with eyedropper support. It supports all major color formats, offers full customization, and comes with TypeScript support.",
       "image": "/zcolorpicker.png",
@@ -86,6 +89,7 @@
       "featured": true
     },
     {
+      "id": "yoink",
       "title": "Yoink",
       "description": "A browser extension that extracts original-quality media URLs from Twitter/X and Instagram. Videos, images, reels — just click Yoink and grab the direct CDN link.",
       "image": "/yoink.png",
@@ -93,6 +97,7 @@
       "github": "https://github.com/nikhilswain/yoink"
     },
     {
+      "id": "algo-visualizer",
       "title": "Algo Visualizer",
       "description": "An interactive algorithm visualizer that shows how algorithms work internally, step by step. It combines visual execution with synchronized code to make the logic, flow, and behavior easy to understand.",
       "image": "/algo-visualizer.png",
@@ -101,6 +106,7 @@
       "github": "https://github.com/nikhilswain/algo-visualizer"
     },
     {
+      "id": "previewz",
       "title": "Previewz",
       "description": "Previewz is a local-first personal gallery where you can save images, videos, and links, and preview them instantly. It includes hidden vaults to keep your private content secure and fully under your control.",
       "image": "/previewz.png",
@@ -115,6 +121,7 @@
       "github": "https://github.com/nikhilswain/Previewz"
     },
     {
+      "id": "token-portfolio",
       "title": "token-portfolio",
       "description": "An app to track crypto tokens, view portfolio value, and connect a wallet — built for speed, simplicity, and full control over the design.",
       "image": "/tokenPortfolio.png",
@@ -130,14 +137,16 @@
       "github": "https://github.com/nikhilswain/token-portfolio"
     },
     {
+      "id": "shape-editor",
       "title": "shape-editor",
       "description": "A web-based shape editor that allows users to create, edit, and combine SVG shapes using various tools and boolean operations.",
       "image": "/shapeEditor.png",
       "technologies": ["React", "TypeScript", "SVG/Canvas API", "Styled CSS"],
-      "link": "https://token-portfolio-lime.vercel.app/",
-      "github": "https://github.com/nikhilswain/token-portfolio"
+      "link": "https://shape-editor.pages.dev",
+      "github": ""
     },
     {
+      "id": "css-shorthands",
       "title": "css-shorthands",
       "description": "A curated list of useful CSS shorthand properties with syntax-highlighted code examples using Prism.js.",
       "image": "/cssshorthand.webp",
@@ -146,6 +155,7 @@
       "github": "https://github.com/nikhilswain/css-shorthands"
     },
     {
+      "id": "10days10design",
       "title": "10days10designs",
       "description": "A self-initiated 10-day design challenge showcasing daily UI creations styled with Tailwind CSS.",
       "image": "10days10design.webp",
@@ -154,6 +164,7 @@
       "github": "https://github.com/nikhilswain/10days10design"
     },
     {
+      "id": "lyricsfinder",
       "title": "LyricsFinder",
       "description": "A simple app to fetch and display song lyrics based on the singer and song name using the Lyrics API.",
       "image": "/lyricsFinder.webp",
@@ -179,7 +190,7 @@
     "devops": ["Git", "GitHub Actions", "Docker", "Vercel", "Netlify"],
     "tools": ["VS Code", "Figma", "Postman", "Jest", "Cypress"]
   },
-  "blog": [
+  "medium": [
     {
       "title": "Getting Started With Tailwind CSS",
       "description": "A utility-first CSS framework for rapidly building custom user interfaces.",
@@ -199,7 +210,7 @@
       "tags": ["CSS", "Flexbox", "Frontend"]
     },
     {
-      "title": "Building Micro-Frontends with Module Federation",
+      "title": "Arrays in JavaScript",
       "description": "From [0] to [ 'H', 'E', 'R', 'O' ]",
       "date": "May 30, 2019",
       "readTime": "8 min read",
