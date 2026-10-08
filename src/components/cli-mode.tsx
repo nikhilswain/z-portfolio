@@ -6,7 +6,7 @@ import { useMode } from "@/components/mode-provider";
 import { Button } from "@/components/ui/button";
 import { Monitor, X, Minus, Square } from "lucide-react";
 import { motion } from "framer-motion";
-import { fetchProgrammingJoke } from "@/pages/api/programmingJokes";
+import { fetchProgrammingJoke } from "@/lib/programmingJokes";
 
 export function CliMode() {
   const { portfolioData, cliData, setCurrentMode } = useMode();

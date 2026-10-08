@@ -1,28 +1,150 @@
 ---
-import "../styles//global.css";
+import "../styles/global.css";
+import content from "../constants/content.json";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "profile" | "article";
+  noindex?: boolean;
+}
+
+const {
+  title = "Nikhil Kumar Swain — Frontend Developer",
+  description = content.about.summary,
+  image = "/og-image.png",
+  type = "website",
+  noindex = false,
+} = Astro.props;
+
+const siteURL = Astro.site ?? new URL("https://zerro.dev");
+const canonical = new URL(Astro.url.pathname, siteURL).toString();
+const ogImage = new URL(image, siteURL).toString();
+const personName = content.name;
+const jobTitle = content.title;
+const twitterHandle = "@iamn1khil";
+const themeColor = "#0a0a0f";
+
+const socials = [
+  content.contact.github,
+  content.contact.linkedin,
+  content.contact.twitter,
+].filter(Boolean);
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: personName,
+  alternateName: "zerro",
+  url: siteURL.origin,
+  image: ogImage,
+  jobTitle,
+  email: `mailto:${content.contact.email}`,
+  description,
+  sameAs: socials,
+  knowsAbout: [
+    ...content.skills.frontend,
+    ...content.skills.backend,
+  ],
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Graphic Era University",
+  },
+  worksFor: {
+    "@type": "Organization",
+    name: "Adstia Pvt. Ltd.",
+  },
+};
+
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: `${personName} — ${jobTitle}`,
+  alternateName: "zerro.dev",
+  url: siteURL.origin,
+  inLanguage: "en",
+  author: { "@type": "Person", name: personName },
+};
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Nikhil Kumar Swain</title>
-	</head>
-	<body>
-		<div>
-			<slot />
-		</div>
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary meta -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={personName} />
+    <meta
+      name="robots"
+      content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}
+    />
+    <meta name="theme-color" content={themeColor} />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Icons -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content={personName} />
+    <meta name="application-name" content={personName} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={`${personName} — Portfolio`} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${personName} — ${jobTitle}`} />
+    <meta property="og:locale" content="en_US" />
+    {type === "profile" && <meta property="profile:username" content="zerro" />}
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content={twitterHandle} />
+    <meta name="twitter:creator" content={twitterHandle} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={`${personName} — ${jobTitle}`} />
+
+    <!-- Discovery -->
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+    <!-- Structured data -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(personJsonLd)}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(websiteJsonLd)}
+    />
+  </head>
+  <body>
+    <div>
+      <slot />
+    </div>
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 </style>
