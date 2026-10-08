@@ -1,0 +1,24 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+
+interface Props {
+  current?: "blog";
+  progress?: boolean;
+}
+
+const { current, progress = false } = Astro.props;
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="/" class="wordmark">zerro<span class="wordmark__cursor" aria-hidden="true">_</span><span class="visually-hidden"> — home</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="/blog/" aria-current={current === "blog" ? "page" : undefined}>Blog</a></li>
+        <li><a href="/resume/">Resume</a></li>
+      </ul>
+    </nav>
+    <ThemeToggle />
+  </div>
+  {progress && <div class="reading-progress" aria-hidden="true"></div>}
+</header>

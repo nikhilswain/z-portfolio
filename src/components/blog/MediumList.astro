@@ -1,0 +1,21 @@
+---
+import content from "@/constants/content.json";
+
+const items = content.medium.map((item) => ({ ...item, year: new Date(item.date).getFullYear() }));
+---
+
+{items.length > 0 && (
+  <section class="medium" aria-labelledby="medium-heading">
+    <h2 id="medium-heading" class="section-label">Earlier writing on Medium</h2>
+    <ul class="medium-list">
+      {items.map((item) => (
+        <li>
+          <span class="medium-list__year">{item.year}</span>
+          <a href={item.link} target="_blank" rel="noopener noreferrer">
+            {item.title}<span aria-hidden="true"> ↗</span><span class="visually-hidden"> (opens Medium in a new tab)</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

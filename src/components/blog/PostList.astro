@@ -1,0 +1,45 @@
+---
+import type { BlogPost } from "@/lib/blog/collection";
+import { formatDate, isoDate } from "@/lib/blog/dates";
+import { tagSlug } from "@/lib/blog/tags";
+import type { PostNode } from "@/lib/blog/tree";
+
+interface Props {
+  tree: PostNode<BlogPost>[];
+}
+
+const { tree } = Astro.props;
+---
+
+<section aria-labelledby="latest-heading">
+  <h2 id="latest-heading" class="section-label">Latest</h2>
+  <ol class="post-list">
+    {tree.map(({ post, children }) => (
+      <li class="post-row">
+        <time class="post-row__date" datetime={isoDate(post.publishedAt)}>{formatDate(post.publishedAt)}</time>
+        <div>
+          <h3 class="post-row__title"><a href={`/blog/${post.slug}/`}>{post.title}</a></h3>
+          <p class="post-row__desc">{post.description}</p>
+          <p class="post-row__meta">
+            <span>{post.readingTime} min</span>
+            {post.tags.map((tag) => (
+              <span class="tag"><span aria-hidden="true">#{tagSlug(tag)}</span><span class="visually-hidden">{tag}</span></span>
+            ))}
+          </p>
+          {children.length > 0 && (
+            <ol class="post-children" aria-label={`Deep dives in ${post.title}`}>
+              {children.map((child) => (
+                <li class="post-child">
+                  <span class="tree" aria-hidden="true">└─</span>
+                  <time datetime={isoDate(child.publishedAt)}>{formatDate(child.publishedAt)}</time>
+                  <a href={`/blog/${child.slug}/`}>{child.title}</a>
+                  <span class="post-child__meta">· {child.readingTime} min</span>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>

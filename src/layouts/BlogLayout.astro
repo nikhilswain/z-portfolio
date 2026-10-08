@@ -1,0 +1,44 @@
+---
+import "@fontsource-variable/ibm-plex-sans/wght.css";
+import "@fontsource-variable/ibm-plex-sans/wght-italic.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/400-italic.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import "../styles/blog.css";
+import type { ComponentProps } from "astro/types";
+import Layout from "./Layout.astro";
+import SiteHeader from "../components/blog/SiteHeader.astro";
+import SiteFooter from "../components/blog/SiteFooter.astro";
+
+type Props = Omit<ComponentProps<typeof Layout>, "dataTheme" | "rssUrl"> & {
+  current?: "blog";
+  progress?: boolean;
+};
+
+const { current, progress = false, ...layoutProps } = Astro.props;
+---
+
+<Layout {...layoutProps} dataTheme="dark" rssUrl="/blog/rss.xml">
+  <Fragment slot="head">
+    <script is:inline>
+      (() => {
+        let theme = null;
+        try {
+          theme = localStorage.getItem("zerro-theme");
+        } catch {}
+        if (theme !== "light" && theme !== "dark") {
+          theme = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+  </Fragment>
+  <div class="blog">
+    <a class="skip-link" href="#content">Skip to content</a>
+    <SiteHeader current={current} progress={progress} />
+    <main id="content" tabindex="-1">
+      <slot />
+    </main>
+    <SiteFooter />
+  </div>
+</Layout>
