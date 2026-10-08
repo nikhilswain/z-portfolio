@@ -175,7 +175,7 @@ export function CliMode() {
         .join("\n");
     } else if (command === "/resume") {
       await simulateLoading(command);
-      window.open("/resume", "_blank");
+      window.open("/resume/", "_blank");
     } else {
       output = `Command not found: ${command}. Type '/help' for available commands.`;
       isError = true;

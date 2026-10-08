@@ -26,7 +26,7 @@ export function HeroSection({ data, onSwitchMode }: HeroSectionProps) {
   const smoothY = useSpring(heroY, springConfig);
 
   const goToResume = () => {
-    window.open("/resume", "_blank");
+    window.open("/resume/", "_blank");
   };
 
   return (
