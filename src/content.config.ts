@@ -3,13 +3,14 @@ import { pathToFileURL } from "node:url";
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 import { readArticleMeta } from "./lib/blog/article-meta.mjs";
+import { draftsEnabled } from "./lib/blog/drafts.mjs";
 import { BLOG_TAGS } from "./lib/blog/tags";
 
 const BLOG_DIR = "./src/content/blog";
-const includeDrafts = import.meta.env.DEV || process.env.BLOG_INCLUDE_DRAFTS === "1";
+const includeDrafts = draftsEnabled();
 
 /**
- * Production builds don't load drafts at all, so Astro never processes their images —
+ * Unless BLOG_INCLUDE_DRAFTS=1 (dev or build), drafts aren't loaded at all, so Astro never processes their images —
  * otherwise unpublished screenshots would still be deployed under /_astro/.
  */
 function blogPattern(): string[] {

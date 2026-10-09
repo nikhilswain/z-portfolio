@@ -8,8 +8,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
-    "build:drafts": "node scripts/build-with-drafts.mjs",
-    "check:blog": "node scripts/check-blog-dist.mjs"
+    "build:drafts": "node scripts/with-drafts.mjs build",
+    "check:blog": "node scripts/check-blog-dist.mjs",
+    "dev:drafts": "node scripts/with-drafts.mjs dev"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.0",

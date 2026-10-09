@@ -1,4 +1,5 @@
 import { getCollection, render, type CollectionEntry } from "astro:content";
+import { draftsEnabled } from "./drafts.mjs";
 import { PROJECT_IDS } from "./projects";
 import { renderFailures } from "./render-check";
 import { validatePosts, type PostSummary } from "./tree";
@@ -10,9 +11,9 @@ export interface BlogPost extends PostSummary {
   readingTime: number;
 }
 
-/** Drafts are visible in `astro dev` and in verification builds (`BLOG_INCLUDE_DRAFTS=1`), never in production. */
+/** Drafts appear only with `npm run dev:drafts` / `npm run build:drafts` (BLOG_INCLUDE_DRAFTS=1), never in production. */
 export function includeDrafts(): boolean {
-  return import.meta.env.DEV || process.env.BLOG_INCLUDE_DRAFTS === "1";
+  return draftsEnabled();
 }
 
 async function load(): Promise<BlogPost[]> {

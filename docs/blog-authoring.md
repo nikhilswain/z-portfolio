@@ -9,7 +9,7 @@ This is the practical guide for adding articles. For design details, see
    `src/content/blog/responsive-layouts-from-editor-coordinates/`.
    The folder name becomes the URL: `https://zerro.dev/blog/<folder-name>/`.
 2. Copy `docs/templates/article.md` into it as `index.md`, and put the article's images in the same folder.
-3. Write. Preview with `npm run dev` at `http://localhost:4321/blog/<slug>/`. Drafts are visible in dev.
+3. Write. Preview with `npm run dev:drafts` at `http://localhost:4321/blog/<slug>/` (plain `npm run dev` hides drafts, like production).
 4. Set `draft: false` (or delete the line) when it's ready.
 5. Commit and push. Cloudflare Pages builds and deploys. The index, sitemap, RSS, table of contents, SEO tags and related links all update automatically.
 
@@ -34,7 +34,7 @@ If you wrote the article inside a project repo (`docs/articles/<slug>/`), copy t
 | `related` | no | Slugs to show first under "More from the blog". |
 | `seoTitle` | no | Only when the visible title is too long or vague for search. Must describe the same topic. |
 | `ogImage` | no | A 1200×630 image for social previews. Without one, the project's image is used, then the site default. |
-| `draft` | no | `true` means visible in `npm run dev`, never published. Production builds skip drafts entirely, so their images aren't deployed either. |
+| `draft` | no | `true` means visible only with `npm run dev:drafts`, never published. Production builds skip drafts entirely, so their images aren't deployed either. |
 
 Reading time is calculated automatically (230 words per minute, code blocks excluded), so don't write it.
 
