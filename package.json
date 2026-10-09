@@ -10,7 +10,9 @@
     "test": "vitest run",
     "build:drafts": "node scripts/with-drafts.mjs build",
     "check:blog": "node scripts/check-blog-dist.mjs",
-    "dev:drafts": "node scripts/with-drafts.mjs dev"
+    "dev:drafts": "node scripts/with-drafts.mjs dev",
+    "crosspost": "node scripts/crosspost.mjs",
+    "crosspost:clean": "node scripts/crosspost.mjs --clean"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.0",
@@ -53,6 +55,7 @@
     "mdast-util-to-hast": "^13.2.1",
     "rehype-stringify": "^10.0.1",
     "remark-rehype": "^11.1.2",
+    "sharp": "^0.33.5",
     "typescript": "^5.9.3",
     "vfile": "^6.0.3",
     "vitest": "^3.2.7"

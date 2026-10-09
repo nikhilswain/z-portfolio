@@ -126,12 +126,15 @@ npm run build                                    # restore a production dist/
 zerro.dev is the original. Other platforms are for distribution, and must point back to it with a canonical URL so search engines credit zerro.dev.
 
 1. Publish on zerro.dev and wait for the deploy.
-2. Cross-post:
-   - **DEV.to:** paste the Markdown and add `canonical_url: https://zerro.dev/blog/<slug>/` to its frontmatter.
-   - **Hashnode:** paste the Markdown. In the article settings, turn on "Are you republishing?" / "Originally published at" and enter the zerro.dev URL.
-   - **Medium:** use **Import a story** with the zerro.dev URL. It sets the canonical link automatically. Never paste the text in by hand.
-   - **Images:** replace relative paths (`./x.png`) with absolute URLs from the live article (right-click → copy image address) before pasting.
+2. Run `npm run crosspost <slug>`. It reads the live article and writes a kit to `crosspost/<slug>/` (git-ignored):
+   - `devto.md`: paste into DEV.to as-is. Its frontmatter sets the title, tags, cover image and `canonical_url`.
+   - `hashnode.md`: paste into Hashnode, then turn on "Are you republishing?" in the article settings and enter the zerro.dev URL.
+   - `medium.html` with PNG images: open it in a browser, copy everything, and paste into a new Medium story. Upload an image at each yellow placeholder and set the canonical link in the story's advanced settings. Don't use Medium's "Import a story": it drops images, code blocks, tables and headings that contain code.
+   - `README.md`: the exact steps, plus each image's position and alt text.
+
+   In the copies, images point at the live site, captions sit under images, callouts become a bold label, and code blocks keep only their language. The command refuses drafts and articles that aren't deployed yet.
 3. Share on X / LinkedIn using the zerro.dev link, not the cross-post.
+4. Run `npm run crosspost:clean` to delete the kits.
 
 **Before sharing:**
 - [ ] The title and description describe the topic.

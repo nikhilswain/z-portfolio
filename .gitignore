@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# cross-post kits (npm run crosspost <slug>)
+crosspost/
