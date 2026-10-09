@@ -9,7 +9,8 @@ interface BlogBufferProps {
   onClose: () => void;
 }
 
-const MIN_LINES = 12;
+/** Enough `~` lines for a maximized terminal on a tall screen; the overflow is clipped. */
+const FILLER_LINES = 60;
 
 export function BlogBuffer({ posts, onClose }: BlogBufferProps) {
   const rows = useMemo(() => blogRows(posts), [posts]);
@@ -31,7 +32,7 @@ export function BlogBuffer({ posts, onClose }: BlogBufferProps) {
 
   return (
     <div className="flex h-full flex-col font-mono text-sm" onKeyDown={handleKeyDown}>
-      <ol className="flex-1 overflow-auto" aria-label="Blog articles">
+      <ol className="min-h-0 overflow-auto" aria-label="Blog articles">
         {rows.map(({ post, depth }, index) => {
           const active = index === cursor;
           return (
@@ -60,12 +61,15 @@ export function BlogBuffer({ posts, onClose }: BlogBufferProps) {
             </li>
           );
         })}
-        {Array.from({ length: Math.max(0, MIN_LINES - rows.length) }, (_, index) => (
-          <li key={`filler-${index}`} aria-hidden="true" className="px-2 text-zinc-700">
-            ~
-          </li>
-        ))}
       </ol>
+      {/* Neovim-style `~` lines fill whatever height is left; clipped, so they never cause scrolling. */}
+      <div aria-hidden="true" className="min-h-0 flex-1 overflow-hidden text-zinc-700">
+        {Array.from({ length: FILLER_LINES }, (_, index) => (
+          <div key={index} className="px-2">
+            ~
+          </div>
+        ))}
+      </div>
       <div className="flex justify-between bg-pink-500 px-2 text-black">
         <span>
           <b>BLOG</b> blog://zerro.dev
