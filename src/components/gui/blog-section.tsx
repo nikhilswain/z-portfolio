@@ -2,14 +2,15 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { MagicCard } from "@/components/ui/magic-card";
 import { formatDate, isoDate } from "@/lib/blog/dates";
 import type { HomepagePost } from "@/lib/blog/homepage";
+import { tagSlug } from "@/lib/blog/tags";
 
 interface BlogSectionProps {
   posts: HomepagePost[];
 }
 
+/** Latest articles as a list, in the same layout as the /blog index. */
 export function BlogSection({ posts }: BlogSectionProps) {
   if (posts.length === 0) return null;
 
@@ -25,7 +26,7 @@ export function BlogSection({ posts }: BlogSectionProps) {
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="mb-16 text-center"
+          className="mb-12 text-center"
         >
           <h2
             id="writing-heading"
@@ -39,37 +40,43 @@ export function BlogSection({ posts }: BlogSectionProps) {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <ol className="mx-auto max-w-[860px] border-t border-zinc-800">
           {latest.map((post, index) => (
-            <motion.div
+            <motion.li
               key={post.slug}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
               viewport={{ once: true }}
+              className="group relative grid gap-2 rounded-sm border-b border-zinc-800 py-6 md:grid-cols-[7.5rem_minmax(0,1fr)] md:gap-x-8 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-4 has-[a:focus-visible]:outline-cyan-400 has-[a:focus-visible]:outline"
             >
-              <MagicCard className="h-full">
-                <a
-                  href={`/blog/${post.slug}/`}
-                  className="group h-full flex flex-col p-6 rounded-lg [overflow-wrap:anywhere] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
-                >
-                  <p className="text-sm text-zinc-500 font-mono mb-3">
-                    <time dateTime={isoDate(post.publishedAt)}>{formatDate(post.publishedAt)}</time>
-                    {" · "}
-                    {post.readingTime} min read
-                  </p>
-                  <h3 className="text-xl font-bold mb-3 text-white group-hover:text-pink-400 transition-colors duration-300">
+              <time dateTime={isoDate(post.publishedAt)} className="pt-1 font-mono text-sm text-zinc-500">
+                {formatDate(post.publishedAt)}
+              </time>
+              <div className="min-w-0 [overflow-wrap:anywhere]">
+                <h3 className="text-xl font-semibold leading-snug">
+                  {/* The link stretches over the whole row: one tab stop, one announcement. */}
+                  <a
+                    href={`/blog/${post.slug}/`}
+                    className="text-white transition-colors group-hover:text-pink-400 focus-visible:outline-none after:absolute after:inset-0"
+                  >
                     {post.title}
-                  </h3>
-                  <p className="text-zinc-400 text-sm flex-grow">{post.description}</p>
-                  <span className="mt-6 text-sm text-cyan-400" aria-hidden="true">
-                    Read article →
-                  </span>
-                </a>
-              </MagicCard>
-            </motion.div>
+                  </a>
+                </h3>
+                <p className="mt-2 leading-relaxed text-zinc-400">{post.description}</p>
+                <p className="mt-3 flex flex-wrap gap-x-3 gap-y-1 font-mono text-sm text-zinc-500">
+                  <span>{post.readingTime} min</span>
+                  {post.tags.map((tag) => (
+                    <span key={tag} className="text-cyan-400">
+                      <span aria-hidden="true">#{tagSlug(tag)}</span>
+                      <span className="sr-only">{tag}</span>
+                    </span>
+                  ))}
+                </p>
+              </div>
+            </motion.li>
           ))}
-        </div>
+        </ol>
 
         <div className="mt-12 flex justify-center">
           {/* Same look as the hero's "View Resume" RippleButton, but a real link so it can be opened in a new tab. */}

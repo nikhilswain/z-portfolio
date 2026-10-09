@@ -32,9 +32,9 @@ describe("bufferKeyAction", () => {
 describe("blogRows", () => {
   it("orders rows like the /blog index: newest parents, children nested under them", () => {
     const rows = blogRows([
-      { slug: "old", title: "Old", description: "", publishedAt: new Date("2026-01-01"), readingTime: 3 },
-      { slug: "kid", title: "Kid", description: "", publishedAt: new Date("2026-05-01"), readingTime: 2, parent: "old", order: 1 },
-      { slug: "new", title: "New", description: "", publishedAt: new Date("2026-03-01"), readingTime: 4 },
+      { slug: "old", title: "Old", description: "", publishedAt: new Date("2026-01-01"), readingTime: 3, tags: [] },
+      { slug: "kid", title: "Kid", description: "", publishedAt: new Date("2026-05-01"), readingTime: 2, tags: [], parent: "old", order: 1 },
+      { slug: "new", title: "New", description: "", publishedAt: new Date("2026-03-01"), readingTime: 4, tags: [] },
     ]);
     expect(rows.map((r) => `${r.depth}:${r.post.slug}`)).toEqual(["0:new", "0:old", "1:kid"]);
   });
