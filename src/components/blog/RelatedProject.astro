@@ -1,0 +1,25 @@
+---
+import type { Project } from "@/lib/blog/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<section class="footer-section" aria-labelledby="related-project-heading">
+  <h2 id="related-project-heading" class="section-label">Related project</h2>
+  <div class="project-card">
+    <p class="project-card__name">{project.title}</p>
+    <p class="project-card__desc">{project.description}</p>
+    <p class="project-card__links">
+      {project.link && (
+        <a href={project.link}>View project<span class="visually-hidden">: {project.title}</span> <span aria-hidden="true">→</span></a>
+      )}
+      {project.github && (
+        <a href={project.github}>View source<span class="visually-hidden">: {project.title}</span> <span aria-hidden="true">→</span></a>
+      )}
+    </p>
+  </div>
+</section>

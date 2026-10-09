@@ -1,0 +1,23 @@
+---
+import type { BlogPost } from "@/lib/blog/collection";
+import { formatDate, isoDate } from "@/lib/blog/dates";
+
+interface Props {
+  posts: BlogPost[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section class="footer-section" aria-labelledby="more-heading">
+  <h2 id="more-heading" class="section-label">More from the blog</h2>
+  <ul class="related-list">
+    {posts.map((post) => (
+      <li>
+        <a href={`/blog/${post.slug}/`}>{post.title}</a>
+        <p>{post.description}</p>
+        <span class="meta"><time datetime={isoDate(post.publishedAt)}>{formatDate(post.publishedAt)}</time> · {post.readingTime} min</span>
+      </li>
+    ))}
+  </ul>
+</section>

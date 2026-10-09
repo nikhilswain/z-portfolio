@@ -1,0 +1,37 @@
+<dialog class="lightbox" data-lightbox aria-label="Image viewer">
+  <form method="dialog">
+    <button class="lightbox__close" aria-label="Close image viewer">×</button>
+  </form>
+  <img data-lightbox-img alt="" />
+  <p class="lightbox__caption" data-lightbox-caption></p>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>("[data-lightbox]");
+  const large = dialog?.querySelector<HTMLImageElement>("[data-lightbox-img]");
+  const caption = dialog?.querySelector<HTMLElement>("[data-lightbox-caption]");
+  let trigger: HTMLButtonElement | null = null;
+
+  if (dialog && large && caption) {
+    for (const img of document.querySelectorAll<HTMLImageElement>("[data-article-body] img")) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "zoom-trigger";
+      button.setAttribute("aria-label", `View larger: ${img.alt}`);
+      img.replaceWith(button);
+      button.append(img);
+      button.addEventListener("click", () => {
+        trigger = button;
+        large.src = img.currentSrc || img.src;
+        large.alt = img.alt;
+        caption.textContent = img.closest("figure")?.querySelector("figcaption")?.textContent ?? "";
+        dialog.showModal();
+      });
+    }
+    // Clicking the backdrop (the dialog element itself, outside the image) closes it.
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    dialog.addEventListener("close", () => trigger?.focus());
+  }
+</script>

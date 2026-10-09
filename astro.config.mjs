@@ -9,6 +9,7 @@ import { remarkContentRules } from "./src/lib/blog/markdown/remark-content-rules
 import { remarkReadingTime } from "./src/lib/blog/markdown/remark-reading-time.ts";
 import { remarkCallouts } from "./src/lib/blog/markdown/remark-callouts.ts";
 import { rehypeFigure } from "./src/lib/blog/markdown/rehype-figure.ts";
+import { rehypeImageText } from "./src/lib/blog/markdown/rehype-image-text.ts";
 import { rehypeTableScroll } from "./src/lib/blog/markdown/rehype-table-scroll.ts";
 import { readArticleMeta } from "./src/lib/blog/article-meta.mjs";
 
@@ -23,7 +24,7 @@ export default defineConfig({
   adapter: cloudflare(),
   markdown: {
     remarkPlugins: [remarkContentRules, remarkReadingTime, remarkCallouts],
-    rehypePlugins: [rehypeFigure, rehypeTableScroll],
+    rehypePlugins: [rehypeFigure, rehypeImageText, rehypeTableScroll],
   },
   vite: {
     plugins: [tailwindcss()],

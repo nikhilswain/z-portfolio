@@ -3,12 +3,17 @@ import { render } from "astro:content";
 import { getImage } from "astro:assets";
 import BlogLayout from "@/layouts/BlogLayout.astro";
 import ArticleHeader from "@/components/blog/ArticleHeader.astro";
+import CopyLink from "@/components/blog/CopyLink.astro";
+import DeepDives from "@/components/blog/DeepDives.astro";
+import Lightbox from "@/components/blog/Lightbox.astro";
+import RelatedArticles from "@/components/blog/RelatedArticles.astro";
+import RelatedProject from "@/components/blog/RelatedProject.astro";
 import TableOfContents from "@/components/blog/TableOfContents.astro";
 import { getBlogPosts, type BlogPost } from "@/lib/blog/collection";
 import { getProject } from "@/lib/blog/projects";
 import { articleBreadcrumbs, articleTitle, blogPostingJsonLd, resolveOgImage } from "@/lib/blog/seo";
 import { shouldShowToc } from "@/lib/blog/toc";
-import { effectiveProject } from "@/lib/blog/tree";
+import { childrenOf, effectiveProject, relatedPosts } from "@/lib/blog/tree";
 
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
@@ -30,6 +35,8 @@ const ogArticleImage = post.entry.data.ogImage
   : undefined;
 const ogImage = resolveOgImage({ articleImage: ogArticleImage, projectImage: project?.image });
 const showToc = shouldShowToc(headings);
+const deepDives = childrenOf(post, posts);
+const related = relatedPosts(post, posts, 3);
 
 const jsonLd = [
   blogPostingJsonLd({
@@ -69,9 +76,14 @@ const jsonLd = [
       <Content />
     </div>
     <footer class="article-footer">
+      {deepDives.length > 0 && <DeepDives posts={deepDives} />}
+      {project && <RelatedProject project={project} />}
+      {related.length > 0 && <RelatedArticles posts={related} />}
       <div class="article-actions">
+        <CopyLink />
         <a href="/blog/" class="back-link">← Back to blog</a>
       </div>
     </footer>
   </article>
+  <Lightbox />
 </BlogLayout>

@@ -997,3 +997,153 @@
   font-size: var(--blog-text-meta);
   color: var(--blog-accent);
 }
+
+/* ---------- Article footer components ---------- */
+.deep-dives,
+.related-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--blog-space-4);
+}
+
+.deep-dives li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--blog-space-2);
+}
+
+.related-list li {
+  display: grid;
+  gap: var(--blog-space-1);
+}
+
+.deep-dives a,
+.related-list a {
+  color: var(--blog-fg-strong);
+  font-weight: var(--blog-weight-medium);
+  text-decoration: none;
+}
+
+.deep-dives a:hover,
+.related-list a:hover {
+  color: var(--blog-accent);
+  text-decoration: underline;
+}
+
+.related-list p {
+  margin: 0;
+  font-size: var(--blog-text-small);
+  line-height: var(--blog-leading-snug);
+  color: var(--blog-fg-muted);
+}
+
+.deep-dives .meta,
+.related-list .meta {
+  font-family: var(--blog-font-mono);
+  font-size: var(--blog-text-meta);
+  color: var(--blog-fg-muted);
+}
+
+.project-card {
+  padding: var(--blog-space-5);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius);
+  background: var(--blog-surface);
+}
+
+.project-card__name {
+  margin: 0;
+  font-size: var(--blog-text-list-title);
+  font-weight: var(--blog-weight-heading);
+  color: var(--blog-fg-strong);
+}
+
+.project-card__desc {
+  margin: var(--blog-space-2) 0 0;
+  font-size: var(--blog-text-small);
+  line-height: var(--blog-leading-snug);
+}
+
+.project-card__links {
+  margin: var(--blog-space-4) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--blog-space-5);
+  font-family: var(--blog-font-mono);
+  font-size: var(--blog-text-meta);
+}
+
+.project-card__links a {
+  color: var(--blog-accent);
+}
+
+.copy-link {
+  padding: var(--blog-space-2) var(--blog-space-4);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius);
+  background: transparent;
+  font-family: var(--blog-font-mono);
+  font-size: var(--blog-text-meta);
+  color: var(--blog-fg);
+  cursor: pointer;
+}
+
+.copy-link:hover {
+  border-color: var(--blog-fg-muted);
+}
+
+/* ---------- Lightbox (always dark overlay — the documented exception to theme tokens) ---------- */
+.zoom-trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: var(--blog-radius);
+  background: none;
+  cursor: zoom-in;
+}
+
+.lightbox {
+  max-width: min(96vw, 1600px);
+  max-height: 92vh;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.lightbox::backdrop {
+  background: rgb(0 0 0 / 0.85);
+}
+
+.lightbox img {
+  display: block;
+  max-width: 100%;
+  max-height: 85vh;
+  margin: auto;
+  border-radius: var(--blog-radius);
+}
+
+.lightbox__caption {
+  margin: var(--blog-space-3) 0 0;
+  font-size: var(--blog-text-meta);
+  text-align: center;
+  color: #e2e2e8;
+}
+
+.lightbox__close {
+  position: absolute;
+  top: -2.75rem;
+  right: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid rgb(255 255 255 / 0.3);
+  border-radius: 999px;
+  background: rgb(0 0 0 / 0.5);
+  font-size: 1.25rem;
+  color: #fff;
+  cursor: pointer;
+}

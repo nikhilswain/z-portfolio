@@ -1,0 +1,22 @@
+---
+import type { BlogPost } from "@/lib/blog/collection";
+
+interface Props {
+  posts: BlogPost[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section class="footer-section" aria-labelledby="deep-dives-heading">
+  <h2 id="deep-dives-heading" class="section-label">Deep dives</h2>
+  <ol class="deep-dives">
+    {posts.map((post) => (
+      <li>
+        <span class="tree" aria-hidden="true">└─</span>
+        <a href={`/blog/${post.slug}/`}>{post.title}</a>
+        <span class="meta">· {post.readingTime} min</span>
+      </li>
+    ))}
+  </ol>
+</section>
