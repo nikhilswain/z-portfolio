@@ -1,6 +1,6 @@
 ---
-title: "Kitchen Sink Child: A Short Deep Dive"
-description: "A draft child article used to check parent links, deep-dive lists and pages that are too short for a table of contents."
+title: "Kitchen Sink Child: getBoundingClientRectDevicePixelContentBoxSize Deep Dive"
+description: "A draft child article (see ResizeObserverEntry.devicePixelContentBoxSize) used to check parent links, deep-dive lists and pages that are too short for a table of contents."
 publishedAt: 2026-10-10
 tags: [Frontend]
 parent: kitchen-sink

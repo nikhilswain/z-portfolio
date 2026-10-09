@@ -130,7 +130,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-wrap: break-word;
+  /* `anywhere` (not `break-word`) also lowers min-content width, so long identifiers can't widen grid/flex items. */
+  overflow-wrap: anywhere;
 }
 
 .blog main {
@@ -398,6 +399,7 @@
 .post-row {
   position: relative;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--blog-space-2);
   padding-block: var(--blog-space-5);
   border-bottom: 1px solid var(--blog-border);
@@ -979,6 +981,7 @@
 .article-footer {
   margin-top: var(--blog-space-8);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--blog-space-7);
 }
 
@@ -1005,6 +1008,7 @@
   padding: 0;
   list-style: none;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--blog-space-4);
 }
 
@@ -1022,6 +1026,7 @@
 
 .deep-dives a,
 .related-list a {
+  min-width: 0;
   color: var(--blog-fg-strong);
   font-weight: var(--blog-weight-medium);
   text-decoration: none;

@@ -51,7 +51,7 @@ export function BlogSection({ posts }: BlogSectionProps) {
               <MagicCard className="h-full">
                 <a
                   href={`/blog/${post.slug}/`}
-                  className="group h-full flex flex-col p-6 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                  className="group h-full flex flex-col p-6 rounded-lg [overflow-wrap:anywhere] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
                 >
                   <p className="text-sm text-zinc-500 font-mono mb-3">
                     <time dateTime={isoDate(post.publishedAt)}>{formatDate(post.publishedAt)}</time>
