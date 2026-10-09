@@ -114,6 +114,12 @@ for (const table of medium.tables) {
   await sharp(Buffer.from(svg), { density: 144 }).png().toFile(path.join(outDir, table.file));
 }
 
+// The article's social image, to upload as the cover on Hashnode (and Medium, if wanted).
+const coverResponse = await fetch(cover);
+if (!coverResponse.ok) fail(`could not download the cover image ${cover} (${coverResponse.status}).`);
+const coverFile = `cover${path.extname(new URL(cover).pathname) || ".png"}`;
+write(coverFile, Buffer.from(await coverResponse.arrayBuffer()));
+
 const cell = (text) => text.replace(/\|/g, "\\|").replace(/\n/g, " ");
 const placements = [
   ...medium.images.map((i) => `| ${i.file} | ${cell(i.after)} | ${cell(i.alt)} |`),
@@ -179,7 +185,7 @@ ${placements.join("\n")}
 1. Your blog dashboard → **Write**. Paste \`hashnode.md\` into the editor.
 2. Title: \`${article.title}\`
    Subtitle: \`${article.description}\`
-   Cover: ${cover}
+   Cover: upload \`${coverFile}\` (the image zerro.dev uses for social cards).
 3. Article settings → **Are you republishing?** → on → paste the canonical URL above.
    If the settings show SEO title and description fields, use the title and subtitle above.
 4. Up to 5 tags (${article.tags.join(", ")}), then publish.
@@ -189,6 +195,6 @@ ${placements.join("\n")}
 console.log(`Cross-post kit for "${article.title}":`);
 console.log(`  ${path.relative(root, outDir)}${path.sep}`);
 console.log(`  devto.md, hashnode.md, medium.html, README.md`);
-const assets = [...medium.images.filter((i) => i.file.endsWith(".png")).map((i) => i.file), ...medium.tables.map((t) => t.file)];
+const assets = [coverFile, ...medium.images.filter((i) => i.file.endsWith(".png")).map((i) => i.file), ...medium.tables.map((t) => t.file)];
 if (assets.length) console.log(`  ${assets.join(", ")}`);
 console.log(`Open README.md for the steps.`);
