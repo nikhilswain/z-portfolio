@@ -1,6 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { PortfolioRoot } from '@/components/portfolio-root';
+import { getBlogPosts } from '@/lib/blog/collection';
+import { toHomepagePost } from '@/lib/blog/homepage';
+
+const posts = (await getBlogPosts()).map(toHomepagePost);
 ---
 
 <Layout
@@ -8,5 +12,5 @@ import { PortfolioRoot } from '@/components/portfolio-root';
   description="Nikhil Kumar Swain (zerro) is a frontend developer specializing in React, TypeScript, and Next.js — building fast, accessible, production-ready web applications."
   type="profile"
 >
-  <PortfolioRoot client:only="react" />
+  <PortfolioRoot posts={posts} client:only="react" />
 </Layout>

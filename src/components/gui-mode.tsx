@@ -8,9 +8,10 @@ import { ContactSection } from "@/components/gui/contact-section";
 import FunFactSection from "@/components/gui/fun-fact-section";
 import { HobbiesAndInterests } from "@/components/gui/hobbies-interests";
 import { BlogSection } from "./gui/blog-section";
+import { isListedProject } from "@/lib/blog/projects";
 
 export function GuiMode() {
-  const { portfolioData, setCurrentMode } = useMode();
+  const { portfolioData, posts, setCurrentMode } = useMode();
   const [debugMode, setDebugMode] = useState(false);
 
   const handleSwitchMode = () => {
@@ -33,9 +34,9 @@ export function GuiMode() {
       <HeroSection data={portfolioData} onSwitchMode={handleSwitchMode} />
       <AboutSection data={portfolioData?.about} />
       <SkillsSection data={portfolioData?.skills} />
-      <ProjectsSection data={portfolioData?.projects} />
+      <ProjectsSection data={portfolioData?.projects.filter(isListedProject)} />
       <FunFactSection data={portfolioData?.funFacts} />
-      <BlogSection data={portfolioData?.medium} />
+      <BlogSection posts={posts} />
       <HobbiesAndInterests data={portfolioData?.hobbies} />
       <ContactSection data={portfolioData?.contact} />
     </div>

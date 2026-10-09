@@ -39,13 +39,22 @@ export function HeroSection({ data, onSwitchMode }: HeroSectionProps) {
 
       <motion.div
         style={{ opacity, scale }}
-        className="absolute top-4 right-4 z-50"
+        className="absolute top-4 right-4 z-50 flex items-center gap-2"
       >
+        <nav aria-label="Main" className="flex items-center gap-1">
+          <Button asChild variant="ghost" className="text-zinc-300 hover:text-white hover:bg-white/10">
+            <a href="/blog/">Blog</a>
+          </Button>
+          <Button asChild variant="ghost" className="text-zinc-300 hover:text-white hover:bg-white/10">
+            <a href="/resume/">Resume</a>
+          </Button>
+        </nav>
         <Button
           variant="outline"
           size="icon"
           onClick={onSwitchMode}
           title="Switch to CLI Mode"
+          aria-label="Switch to CLI mode"
           className="border-cyan-500 text-cyan-500 hover:bg-cyan-500/10"
         >
           <Terminal className="h-4 w-4" />
