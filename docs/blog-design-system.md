@@ -43,7 +43,7 @@ the homepage and `/resume/` never receive blog styles.
 
 Titles use `letter-spacing: -0.02em` and `text-wrap: balance`. Section labels are uppercase mono with `0.08em` tracking.
 
-Fonts are self-hosted with Fontsource and imported only in `BlogLayout.astro`: Plex Sans variable (upright and italic), and Plex Mono 400, 400 italic and 500.
+Fonts are self-hosted with Fontsource and imported only in `BlogLayout.astro`: Plex Sans variable (upright and italic), and Plex Mono 400, 400 italic and 500. The latin subsets of Plex Sans (upright) and Plex Mono 400 are `<link rel="preload">`ed, so the fallback-to-Plex swap happens before first paint. Without that, the header shifts (CLS 0.109 on throttled mobile, 0 with the preloads).
 
 ### Colour
 
@@ -156,7 +156,7 @@ A bottom border separates the header from the body.
   | `strong` | Strong colour, weight 600 |
   | `del` | Muted |
   | Lists | Disc and decimal markers (Tailwind's preflight reset is undone), muted markers, 0.4em between items |
-  | Task lists | No bullet; checkbox in `--blog-accent-2` |
+  | Task lists | No bullet; checkbox in `--blog-accent-2`, labelled "Done" or "Not done" by `rehype-task-list` |
   | Blockquotes | 3px left border, muted text |
   | `hr` | 1px border with 3rem vertical margin |
   | Inline code | Mono, `--blog-code-inline-bg`, 1px border, small radius, `overflow-wrap: anywhere` |
