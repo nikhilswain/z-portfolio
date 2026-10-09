@@ -7,9 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Monitor, X, Minus, Square } from "lucide-react";
 import { motion } from "framer-motion";
 import { fetchProgrammingJoke } from "@/lib/programmingJokes";
+import { BlogBuffer } from "@/components/cli/blog-buffer";
+import { blogRows } from "@/components/cli/blog-buffer-utils";
+import { isListedProject } from "@/lib/blog/projects";
 
 export function CliMode() {
-  const { portfolioData, cliData, setCurrentMode } = useMode();
+  const { portfolioData, cliData, posts, setCurrentMode } = useMode();
+  const [blogOpen, setBlogOpen] = useState(false);
+  const listedProjects = portfolioData.projects.filter(isListedProject);
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<CommandResult[]>([
     { command: "", output: cliData.welcome },
@@ -142,7 +147,7 @@ export function CliMode() {
       output = portfolioData.about.summary;
     } else if (command === "/projects") {
       await simulateLoading(command);
-      output = portfolioData.projects
+      output = listedProjects
         .map(
           (project: any, index: number) =>
             `${index + 1}. ${project.title} - ${project.description}\n`
@@ -150,16 +155,16 @@ export function CliMode() {
         .join("");
     } else if (command.startsWith("/project ")) {
       const projectIndex = Number.parseInt(command.split(" ")[1]) - 1;
-      output = portfolioData.projects[projectIndex]
-        ? `Title: ${portfolioData.projects[projectIndex].title}\nDescription: ${
-            portfolioData.projects[projectIndex].description
-          }\nTechnologies: ${portfolioData.projects[
+      output = listedProjects[projectIndex]
+        ? `Title: ${listedProjects[projectIndex].title}\nDescription: ${
+            listedProjects[projectIndex].description
+          }\nTechnologies: ${listedProjects[
             projectIndex
           ].technologies.join(
             ", "
-          )}\nLink: ${portfolioData.projects[projectIndex].link}`
+          )}\nLink: ${listedProjects[projectIndex].link}`
         : "Project not found. Use '/projects' to see available projects.";
-      isError = !portfolioData.projects[projectIndex];
+      isError = !listedProjects[projectIndex];
     } else if (command === "/skills") {
       await simulateLoading(command);
       output = Object.entries(portfolioData.skills)
@@ -173,6 +178,25 @@ export function CliMode() {
       output = Object.entries(portfolioData.contact)
         .map(([method, value]: [string, any]) => `${method}: ${value}`)
         .join("\n");
+    } else if (command === "/blog") {
+      if (posts.length === 0) {
+        output = "No articles yet.";
+      } else {
+        setHistory((prev) => [...prev, { command, output: "" }]);
+        setInput("");
+        setBlogOpen(true);
+        return;
+      }
+    } else if (command.startsWith("/blog ")) {
+      const line = Number.parseInt(command.split(" ")[1], 10);
+      const row = blogRows(posts)[line - 1];
+      if (row) {
+        output = `Opening ${row.post.title}...`;
+        window.location.href = `/blog/${row.post.slug}/`;
+      } else {
+        output = "Article not found. Use '/blog' to see available articles.";
+        isError = true;
+      }
     } else if (command === "/resume") {
       await simulateLoading(command);
       window.open("/resume/", "_blank");
@@ -269,54 +293,66 @@ export function CliMode() {
           ref={terminalRef}
           className="h-[calc(70vh-32px)] overflow-auto p-4 font-mono text-cyan-500 text-sm bg-black"
         >
-          {history.map((item, index) => (
-            <div key={index} className="mb-2">
-              {item.command && (
-                <div className="flex items-start">
-                  <span className="mr-2">$</span>
-                  <span>{item.command}</span>
-                </div>
-              )}
-              <div
-                className={`ml-4 whitespace-pre-wrap ${
-                  item.isError ? "text-red-500" : ""
-                }`}
-              >
-                {item.isLoading ? (
-                  <div className="flex items-center gap-1">
-                    <span>{item.output}</span>
-                    <span className="inline-flex">
-                      <span className="animate-[blink_1s_infinite_0ms]">.</span>
-                      <span className="animate-[blink_1s_infinite_200ms]">
-                        .
-                      </span>
-                      <span className="animate-[blink_1s_infinite_400ms]">
-                        .
-                      </span>
-                    </span>
-                  </div>
-                ) : (
-                  item.output
-                )}
-              </div>
-            </div>
-          ))}
-
-          {/* Input line */}
-          <div className="flex items-center mt-2">
-            <span className="mr-2 text-pink-500">$</span>
-            <input
-              ref={inputRef}
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="flex-1 bg-transparent border-none outline-none text-cyan-500 font-mono"
-              autoFocus
-              disabled={isProcessing}
-              placeholder={isProcessing ? "Processing..." : "Type a command..."}
+          {blogOpen ? (
+            <BlogBuffer
+              posts={posts}
+              onClose={() => {
+                setBlogOpen(false);
+                requestAnimationFrame(() => inputRef.current?.focus());
+              }}
             />
-          </div>
+          ) : (
+            <>
+              {history.map((item, index) => (
+                <div key={index} className="mb-2">
+                  {item.command && (
+                    <div className="flex items-start">
+                      <span className="mr-2">$</span>
+                      <span>{item.command}</span>
+                    </div>
+                  )}
+                  <div
+                    className={`ml-4 whitespace-pre-wrap ${
+                      item.isError ? "text-red-500" : ""
+                    }`}
+                  >
+                    {item.isLoading ? (
+                      <div className="flex items-center gap-1">
+                        <span>{item.output}</span>
+                        <span className="inline-flex">
+                          <span className="animate-[blink_1s_infinite_0ms]">.</span>
+                          <span className="animate-[blink_1s_infinite_200ms]">
+                            .
+                          </span>
+                          <span className="animate-[blink_1s_infinite_400ms]">
+                            .
+                          </span>
+                        </span>
+                      </div>
+                    ) : (
+                      item.output
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* Input line */}
+              <div className="flex items-center mt-2">
+                <span className="mr-2 text-pink-500">$</span>
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  className="flex-1 bg-transparent border-none outline-none text-cyan-500 font-mono"
+                  autoFocus
+                  disabled={isProcessing}
+                  placeholder={isProcessing ? "Processing..." : "Type a command..."}
+                />
+              </div>
+            </>
+          )}
         </div>
       </motion.div>
 

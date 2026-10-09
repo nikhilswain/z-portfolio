@@ -1,6 +1,6 @@
 {
   "welcome": "Welcome to Nikhil Kumar Swain's Portfolio CLI!\nType '/help' to see available commands.",
-  "help": "Available commands:\n\n- /help: Show this help message\n- /about: Display information about me\n- /resume: Redirect to resume page\n- /projects: List all projects\n- /project [number]: Show details for a specific project\n- /skills: List my skills by category\n- /contact: Show contact information\n- /clear: Clear the terminal\n- /gui: Switch to GUI mode\n\nEaster Egg Commands:\n- /joke: Tell a random joke\n- /ascii: Display ASCII art\n- /quote: Get a random quote\n- /game: Play a simple game",
+  "help": "Available commands:\n\n- /help: Show this help message\n- /about: Display information about me\n- /resume: Redirect to resume page\n- /projects: List all projects\n- /project [number]: Show details for a specific project\n- /blog: Browse blog articles (j/k to move, enter to open, q to quit)\n- /blog [number]: Open the article on that line of /blog\n- /skills: List my skills by category\n- /contact: Show contact information\n- /clear: Clear the terminal\n- /gui: Switch to GUI mode\n\nEaster Egg Commands:\n- /joke: Tell a random joke\n- /ascii: Display ASCII art\n- /quote: Get a random quote\n- /game: Play a simple game",
   "commands": {
     "help": {
       "description": "Show available commands",
@@ -22,6 +22,11 @@
       "description": "Show details for a specific project",
       "usage": "/project [number]",
       "example": "/project 1"
+    },
+    "blog": {
+      "description": "Browse blog articles",
+      "usage": "/blog [number]",
+      "example": "/blog 1"
     },
     "skills": {
       "description": "List my skills by category",
