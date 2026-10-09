@@ -1,10 +1,11 @@
 ---
-title: "Kitchen Sink: Every Element the Blog Renders"
+title: "Kitchen Sink: Every Element the Blog Renders, Even requestAnimationFrameAndIntersectionObserverCallbacks"
 description: "A draft test article that exercises every Markdown element the zerro.dev blog supports, used to check layout, typography and accessibility."
 publishedAt: 2026-10-09
 updatedAt: 2026-10-12
 tags: [Frontend, Tooling]
 project: zketch
+ogImage: ./zketch.png
 draft: true
 ---
 

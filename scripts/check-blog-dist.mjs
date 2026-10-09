@@ -72,6 +72,23 @@ for (const [slug, article] of meta) {
 
   if (article.draft && !html.includes('content="noindex, nofollow"')) fail(`${slug}: draft page is indexable`);
 
+  // Declared og:image dimensions must match the generated PNG (social cards crop or letterbox otherwise).
+  const ogUrl = /<meta property="og:image" content="([^"]+)"/.exec(html)?.[1];
+  const declaredWidth = /<meta property="og:image:width" content="(\d+)"/.exec(html)?.[1];
+  const declaredHeight = /<meta property="og:image:height" content="(\d+)"/.exec(html)?.[1];
+  if (ogUrl && declaredWidth && declaredHeight) {
+    const ogPath = new URL(ogUrl).pathname.slice(1);
+    const ogFile = new URL(ogPath, dist);
+    if (ogPath.endsWith(".png") && existsSync(ogFile)) {
+      const png = readFileSync(ogFile);
+      const width = png.readUInt32BE(16);
+      const height = png.readUInt32BE(20);
+      if (`${width}x${height}` !== `${declaredWidth}x${declaredHeight}`) {
+        fail(`${slug}: og:image is ${width}x${height} but declares ${declaredWidth}x${declaredHeight}`);
+      }
+    }
+  }
+
   const entry = new RegExp(`<url><loc>${escape(url)}</loc>(.*?)</url>`).exec(sitemap)?.[1];
   const expectedDate = (article.updatedAt ?? article.publishedAt).slice(0, 10);
   if (!entry) fail(`${slug}: not in the sitemap`);

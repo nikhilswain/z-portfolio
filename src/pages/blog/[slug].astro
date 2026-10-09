@@ -31,7 +31,7 @@ const { Content, headings } = await render(post.entry);
 const parent = post.parent ? posts.find((p) => p.slug === post.parent) : undefined;
 const project = getProject(effectiveProject(post, posts));
 const ogArticleImage = post.entry.data.ogImage
-  ? (await getImage({ src: post.entry.data.ogImage, width: 1200, height: 630, format: "png" })).src
+  ? (await getImage({ src: post.entry.data.ogImage, width: 1200, height: 630, fit: "cover", format: "png" })).src
   : undefined;
 const ogImage = resolveOgImage({ articleImage: ogArticleImage, projectImage: project?.image });
 const showToc = shouldShowToc(headings);
