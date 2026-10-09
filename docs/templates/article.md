@@ -1,6 +1,6 @@
 ---
-title: ""              # required — names the actual topic, not "How I built X"
-description: ""        # required — one sentence, 120–160 characters
+title: ""              # required — names the actual topic, not "How I built X"; ≤ 60 characters
+description: ""        # required — one sentence, 140–156 characters (build rejects < 120 or > 160)
 publishedAt: 2026-01-01   # required — YYYY-MM-DD
 # updatedAt: 2026-01-01   # optional — only when meaningfully revised
 tags: []               # required — 1–4 from the allowed list in docs/blog-authoring.md
@@ -8,7 +8,7 @@ tags: []               # required — 1–4 from the allowed list in docs/blog-a
 # parent: main-slug    # optional — makes this a child of that article
 # order: 1             # optional — position among sibling child articles
 # related: [other-slug]   # optional — overrides "More from the blog"
-# seoTitle: ""         # optional — rarely needed; same topic as title
+# seoTitle: ""         # optional — only if title is over 60 characters; ≤ 60, same topic
 # ogImage: ./social.png   # optional — 1200×630 social preview
 draft: true            # remove (or set false) to publish
 ---

@@ -8,6 +8,7 @@ import {
   blogJsonLd,
   blogPostingJsonLd,
   resolveOgImage,
+  searchMetaProblems,
   serializeJsonLd,
 } from "./seo";
 
@@ -29,6 +30,29 @@ describe("seo", () => {
   it("uses seoTitle when present", () => {
     expect(articleTitle("Visible")).toBe("Visible — zerro.dev");
     expect(articleTitle("Visible", "Search")).toBe("Search — zerro.dev");
+  });
+
+  it("leaves out the site name when it would push the title past 60 characters", () => {
+    const title = "Scroll-scrubbed video that stays smooth with any video file"; // 59
+    expect(articleTitle(title)).toBe(title);
+    expect(articleTitle("x".repeat(48))).toBe(`${"x".repeat(48)} — zerro.dev`); // exactly 60
+    expect(articleTitle("x".repeat(49))).toBe("x".repeat(49));
+  });
+
+  it("reports search titles over 60 characters and descriptions outside 120–160", () => {
+    const description = "d".repeat(150);
+    expect(searchMetaProblems({ title: "Short title", description })).toEqual([]);
+    expect(searchMetaProblems({ title: "t".repeat(61), description })).toEqual([
+      "title is 61 characters; search results cut titles off at about 60. Shorten it, or add a seoTitle of 60 characters or fewer.",
+    ]);
+    expect(searchMetaProblems({ title: "t".repeat(61), seoTitle: "Short", description })).toEqual([]);
+    expect(searchMetaProblems({ title: "T", seoTitle: "s".repeat(61), description })).toEqual([
+      "seoTitle is 61 characters; search results cut titles off at about 60. Shorten it.",
+    ]);
+    expect(searchMetaProblems({ title: "T", description: "d".repeat(119) })).toEqual([
+      "description is 119 characters; it must be 120–160 (140–156 is ideal) so search results show all of it.",
+    ]);
+    expect(searchMetaProblems({ title: "T", description: "d".repeat(161) })).toHaveLength(1);
   });
 
   it("falls back from article to project to default OG image", () => {

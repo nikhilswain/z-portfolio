@@ -22,8 +22,33 @@ export function articleUrl(slug: string): string {
   return absoluteUrl(`/blog/${slug}/`);
 }
 
+/** Search results cut titles off at about this many characters. */
+export const MAX_TITLE_LENGTH = 60;
+const TITLE_SUFFIX = " — zerro.dev";
+
+/** The `<title>`: the site name is added only while the whole title still fits in 60 characters. */
 export function articleTitle(title: string, seoTitle?: string): string {
-  return `${seoTitle ?? title} — zerro.dev`;
+  const base = seoTitle ?? title;
+  return base.length + TITLE_SUFFIX.length <= MAX_TITLE_LENGTH ? base + TITLE_SUFFIX : base;
+}
+
+/** Why a published article's search title or description won't show in full in search results; empty when fine. */
+export function searchMetaProblems(meta: { title: string; seoTitle?: string; description: string }): string[] {
+  const problems: string[] = [];
+  if (meta.seoTitle !== undefined) {
+    if (meta.seoTitle.length > MAX_TITLE_LENGTH) {
+      problems.push(`seoTitle is ${meta.seoTitle.length} characters; search results cut titles off at about 60. Shorten it.`);
+    }
+  } else if (meta.title.length > MAX_TITLE_LENGTH) {
+    problems.push(
+      `title is ${meta.title.length} characters; search results cut titles off at about 60. Shorten it, or add a seoTitle of 60 characters or fewer.`,
+    );
+  }
+  const length = meta.description.length;
+  if (length < 120 || length > 160) {
+    problems.push(`description is ${length} characters; it must be 120–160 (140–156 is ideal) so search results show all of it.`);
+  }
+  return problems;
 }
 
 export function resolveOgImage(input: { articleImage?: string; projectImage?: string }): string {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { devtoTags, parseArticle, tableSvg, toMediumHtml, toPortableMarkdown } from "./crosspost.mjs";
+import { devtoTags, mediumTopics, parseArticle, tableSvg, toMediumHtml, toPortableMarkdown } from "./crosspost.mjs";
 
 const SITE = "https://zerro.dev";
 const images = new Map([["shot", `${SITE}/_astro/shot.abc123.webp`]]);
@@ -143,5 +143,18 @@ describe("tableSvg", () => {
     expect(svg).toContain(">Name<");
     expect(width).toBeGreaterThan(100);
     expect(height).toBeGreaterThan(50);
+  });
+});
+
+describe("mediumTopics", () => {
+  it("maps blog tags to Medium topics and fills up to five with general ones", () => {
+    expect(mediumTopics(["Performance", "Browser APIs", "React", "Animation"])).toEqual([
+      "Web Performance",
+      "Web Development",
+      "React",
+      "Animation",
+      "JavaScript",
+    ]);
+    expect(mediumTopics(["CSS"])).toEqual(["CSS", "Web Development", "JavaScript", "Frontend Development", "Programming"]);
   });
 });

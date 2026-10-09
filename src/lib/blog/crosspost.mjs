@@ -16,6 +16,25 @@ const DEVTO_TAGS = {
   Accessibility: "a11y",
 };
 
+/** Blog tag → Medium topic, where Medium's established topic name differs. */
+const MEDIUM_TOPICS = {
+  Performance: "Web Performance",
+  "Browser APIs": "Web Development",
+  Frontend: "Frontend Development",
+  Architecture: "Software Architecture",
+  Testing: "Software Testing",
+};
+const GENERAL_MEDIUM_TOPICS = ["Web Development", "JavaScript", "Frontend Development", "Programming"];
+
+/**
+ * Medium's "Reader Interests" (up to five topics).
+ * @param {string[]} tags blog tags
+ */
+export function mediumTopics(tags) {
+  const topics = [...tags.map((tag) => MEDIUM_TOPICS[tag] ?? tag), ...GENERAL_MEDIUM_TOPICS];
+  return [...new Set(topics)].slice(0, 5);
+}
+
 /** @param {string} value */
 const unquote = (value) => {
   const v = value.trim();

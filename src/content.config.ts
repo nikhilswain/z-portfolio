@@ -4,6 +4,7 @@ import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 import { readArticleMeta } from "./lib/blog/article-meta.mjs";
 import { draftsEnabled } from "./lib/blog/drafts.mjs";
+import { searchMetaProblems } from "./lib/blog/seo";
 import { BLOG_TAGS } from "./lib/blog/tags";
 
 const BLOG_DIR = "./src/content/blog";
@@ -37,7 +38,12 @@ const blog = defineCollection({
       seoTitle: z.string().optional(),
       ogImage: image().optional(),
       draft: z.boolean().default(false),
-    }),
+    })
+      // Published articles must show their whole title and description in search results; drafts may be rough.
+      .superRefine((data, ctx) => {
+        if (data.draft) return;
+        for (const message of searchMetaProblems(data)) ctx.addIssue({ code: z.ZodIssueCode.custom, message });
+      }),
 });
 
 export const collections = { blog };

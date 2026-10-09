@@ -24,15 +24,15 @@ If you wrote the article inside a project repo (`docs/articles/<slug>/`), copy t
 
 | Field | Required | Notes |
 |---|---|---|
-| `title` | yes | Names the topic: "Reconstructing Responsive Layouts From Editor Coordinates", not "How I Built My Renderer". |
-| `description` | yes | One plain sentence, 120–160 characters. Used for search results, the index and social cards. |
+| `title` | yes | Names the topic: "Reconstructing Responsive Layouts From Editor Coordinates", not "How I Built My Renderer". 60 characters or fewer, or add a `seoTitle` that is; the build rejects a published article otherwise. " — zerro.dev" is added to the page title only when it still fits in 60. |
+| `description` | yes | One plain sentence, 120–160 characters (140–156 is ideal); the build rejects a published article outside that. Used for search results, the index and social cards. |
 | `publishedAt` | yes | `YYYY-MM-DD` |
 | `updatedAt` | no | Only for meaningful revisions. Shown as "Updated …" and used as the sitemap date. |
 | `tags` | yes | 1–4 from the allowed list below. |
 | `project` | no | A project id (see below). Adds the "Related project" card. |
 | `parent`, `order` | no | Make this a child article (see below). |
 | `related` | no | Slugs to show first under "More from the blog". |
-| `seoTitle` | no | Only when the visible title is too long or vague for search. Must describe the same topic. |
+| `seoTitle` | no | Only when the visible title is over 60 characters or vague for search. 60 characters or fewer, same topic. |
 | `ogImage` | no | A 1200×630 image for social previews. Without one, the project's image is used, then the site default. |
 | `draft` | no | `true` means visible only with `npm run dev:drafts`, never published. Production builds skip drafts entirely, so their images aren't deployed either. |
 
