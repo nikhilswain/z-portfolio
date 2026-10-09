@@ -5,14 +5,25 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-/** @param {string} value */
-const toIso = (value) => new Date(value).toISOString();
+/**
+ * @param {string} value
+ * @param {string} field
+ * @param {string} file
+ */
+const toIso = (value, field, file) => {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    throw new Error(`[blog] ${file}: ${field} "${value}" is not a valid date. Use YYYY-MM-DD.`);
+  }
+  return date.toISOString();
+};
 
 /**
  * @param {string} source
+ * @param {string} [file] path used in error messages
  * @returns {{ publishedAt: string; updatedAt: string | undefined; draft: boolean } | null}
  */
-export function parseFrontmatterMeta(source) {
+export function parseFrontmatterMeta(source, file = "frontmatter") {
   const match = /^---\r?\n([\s\S]*?)\r?\n---/.exec(source);
   if (!match) return null;
   const frontmatter = match[1];
@@ -24,8 +35,8 @@ export function parseFrontmatterMeta(source) {
   if (!publishedAt) return null;
   const updatedAt = field("updatedAt");
   return {
-    publishedAt: toIso(publishedAt),
-    updatedAt: updatedAt ? toIso(updatedAt) : undefined,
+    publishedAt: toIso(publishedAt, "publishedAt", file),
+    updatedAt: updatedAt ? toIso(updatedAt, "updatedAt", file) : undefined,
     draft: field("draft") === "true",
   };
 }
@@ -41,7 +52,7 @@ export function readArticleMeta(dirUrl) {
   for (const slug of readdirSync(dir).sort()) {
     const file = path.join(dir, slug, "index.md");
     if (!existsSync(file)) continue;
-    const parsed = parseFrontmatterMeta(readFileSync(file, "utf8"));
+    const parsed = parseFrontmatterMeta(readFileSync(file, "utf8"), `src/content/blog/${slug}/index.md`);
     if (parsed) meta.set(slug, parsed);
   }
   return meta;

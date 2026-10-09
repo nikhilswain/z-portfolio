@@ -17,7 +17,7 @@ export function includeDrafts(): boolean {
 
 async function load(): Promise<BlogPost[]> {
   const entries = await getCollection("blog", (entry) => includeDrafts() || !entry.data.draft);
-  const failures = renderFailures(entries);
+  const failures = await renderFailures(entries);
   if (failures.length > 0) {
     throw new Error(`[blog] Invalid articles:\n- ${failures.join("\n- ")}`);
   }
