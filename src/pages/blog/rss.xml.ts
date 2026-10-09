@@ -9,7 +9,8 @@ export async function GET(context: APIContext) {
   return rss({
     title: "zerro.dev — Blog",
     description: `${BLOG_TAGLINE} Technical writing by Nikhil Kumar Swain.`,
-    site: context.site ?? "https://zerro.dev",
+    // The channel <link> is the feed's home page; item links are root-relative so they still resolve correctly.
+    site: new URL("/blog/", context.site ?? "https://zerro.dev").toString(),
     items: posts.map((post) => ({
       title: post.title,
       description: post.description,

@@ -1,10 +1,27 @@
+import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
+import { readArticleMeta } from "./lib/blog/article-meta.mjs";
 import { BLOG_TAGS } from "./lib/blog/tags";
+
+const BLOG_DIR = "./src/content/blog";
+const includeDrafts = import.meta.env.DEV || process.env.BLOG_INCLUDE_DRAFTS === "1";
+
+/**
+ * Production builds don't load drafts at all, so Astro never processes their images —
+ * otherwise unpublished screenshots would still be deployed under /_astro/.
+ */
+function blogPattern(): string[] {
+  if (includeDrafts) return ["*/index.md"];
+  const meta = readArticleMeta(pathToFileURL(path.resolve(BLOG_DIR) + path.sep));
+  const drafts = [...meta].filter(([, article]) => article.draft).map(([slug]) => `!${slug}/index.md`);
+  return ["*/index.md", ...drafts];
+}
 
 const blog = defineCollection({
   // One folder per article: src/content/blog/<slug>/index.md → entry id "<slug>".
-  loader: glob({ pattern: "*/index.md", base: "./src/content/blog" }),
+  loader: glob({ pattern: blogPattern(), base: BLOG_DIR }),
   schema: ({ image }) =>
     z.object({
       title: z.string().min(1),

@@ -1,7 +1,7 @@
 // Verifies the built blog in dist/. Usage:
 //   npm run build && npm run check:blog                       (production: drafts must be absent)
 //   npm run build:drafts && npm run check:blog -- --drafts    (drafts present and noindex)
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { readArticleMeta } from "../src/lib/blog/article-meta.mjs";
 
 const withDrafts = process.argv.includes("--drafts");
@@ -22,10 +22,25 @@ const sitemap = read("sitemap-0.xml") ?? "";
 if (!index) fail("dist/blog/index.html is missing");
 if (!rssXml) fail("dist/blog/rss.xml is missing");
 else if (!rssXml.includes("<rss") || !rssXml.includes("<channel>")) fail("rss.xml is not an RSS document");
+else if (!/<channel>[\s\S]*?<link>https:\/\/zerro\.dev\/blog\/<\/link>/.test(rssXml)) fail("rss.xml channel <link> is not https://zerro.dev/blog/");
 if (!sitemap.includes("<loc>https://zerro.dev/blog/</loc>")) fail("/blog/ is not in the sitemap");
 if (index && !/<html[^>]*\sdata-theme="dark"/.test(index)) fail("/blog/ is missing the server-rendered dark theme");
 if (/<lastmod>/.test(sitemap.replace(/<url><loc>https:\/\/zerro\.dev\/blog\/[^<]+\/<\/loc><lastmod>/g, "")))
   fail("a non-article sitemap entry has <lastmod>");
+
+// Unpublished screenshots must not be deployed: production dist/_astro may not contain draft-only images.
+if (!withDrafts) {
+  const assets = existsSync(new URL("_astro/", dist)) ? readdirSync(new URL("_astro/", dist)) : [];
+  for (const [slug, article] of meta) {
+    if (!article.draft) continue;
+    const folder = new URL(`../src/content/blog/${slug}/`, import.meta.url);
+    for (const image of readdirSync(folder).filter((name) => /\.(png|jpe?g|webp|gif|avif|svg)$/i.test(name))) {
+      const stem = image.replace(/\.[^.]+$/, "");
+      const leaked = assets.filter((asset) => asset.startsWith(`${stem}.`));
+      if (leaked.length > 0) fail(`${slug}: draft image ${image} was deployed as ${leaked.join(", ")}`);
+    }
+  }
+}
 
 for (const [slug, article] of meta) {
   const url = `https://zerro.dev/blog/${slug}/`;
