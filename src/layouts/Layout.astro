@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import content from "../constants/content.json";
+import { serializeJsonLd } from "../lib/blog/seo";
 
 interface Props {
   title?: string;
@@ -155,13 +156,13 @@ const websiteJsonLd = {
     <!-- Structured data -->
     <script
       type="application/ld+json"
-      set:html={JSON.stringify(personJsonLd)}
+      set:html={serializeJsonLd(personJsonLd)}
     />
     <script
       type="application/ld+json"
-      set:html={JSON.stringify(websiteJsonLd)}
+      set:html={serializeJsonLd(websiteJsonLd)}
     />
-    {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+    {jsonLd.map((data) => <script type="application/ld+json" set:html={serializeJsonLd(data)} />)}
     <slot name="head" />
   </head>
   <body>

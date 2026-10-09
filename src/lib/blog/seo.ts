@@ -9,6 +9,11 @@ export const BLOG_DESCRIPTION =
 
 const author = { "@type": "Person", "@id": PERSON_ID, name: AUTHOR_NAME, url: SITE_URL } as const;
 
+/** JSON for an inline `<script type="application/ld+json">`: `<` is escaped so text like `</script>` can't close the tag. */
+export function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
 export function absoluteUrl(pathOrUrl: string): string {
   return new URL(pathOrUrl, SITE_URL).toString();
 }

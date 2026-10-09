@@ -8,6 +8,7 @@ import {
   blogJsonLd,
   blogPostingJsonLd,
   resolveOgImage,
+  serializeJsonLd,
 } from "./seo";
 
 const base = {
@@ -66,6 +67,14 @@ describe("seo", () => {
       [3, "Engine", "https://zerro.dev/blog/engine/"],
       [4, "Child", "https://zerro.dev/blog/child/"],
     ]);
+  });
+
+  it("serializes JSON-LD so a title containing </script> can't end the script tag", () => {
+    const data = { headline: "Why </script> breaks inline JSON & <b>tags</b>" };
+    const out = serializeJsonLd(data);
+    expect(out).not.toContain("</script>");
+    expect(out).not.toContain("<");
+    expect(JSON.parse(out)).toEqual(data);
   });
 
   it("builds Blog JSON-LD, including when there are no posts", () => {
