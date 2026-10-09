@@ -5,6 +5,9 @@ import "@fontsource/ibm-plex-mono/400.css";
 import "@fontsource/ibm-plex-mono/400-italic.css";
 import "@fontsource/ibm-plex-mono/500.css";
 import "../styles/blog.css";
+// Preload the two faces visible above the fold so the swap from fallback fonts doesn't shift the header.
+import plexSansLatin from "@fontsource-variable/ibm-plex-sans/files/ibm-plex-sans-latin-wght-normal.woff2?url";
+import plexMonoLatin from "@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2?url";
 import type { ComponentProps } from "astro/types";
 import Layout from "./Layout.astro";
 import SiteHeader from "../components/blog/SiteHeader.astro";
@@ -20,6 +23,8 @@ const { current, progress = false, ...layoutProps } = Astro.props;
 
 <Layout {...layoutProps} dataTheme="dark" rssUrl="/blog/rss.xml">
   <Fragment slot="head">
+    <link rel="preload" href={plexSansLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={plexMonoLatin} as="font" type="font/woff2" crossorigin />
     <script is:inline>
       (() => {
         let theme = null;
