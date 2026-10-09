@@ -178,7 +178,12 @@ ${placements.join("\n")}
    Markdown editor first: Settings → Customization → **Basic markdown**.
 2. Paste all of \`devto.md\`, including the \`---\` block at the top. It sets the title, tags
    (${tags.join(", ")}), cover image and canonical link.
-3. Preview, then publish (or change \`published: false\` to \`true\`).
+3. **Check the canonical link before publishing.** The default editor ignores the \`---\` block, so
+   click the **gear icon** (Post options) next to Publish and make sure **Canonical URL** is the
+   canonical URL above. Without it, DEV claims to be the original.
+4. Preview, then publish (or change \`published: false\` to \`true\`).
+5. Confirm it afterwards: \`https://dev.to/api/articles?username=<your username>\` lists each post's
+   \`canonical_url\`, which must be the zerro.dev URL.
 
 ## Hashnode
 
