@@ -1,0 +1,26 @@
+---
+import type { BlogPost } from "@/lib/blog/collection";
+import { tagSlug } from "@/lib/blog/tags";
+import ArticleMeta from "./ArticleMeta.astro";
+
+interface Props {
+  post: BlogPost;
+  parent?: BlogPost;
+}
+
+const { post, parent } = Astro.props;
+---
+
+<header class="article-header">
+  {parent && (
+    <p class="article-parent">Part of: <a href={`/blog/${parent.slug}/`}>{parent.title}</a></p>
+  )}
+  <h1 class="article-title">{post.title}</h1>
+  <p class="article-lead">{post.description}</p>
+  <ArticleMeta publishedAt={post.publishedAt} updatedAt={post.updatedAt} readingTime={post.readingTime} />
+  <ul class="tag-list" aria-label="Tags">
+    {post.tags.map((tag) => (
+      <li class="tag"><span aria-hidden="true">#{tagSlug(tag)}</span><span class="visually-hidden">{tag}</span></li>
+    ))}
+  </ul>
+</header>

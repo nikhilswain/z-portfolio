@@ -1,0 +1,77 @@
+---
+import { render } from "astro:content";
+import { getImage } from "astro:assets";
+import BlogLayout from "@/layouts/BlogLayout.astro";
+import ArticleHeader from "@/components/blog/ArticleHeader.astro";
+import TableOfContents from "@/components/blog/TableOfContents.astro";
+import { getBlogPosts, type BlogPost } from "@/lib/blog/collection";
+import { getProject } from "@/lib/blog/projects";
+import { articleBreadcrumbs, articleTitle, blogPostingJsonLd, resolveOgImage } from "@/lib/blog/seo";
+import { shouldShowToc } from "@/lib/blog/toc";
+import { effectiveProject } from "@/lib/blog/tree";
+
+export async function getStaticPaths() {
+  const posts = await getBlogPosts();
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+interface Props {
+  post: BlogPost;
+}
+
+const { post } = Astro.props;
+const posts = await getBlogPosts();
+const { Content, headings } = await render(post.entry);
+
+const parent = post.parent ? posts.find((p) => p.slug === post.parent) : undefined;
+const project = getProject(effectiveProject(post, posts));
+const ogArticleImage = post.entry.data.ogImage
+  ? (await getImage({ src: post.entry.data.ogImage, width: 1200, height: 630, format: "png" })).src
+  : undefined;
+const ogImage = resolveOgImage({ articleImage: ogArticleImage, projectImage: project?.image });
+const showToc = shouldShowToc(headings);
+
+const jsonLd = [
+  blogPostingJsonLd({
+    slug: post.slug,
+    title: post.title,
+    description: post.description,
+    publishedAt: post.publishedAt,
+    updatedAt: post.updatedAt,
+    tags: post.tags,
+    image: ogImage,
+    parent: parent ? { slug: parent.slug, title: parent.title } : undefined,
+  }),
+  articleBreadcrumbs(post, parent),
+];
+---
+
+<BlogLayout
+  title={articleTitle(post.title, post.entry.data.seoTitle)}
+  description={post.description}
+  image={ogImage}
+  imageSize={ogArticleImage ? { width: 1200, height: 630 } : undefined}
+  type="article"
+  article={{
+    publishedTime: post.publishedAt.toISOString(),
+    modifiedTime: post.updatedAt.toISOString(),
+    tags: post.tags,
+  }}
+  jsonLd={jsonLd}
+  noindex={post.draft}
+  progress
+>
+  <article class="article">
+    <ArticleHeader post={post} parent={parent} />
+    {showToc && <TableOfContents headings={headings} variant="inline" />}
+    {showToc && <TableOfContents headings={headings} variant="rail" />}
+    <div class="prose" data-article-body>
+      <Content />
+    </div>
+    <footer class="article-footer">
+      <div class="article-actions">
+        <a href="/blog/" class="back-link">← Back to blog</a>
+      </div>
+    </footer>
+  </article>
+</BlogLayout>

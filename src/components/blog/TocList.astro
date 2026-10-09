@@ -1,0 +1,72 @@
+---
+import type { TocItem } from "@/lib/blog/toc";
+
+interface Props {
+  items: TocItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<ol class="toc-list">
+  {items.map(({ heading, children }) => (
+    <li>
+      <a class="toc-link" href={`#${heading.slug}`} data-toc-link>{heading.text}</a>
+      {children.length > 0 && (
+        <ol class="toc-list">
+          {children.map((child) => (
+            <li><a class="toc-link" href={`#${child.slug}`} data-toc-link>{child.text}</a></li>
+          ))}
+        </ol>
+      )}
+    </li>
+  ))}
+</ol>
+
+<script>
+  // Highlights the section being read. The active heading is the last one whose top
+  // has scrolled above the sticky header; at the very bottom, the last heading wins.
+  const OFFSET = 120;
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-toc-link]"));
+  const ids = [...new Set(links.map((link) => decodeURIComponent(link.hash.slice(1))))];
+  const headings = ids
+    .map((id) => document.getElementById(id))
+    .filter((element): element is HTMLElement => element !== null);
+  let ticking = false;
+
+  function setActive(id: string | undefined) {
+    for (const link of links) {
+      if (decodeURIComponent(link.hash.slice(1)) === id) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    }
+  }
+
+  function update() {
+    ticking = false;
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    let current: HTMLElement | undefined;
+    if (atBottom) {
+      current = headings.at(-1);
+    } else {
+      for (const heading of headings) {
+        if (heading.getBoundingClientRect().top <= OFFSET) current = heading;
+        else break;
+      }
+    }
+    setActive(current?.id);
+  }
+
+  if (headings.length > 0) {
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    update();
+  }
+</script>

@@ -1,0 +1,24 @@
+---
+import { formatDate, isoDate, sameDay } from "@/lib/blog/dates";
+
+interface Props {
+  publishedAt: Date;
+  updatedAt: Date;
+  readingTime: number;
+}
+
+const { publishedAt, updatedAt, readingTime } = Astro.props;
+const showUpdated = !sameDay(publishedAt, updatedAt);
+---
+
+<p class="article-meta">
+  <time datetime={isoDate(publishedAt)}>{formatDate(publishedAt)}</time>
+  <span aria-hidden="true">·</span>
+  <span>{readingTime} min read</span>
+  {showUpdated && (
+    <>
+      <span aria-hidden="true">·</span>
+      <span>Updated <time datetime={isoDate(updatedAt)}>{formatDate(updatedAt)}</time></span>
+    </>
+  )}
+</p>
