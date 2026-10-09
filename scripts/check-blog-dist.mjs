@@ -73,12 +73,15 @@ for (const [slug, article] of meta) {
     fail(`${slug}: page is missing`);
     continue;
   }
+  // Expressive Code keeps each block's raw source in a data-code attribute (for the copy button),
+  // so markup inside code samples must not count as page elements.
+  const markup = html.replace(/\sdata-code="[^"]*"/g, "");
 
-  const dupes = duplicateIds(html);
+  const dupes = duplicateIds(markup);
   if (dupes.length > 0) fail(`${slug}: duplicate ids: ${dupes.join(", ")}`);
   if (loadsTailwind(html)) fail(`${slug}: loads the homepage Tailwind stylesheet`);
 
-  const h1Count = (html.match(/<h1[\s>]/g) ?? []).length;
+  const h1Count = (markup.match(/<h1[\s>]/g) ?? []).length;
   if (h1Count !== 1) fail(`${slug}: expected exactly 1 <h1>, found ${h1Count}`);
   if (!html.includes(`<link rel="canonical" href="${url}">`)) fail(`${slug}: canonical is missing or wrong`);
   for (const needle of [

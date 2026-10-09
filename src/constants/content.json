@@ -43,6 +43,23 @@
   },
   "projects": [
     {
+      "id": "vidscroll",
+      "title": "vidscroll",
+      "description": "An npm package for scroll-scrubbed video in React and plain HTML. Smooth on any MP4 or WebM: files with sparse keyframes are re-encoded in the browser with WebCodecs and cached, so scrubbing never stutters.",
+      "image": "/vidscroll.jpg",
+      "technologies": [
+        "npm library",
+        "React",
+        "TypeScript",
+        "WebCodecs API",
+        "Cache Storage",
+        "Web Components"
+      ],
+      "link": "https://vidscroll.js.org/",
+      "github": "https://github.com/nikhilswain/vidscroll",
+      "featured": true
+    },
+    {
       "id": "zist",
       "title": "zist",
       "description": "Zist is a Kanban board app for organizing tasks with workspaces, rich cards, activity tracking, and local data storage.",
@@ -86,7 +103,7 @@
       "technologies": ["npm library", "React", "TypeScript", "Vite"],
       "link": "https://www.npmjs.com/package/@zzro/z-color-picker",
       "github": "https://github.com/nikhilswain/z-color-picker",
-      "featured": true
+      "featured": false
     },
     {
       "id": "yoink",

@@ -31,7 +31,7 @@ describe("tags and projects", () => {
 
   it("exposes every project id from content.json", () => {
     expect(PROJECT_IDS).toEqual([
-      "zist", "zketch", "z-color-picker", "yoink", "algo-visualizer", "previewz",
+      "vidscroll", "zist", "zketch", "z-color-picker", "yoink", "algo-visualizer", "previewz",
       "token-portfolio", "shape-editor", "css-shorthands", "10days10design", "lyricsfinder",
     ]);
     expect(getProject("zketch")?.title).toBe("zketch");
