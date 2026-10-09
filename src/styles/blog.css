@@ -110,6 +110,59 @@
   --blog-callout-caution: #b91c1c;
 }
 
+/* ---------- Reset ----------
+   Blog pages don't load the homepage's Tailwind stylesheet, so this replaces the parts of its
+   preflight the blog relies on. :where() keeps specificity at zero so every rule below wins. */
+:where(:root[data-theme]) {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+}
+
+:where(:root[data-theme]) *,
+:where(:root[data-theme]) ::before,
+:where(:root[data-theme]) ::after {
+  box-sizing: border-box;
+  border: 0 solid;
+}
+
+:where(:root[data-theme]) :where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, pre, dl, dd, ol, ul) {
+  margin: 0;
+}
+
+:where(:root[data-theme]) :where(h1, h2, h3, h4, h5, h6) {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+:where(:root[data-theme]) :where(ol, ul) {
+  list-style: none;
+  padding: 0;
+}
+
+:where(:root[data-theme]) a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+:where(:root[data-theme]) :where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+}
+
+:where(:root[data-theme]) :where(img, svg, video, canvas, iframe) {
+  display: block;
+  vertical-align: middle;
+}
+
+:where(:root[data-theme]) :where(img, video) {
+  max-width: 100%;
+  height: auto;
+}
+
 /* ---------- Base ---------- */
 :root[data-theme] body {
   background: var(--blog-bg);

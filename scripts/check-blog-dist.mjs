@@ -28,6 +28,14 @@ const duplicateIds = (html) => {
   return [...counts].filter(([, n]) => n > 1).map(([id]) => id);
 };
 if (index && duplicateIds(index).length > 0) fail(`/blog/ has duplicate ids: ${duplicateIds(index).join(", ")}`);
+
+// Blog pages ship only blog styles — the homepage's Tailwind stylesheet must not be loaded.
+const loadsTailwind = (html) =>
+  [...html.matchAll(/<link rel="stylesheet" href="([^"]+)"/g)].some(([, href]) => {
+    const css = read(href.replace(/^\//, ""));
+    return css !== null && css.includes("tailwindcss");
+  }) || [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)].some(([, css]) => css.includes("tailwindcss"));
+if (index && loadsTailwind(index)) fail("/blog/ loads the homepage Tailwind stylesheet");
 if (!rssXml) fail("dist/blog/rss.xml is missing");
 else if (!rssXml.includes("<rss") || !rssXml.includes("<channel>")) fail("rss.xml is not an RSS document");
 else if (!/<channel>[\s\S]*?<link>https:\/\/zerro\.dev\/blog\/<\/link>/.test(rssXml)) fail("rss.xml channel <link> is not https://zerro.dev/blog/");
@@ -68,6 +76,7 @@ for (const [slug, article] of meta) {
 
   const dupes = duplicateIds(html);
   if (dupes.length > 0) fail(`${slug}: duplicate ids: ${dupes.join(", ")}`);
+  if (loadsTailwind(html)) fail(`${slug}: loads the homepage Tailwind stylesheet`);
 
   const h1Count = (html.match(/<h1[\s>]/g) ?? []).length;
   if (h1Count !== 1) fail(`${slug}: expected exactly 1 <h1>, found ${h1Count}`);
