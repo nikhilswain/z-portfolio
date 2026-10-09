@@ -11,6 +11,7 @@ import { remarkCallouts } from "./src/lib/blog/markdown/remark-callouts.ts";
 import { rehypeFigure } from "./src/lib/blog/markdown/rehype-figure.ts";
 import { rehypeImageText } from "./src/lib/blog/markdown/rehype-image-text.ts";
 import { rehypeTableScroll } from "./src/lib/blog/markdown/rehype-table-scroll.ts";
+import { rehypeTaskList } from "./src/lib/blog/markdown/rehype-task-list.ts";
 import { readArticleMeta } from "./src/lib/blog/article-meta.mjs";
 
 const SITE = "https://zerro.dev";
@@ -24,7 +25,7 @@ export default defineConfig({
   adapter: cloudflare(),
   markdown: {
     remarkPlugins: [remarkContentRules, remarkReadingTime, remarkCallouts],
-    rehypePlugins: [rehypeFigure, rehypeImageText, rehypeTableScroll],
+    rehypePlugins: [rehypeFigure, rehypeImageText, rehypeTableScroll, rehypeTaskList],
   },
   vite: {
     plugins: [tailwindcss()],
