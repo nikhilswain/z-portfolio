@@ -58,7 +58,7 @@ const personJsonLd = {
   "@type": "Person",
   "@id": `${siteURL.origin}/#person`,
   name: personName,
-  alternateName: "zerro",
+  alternateName: "zero",
   url: siteURL.origin,
   image: new URL(DEFAULT_IMAGE, siteURL).toString(),
   jobTitle,
@@ -134,7 +134,7 @@ const websiteJsonLd = {
     {ogImageSize && <meta property="og:image:height" content={String(ogImageSize.height)} />}
     <meta property="og:image:alt" content={`${personName} — ${jobTitle}`} />
     <meta property="og:locale" content="en_US" />
-    {type === "profile" && <meta property="profile:username" content="zerro" />}
+    {type === "profile" && <meta property="profile:username" content="zero" />}
     {article && <meta property="article:published_time" content={article.publishedTime} />}
     {article && <meta property="article:modified_time" content={article.modifiedTime} />}
     {article && <meta property="article:author" content={siteURL.origin} />}

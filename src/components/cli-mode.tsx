@@ -298,7 +298,7 @@ export function CliMode() {
             <button tabIndex={-1} onClick={() => dispatchWindow("minimize")} className="h-3 w-3 rounded-full bg-yellow-500 hover:brightness-125" />
             <button tabIndex={-1} onClick={() => dispatchWindow("toggleMaximize")} className="hidden h-3 w-3 rounded-full bg-green-500 hover:brightness-125 md:block" />
           </div>
-          <div className="font-mono text-xs text-zinc-400">zerro@portfolio: ~</div>
+          <div className="font-mono text-xs text-zinc-400">zero@portfolio: ~</div>
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"
@@ -425,7 +425,7 @@ export function CliMode() {
             className="flex items-center gap-2 rounded-full border border-zinc-700 bg-zinc-900 px-4 py-2 font-mono text-sm text-zinc-200 shadow-lg shadow-pink-500/10 hover:border-pink-500/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
           >
             <ChevronUp className="h-4 w-4 text-pink-400" aria-hidden="true" />
-            zerro — terminal
+            zero — terminal
           </motion.button>
         </div>
       )}
@@ -448,7 +448,7 @@ export function CliMode() {
 function Prompt() {
   return (
     <span className="shrink-0">
-      <span className="text-pink-400">zerro@portfolio</span>
+      <span className="text-pink-400">zero@portfolio</span>
       <span className="text-zinc-500">:</span>
       <span className="text-cyan-400">~</span>
       <span className="text-zinc-500">$</span>

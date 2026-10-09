@@ -115,7 +115,7 @@ Every text pair is at least 4.5:1. The lightbox is the one documented exception 
 ## Components
 
 ### Site header
-- **Markup:** `SiteHeader.astro` renders `header.site-header`, containing the `zerro_` wordmark (linking to `/`), `nav.site-nav` (Blog, Resume) and the theme toggle.
+- **Markup:** `SiteHeader.astro` renders `header.site-header`, containing the `zero_` wordmark (linking to `/`), `nav.site-nav` (Blog, Resume) and the theme toggle.
 - **Layout:** sticky at the top, `--blog-header-h` tall, a translucent background (88% `--blog-bg`) with a backdrop blur and a bottom border, and inner width `--blog-shell`.
 - **Current page:** the active nav link has `aria-current="page"`, with a 2px `--blog-accent` underline.
 - **Progress line:** on article pages, `.reading-progress` is a 2px gradient line on the header's bottom edge. It is driven by `animation-timeline: scroll(root block)` with no JS. It is hidden when the browser lacks support and under reduced motion.
