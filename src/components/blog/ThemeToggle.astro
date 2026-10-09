@@ -20,6 +20,7 @@
   button?.addEventListener("click", () => {
     const theme = nextTheme();
     root.dataset.theme = theme;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme === "light" ? "#fbfaf7" : "#0a0a0f");
     try {
       localStorage.setItem(STORAGE_KEY, theme);
     } catch {

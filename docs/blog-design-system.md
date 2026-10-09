@@ -125,6 +125,7 @@ Every text pair is at least 4.5:1. The lightbox is the one documented exception 
 - The choice is stored in `localStorage["zerro-theme"]`, and every storage access is wrapped in try/catch.
 - **Before paint:** an inline `<head>` script in `BlogLayout` sets `data-theme` from storage, falling back to `prefers-color-scheme`.
 - **Without JS:** the server renders `data-theme="dark"`.
+- **Browser chrome:** the theme script and the toggle set `<meta name="theme-color">` to the current `--blog-bg` (`#0a0a0f` dark, `#fbfaf7` light), so mobile browser bars match the page.
 
 ### Skip link
 `.skip-link` is the first focusable element. It is visually off-screen until focused, then appears at the top left and moves focus to `main#content`, which has `tabindex="-1"`.
