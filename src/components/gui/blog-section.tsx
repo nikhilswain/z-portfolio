@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 import { MagicCard } from "@/components/ui/magic-card";
 import { formatDate, isoDate } from "@/lib/blog/dates";
 import type { HomepagePost } from "@/lib/blog/homepage";
@@ -71,13 +71,15 @@ export function BlogSection({ posts }: BlogSectionProps) {
           ))}
         </div>
 
-        <div className="mt-12 text-center">
-          <Button
-            asChild
-            className="bg-gradient-to-r from-pink-600 to-cyan-600 hover:from-pink-700 hover:to-cyan-700"
+        <div className="mt-12 flex justify-center">
+          {/* Same look as the hero's "View Resume" RippleButton, but a real link so it can be opened in a new tab. */}
+          <a
+            href="/blog/"
+            className="inline-flex items-center justify-center rounded-lg border-2 bg-background px-4 py-2 text-primary transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
           >
-            <a href="/blog/">All articles →</a>
-          </Button>
+            All articles
+            <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+          </a>
         </div>
       </div>
     </section>
