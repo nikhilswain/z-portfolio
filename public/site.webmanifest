@@ -1,6 +1,6 @@
 {
   "name": "Nikhil Kumar Swain — Frontend Developer",
-  "short_name": "zerro.dev",
+  "short_name": "zero",
   "description": "Portfolio of Nikhil Kumar Swain, a frontend developer building fast, accessible, production-ready web applications with React, TypeScript, and Next.js.",
   "start_url": "/",
   "scope": "/",
@@ -21,7 +21,7 @@
       "purpose": "any"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
