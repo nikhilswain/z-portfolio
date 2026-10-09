@@ -11,8 +11,8 @@ interface Props {
 const { tree } = Astro.props;
 ---
 
-<section aria-labelledby="latest-heading">
-  <h2 id="latest-heading" class="section-label">Latest</h2>
+<section aria-labelledby="LatestHeading">
+  <h2 id="LatestHeading" class="section-label">Latest</h2>
   <ol class="post-list">
     {tree.map(({ post, children }) => (
       <li class="post-row">

@@ -128,7 +128,9 @@ Every text pair is at least 4.5:1. The lightbox is the one documented exception 
 - **Browser chrome:** the theme script and the toggle set `<meta name="theme-color">` to the current `--blog-bg` (`#0a0a0f` dark, `#fbfaf7` light), so mobile browser bars match the page.
 
 ### Skip link
-`.skip-link` is the first focusable element. It is visually off-screen until focused, then appears at the top left and moves focus to `main#content`, which has `tabindex="-1"`.
+`.skip-link` is the first focusable element. It is visually off-screen until focused, then appears at the top left and moves focus to `main#MainContent`, which has `tabindex="-1"`.
+
+Layout ids (`MainContent`, `LatestHeading`, `MediumHeading`, `TocRailTitle`, `DeepDivesHeading`, `RelatedProjectHeading`, `MoreHeading`) are mixed-case on purpose: heading ids generated from Markdown are always lowercase, so the two can never collide. `check:blog` fails on any duplicate id.
 
 ### Article header
 `ArticleHeader.astro` renders, in order:

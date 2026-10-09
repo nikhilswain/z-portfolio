@@ -20,6 +20,14 @@ const rssXml = read("blog/rss.xml");
 const sitemap = read("sitemap-0.xml") ?? "";
 
 if (!index) fail("dist/blog/index.html is missing");
+
+// Every id on a page must be unique, otherwise skip links and TOC anchors jump to the wrong element.
+const duplicateIds = (html) => {
+  const counts = new Map();
+  for (const [, id] of html.matchAll(/\sid="([^"]+)"/g)) counts.set(id, (counts.get(id) ?? 0) + 1);
+  return [...counts].filter(([, n]) => n > 1).map(([id]) => id);
+};
+if (index && duplicateIds(index).length > 0) fail(`/blog/ has duplicate ids: ${duplicateIds(index).join(", ")}`);
 if (!rssXml) fail("dist/blog/rss.xml is missing");
 else if (!rssXml.includes("<rss") || !rssXml.includes("<channel>")) fail("rss.xml is not an RSS document");
 else if (!/<channel>[\s\S]*?<link>https:\/\/zerro\.dev\/blog\/<\/link>/.test(rssXml)) fail("rss.xml channel <link> is not https://zerro.dev/blog/");
@@ -57,6 +65,9 @@ for (const [slug, article] of meta) {
     fail(`${slug}: page is missing`);
     continue;
   }
+
+  const dupes = duplicateIds(html);
+  if (dupes.length > 0) fail(`${slug}: duplicate ids: ${dupes.join(", ")}`);
 
   const h1Count = (html.match(/<h1[\s>]/g) ?? []).length;
   if (h1Count !== 1) fail(`${slug}: expected exactly 1 <h1>, found ${h1Count}`);

@@ -41,9 +41,9 @@ const { current, progress = false, ...layoutProps } = Astro.props;
     </script>
   </Fragment>
   <div class="blog">
-    <a class="skip-link" href="#content">Skip to content</a>
+    <a class="skip-link" href="#MainContent">Skip to content</a>
     <SiteHeader current={current} progress={progress} />
-    <main id="content" tabindex="-1">
+    <main id="MainContent" tabindex="-1">
       <slot />
     </main>
     <SiteFooter />

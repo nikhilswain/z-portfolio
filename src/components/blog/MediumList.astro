@@ -5,8 +5,8 @@ const items = content.medium.map((item) => ({ ...item, year: new Date(item.date)
 ---
 
 {items.length > 0 && (
-  <section class="medium" aria-labelledby="medium-heading">
-    <h2 id="medium-heading" class="section-label">Earlier writing on Medium</h2>
+  <section class="medium" aria-labelledby="MediumHeading">
+    <h2 id="MediumHeading" class="section-label">Earlier writing on Medium</h2>
     <ul class="medium-list">
       {items.map((item) => (
         <li>

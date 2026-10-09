@@ -27,6 +27,14 @@ The first heading named "Example" — its TOC link must point here.
 
 Headings can contain code and still produce a clean anchor.
 
+### Content
+
+A heading whose text matches a layout landmark. Its id must not collide with the page's own ids (skip link, footer sections).
+
+### Deep dives heading
+
+Another heading chosen to collide with a footer section id if layout ids were lowercase.
+
 ## Lists
 
 - Unordered item one
