@@ -139,7 +139,7 @@ export const EXPERIENCE: Job[] = [
     company: "Creazilla",
     role: "Frontend Developer (Contract)",
     start: "2025-12",
-    end: null,
+    end: "2026-09",
     location: "Remote",
     bullets: [
       "Rebuilt approximately 90% of a production visual website editor using React, TypeScript, and MobX, implementing page management, locking, duplication, animations, site routing, responsive editing, preview, and publishing workflows for a platform receiving 334K+ monthly visits.",

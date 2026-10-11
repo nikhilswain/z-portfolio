@@ -74,10 +74,13 @@ const personJsonLd = {
     "@type": "CollegeOrUniversity",
     name: "Graphic Era University",
   },
-  worksFor: {
-    "@type": "Organization",
-    name: EXPERIENCE[0].company,
-  },
+  // Only claim a current employer while the latest job is still running.
+  ...(EXPERIENCE[0].end === null && {
+    worksFor: {
+      "@type": "Organization",
+      name: EXPERIENCE[0].company,
+    },
+  }),
 };
 
 const websiteJsonLd = {
