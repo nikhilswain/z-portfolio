@@ -5,10 +5,17 @@
    docs/blog-design-system.md — change both together.
    ========================================================================== */
 
+@font-face {
+  font-family: "Departure Mono";
+  src: url("/fonts/DepartureMono-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
 /* ---------- Tokens: type, space, layout ---------- */
 :root[data-theme] {
   --blog-font-sans: "IBM Plex Sans Variable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --blog-font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --blog-font-pixel: "Departure Mono", var(--blog-font-mono);
 
   --blog-text-title: clamp(2.25rem, 1.6rem + 2.4vw, 3rem);
   --blog-text-index-title: clamp(2.5rem, 1.9rem + 2.4vw, 3.25rem);
@@ -80,8 +87,8 @@
   --blog-fg-subtle: #6b6b78; /* decorative only: tree lines, filler — never text */
   --blog-border: #26262f;
   --blog-accent: #f472b6;
-  --blog-accent-2: #22d3ee;
-  --blog-focus: #22d3ee;
+  --blog-accent-2: var(--blog-accent);
+  --blog-focus: var(--blog-accent);
   --blog-code-inline-bg: #1c1c25;
   --blog-callout-note: #22d3ee;
   --blog-callout-tip: #4ade80;
@@ -100,8 +107,8 @@
   --blog-fg-subtle: #9a9aa5;
   --blog-border: #e3e0d8;
   --blog-accent: #be185d;
-  --blog-accent-2: #0e7490;
-  --blog-focus: #0e7490;
+  --blog-accent-2: var(--blog-accent);
+  --blog-focus: var(--blog-accent);
   --blog-code-inline-bg: #efece6;
   --blog-callout-note: #155e75;
   --blog-callout-tip: #166534;
@@ -342,7 +349,7 @@
   right: 0;
   bottom: -1px;
   height: 2px;
-  background: linear-gradient(90deg, var(--blog-accent), var(--blog-accent-2));
+  background: var(--blog-accent);
   transform: scaleX(0);
   transform-origin: 0 50%;
 }
@@ -399,6 +406,19 @@
 
 .site-footer a:hover {
   color: var(--blog-fg-strong);
+}
+
+.console-hint kbd {
+  padding: 0 var(--blog-space-1);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius-sm);
+  font-family: var(--blog-font-mono);
+}
+
+@media (hover: none) {
+  .console-hint {
+    display: none;
+  }
 }
 
 /* ---------- Blog index ---------- */

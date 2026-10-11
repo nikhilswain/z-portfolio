@@ -14,7 +14,7 @@ import SiteHeader from "../components/blog/SiteHeader.astro";
 import SiteFooter from "../components/blog/SiteFooter.astro";
 
 type Props = Omit<ComponentProps<typeof Layout>, "dataTheme" | "rssUrl"> & {
-  current?: "blog";
+  current?: "blog" | "resume";
   progress?: boolean;
 };
 

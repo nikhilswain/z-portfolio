@@ -1,7 +1,7 @@
 ---
 import { render } from "astro:content";
 import { getImage } from "astro:assets";
-import BlogLayout from "@/layouts/BlogLayout.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
 import ArticleHeader from "@/components/blog/ArticleHeader.astro";
 import CopyLink from "@/components/blog/CopyLink.astro";
 import DeepDives from "@/components/blog/DeepDives.astro";
@@ -53,7 +53,7 @@ const jsonLd = [
 ];
 ---
 
-<BlogLayout
+<SiteLayout
   title={articleTitle(post.title, post.entry.data.seoTitle)}
   description={post.description}
   image={ogImage}
@@ -86,4 +86,4 @@ const jsonLd = [
     </footer>
   </article>
   <Lightbox />
-</BlogLayout>
+</SiteLayout>

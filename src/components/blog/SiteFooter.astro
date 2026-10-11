@@ -1,13 +1,17 @@
 ---
+import { PERSON } from "@/data/profile";
+
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="site-footer__inner">
-    <p>© {year} Nikhil Kumar Swain</p>
+    <p>© {year} {PERSON.name}</p>
     <ul>
       <li><a href="/blog/rss.xml">RSS</a></li>
       <li><a href="https://github.com/nikhilswain" rel="me">GitHub</a></li>
+      <li><a href="https://v1.zerro.dev" rel="noopener">Older builds: v1 ↗</a></li>
+      <li class="console-hint">press <kbd>`</kbd> for console</li>
     </ul>
   </div>
 </footer>

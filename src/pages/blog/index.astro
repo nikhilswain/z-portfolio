@@ -1,5 +1,5 @@
 ---
-import BlogLayout from "@/layouts/BlogLayout.astro";
+import SiteLayout from "@/layouts/SiteLayout.astro";
 import PostList from "@/components/blog/PostList.astro";
 import MediumList from "@/components/blog/MediumList.astro";
 import { getBlogPosts } from "@/lib/blog/collection";
@@ -10,7 +10,7 @@ const posts = await getBlogPosts();
 const tree = buildPostTree(posts);
 ---
 
-<BlogLayout
+<SiteLayout
   title="Blog — Nikhil Kumar Swain"
   description={BLOG_DESCRIPTION}
   jsonLd={[blogJsonLd(posts)]}
@@ -25,4 +25,4 @@ const tree = buildPostTree(posts);
     {tree.length > 0 ? <PostList tree={tree} /> : <p class="blog-index__empty">First articles are on the way.</p>}
     <MediumList />
   </div>
-</BlogLayout>
+</SiteLayout>
