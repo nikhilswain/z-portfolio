@@ -24,6 +24,9 @@ const rest = PROJECTS.filter((project) => isListedProject(project) && project.fe
           <span class="pindex__stack">{project.stack.slice(0, 2).join(" · ")}</span>
         </div>
       )}
+      {project.link && project.github && (
+        <a class="pindex__code" href={project.github}>code ↗</a>
+      )}
     </li>
   ))}
 </ul>
@@ -138,6 +141,21 @@ const rest = PROJECTS.filter((project) => isListedProject(project) && project.fe
     color: var(--blog-fg-muted);
   }
 
+  .pindex__code {
+    display: inline-block;
+    margin-left: calc(96px + var(--blog-space-4));
+    margin-bottom: var(--blog-space-3);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+    transition: color 200ms ease-out;
+  }
+
+  .pindex__code:hover,
+  .pindex__code:focus-visible {
+    color: var(--blog-accent);
+  }
+
   .pindex__row:hover .pindex__name,
   .pindex__row:focus-visible .pindex__name {
     color: var(--blog-accent);
@@ -167,12 +185,28 @@ const rest = PROJECTS.filter((project) => isListedProject(project) && project.fe
     .pindex__thumb {
       display: none;
     }
+
+    .pindex__code {
+      margin-left: var(--blog-space-4);
+    }
   }
 
   @media (min-width: 768px) {
+    .pindex > li {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      column-gap: var(--blog-space-5);
+      align-items: baseline;
+    }
+
     .pindex__row {
       grid-template-columns: minmax(10rem, 14rem) 1fr auto;
       padding: var(--blog-space-4) 0;
+    }
+
+    .pindex__code {
+      margin-left: 0;
+      margin-bottom: 0;
     }
 
     .pindex__stack {

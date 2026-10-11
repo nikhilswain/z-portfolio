@@ -5,7 +5,10 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 <SiteLayout title="Your doodles — zerro.dev" noindex>
   <div class="fridge" data-fridge>
     <div class="fridge__bin" hidden>drop here to remove</div>
-    <p class="fridge__note">your doodles · lives only in this browser · <a href="/#playground">draw more →</a></p>
+    <p class="fridge__note">
+      <span class="fridge__note--fine">your doodles · drag or throw them around · drop at the bottom to remove · lives only in this browser · <a href="/#playground">draw more →</a></span>
+      <span class="fridge__note--coarse">drag them around · drop at the bottom to remove · lives only in this browser · <a href="/#playground">draw more →</a></span>
+    </p>
   </div>
   <noscript>Your doodles are stored in your browser and need JavaScript to show.</noscript>
 </SiteLayout>
@@ -26,9 +29,24 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
     position: absolute;
     left: var(--blog-page-pad);
     bottom: var(--blog-space-4);
+    max-width: calc(100% - 2 * var(--blog-page-pad));
     font-family: var(--blog-font-mono);
     font-size: var(--blog-text-meta);
     color: var(--blog-fg-muted);
+  }
+
+  .fridge__note--coarse {
+    display: none;
+  }
+
+  @media (pointer: coarse) {
+    .fridge__note--fine {
+      display: none;
+    }
+
+    .fridge__note--coarse {
+      display: inline;
+    }
   }
 
   .fridge__note a {
@@ -68,11 +86,23 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
   :global(.magnet__bob) {
     width: 100%;
     height: 100%;
+    cursor: inherit;
   }
 
   :global(.magnet svg) {
     width: 100%;
     height: 100%;
+    cursor: inherit;
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    :global(.magnet__bob) {
+      transition: scale 150ms ease-out;
+    }
+
+    :global(.magnet:not(.is-dragging):hover .magnet__bob) {
+      scale: 1.03;
+    }
   }
 
   :global(.fridge__empty) {

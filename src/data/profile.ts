@@ -241,6 +241,7 @@ export const PROJECTS: Project[] = [
     stack: ["React", "TypeScript", "Astro", "Shadcn", "IndexedDB", "Tailwind CSS", "Chart.js"],
     image: "/zist.png",
     link: "https://zist.zerro.dev",
+    github: "https://github.com/nikhilswain/zist",
     featured: 3,
     bullets: [
       "Built a local-first Kanban application with workspaces, boards, rich task cards, drag-and-drop across columns, checklists, activity history, saved views, command palette, and JSON backup/restore.",
@@ -403,6 +404,7 @@ export const PROJECTS: Project[] = [
     stack: ["TypeScript", "Next.js", "Tailwind CSS", "Dexie", "Zustand"],
     image: "/zlate.png",
     link: "https://zlate.zerro.dev",
+    github: "https://github.com/nikhilswain/zlate",
     featured: 4,
     bullets: [
       "Built a visual project tracker for managing 2-5 concurrent client projects through custom month, week, and year calendar views with per-day notes, focus filters, themes, and progress visualization.",

@@ -157,6 +157,7 @@ export function initFridge(root: HTMLElement): void {
       if (event.pointerType === "mouse" && event.button !== 0) return;
       magnet.setPointerCapture(event.pointerId);
       dragging = true;
+      magnet.classList.add("is-dragging");
       magnet.style.cursor = "grabbing";
       bob.style.animationPlayState = "paused";
       magnet.style.zIndex = "99";
@@ -181,6 +182,7 @@ export function initFridge(root: HTMLElement): void {
 
     function release() {
       dragging = false;
+      magnet.classList.remove("is-dragging");
       magnet.style.cursor = "grab";
       bob.style.animationPlayState = "running";
       bin.hidden = true;
