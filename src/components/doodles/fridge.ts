@@ -11,6 +11,14 @@ export function initFridge(root: HTMLElement): void {
   const bin = root.querySelector<HTMLElement>(".fridge__bin")!;
   let dragging = false;
   let night = document.documentElement.dataset.theme === "dark";
+  const magnets: { el: HTMLElement; pos: Position; refit: () => void }[] = [];
+
+  function remPx() {
+    return parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+  }
+  function renderSize(s: number) {
+    return Math.min(Math.max(5 * remPx(), s * root.clientWidth), 12 * remPx());
+  }
 
   function readJSON<T>(key: string, fallback: T): T {
     try {
@@ -201,12 +209,32 @@ export function initFridge(root: HTMLElement): void {
     requestAnimationFrame(frame);
   }
 
+  function growFridge() {
+    const rem = remPx();
+    const cols = root.clientWidth < 640 ? 2 : 4;
+    const rows = Math.ceil(doodles.length / cols);
+    let total = 0;
+    for (const m of magnets) total += parseFloat(m.el.style.width) || 0;
+    const rowHeight = magnets.length ? (total / magnets.length) * 1.15 : 0;
+    const base = parseFloat(getComputedStyle(root).minHeight) || 0;
+    root.style.minHeight = `${Math.max(base, rows * rowHeight + 6 * rem)}px`;
+  }
+
   function renderMagnet(doodle: Doodle, index: number) {
     const key = String(doodle.at);
+    const cols = root.clientWidth < 640 ? 2 : 4;
     let pos = positions[key];
     if (!pos) {
-      pos = { x: 0.1 + Math.random() * 0.7, y: 0.1 + Math.random() * 0.6, r: Math.random() * 24 - 12, s: 7 + Math.random() * 5 };
+      const rows = Math.ceil(doodles.length / cols);
+      const col = index % cols;
+      const row = Math.floor(index / cols);
+      const x = Math.max(0.05, Math.min(0.95, (col + 0.5) / cols + (Math.random() * 0.16 - 0.08)));
+      const y = Math.max(0.05, Math.min(0.95, (row + 0.5) / rows + (Math.random() * 0.1 - 0.05)));
+      pos = { x, y, r: Math.random() * 24 - 12, s: 0.22 + Math.random() * 0.12 };
       positions[key] = pos;
+      saveJSON(FRIDGE_KEY, positions);
+    } else if (pos.s > 1) {
+      pos.s = Math.min(0.34, (pos.s * 16) / root.clientWidth);
       saveJSON(FRIDGE_KEY, positions);
     }
 
@@ -215,8 +243,6 @@ export function initFridge(root: HTMLElement): void {
     magnet.tabIndex = 0;
     magnet.setAttribute("role", "img");
     magnet.setAttribute("aria-label", "Doodle — press Delete to remove");
-    magnet.style.width = `${pos.s}rem`;
-    magnet.style.height = `${pos.s}rem`;
     magnet.style.zIndex = String(index + 1);
 
     const bob = document.createElement("div");
@@ -230,12 +256,28 @@ export function initFridge(root: HTMLElement): void {
     magnet.append(bob);
     root.append(magnet);
 
-    const halfW = magnet.offsetWidth / 2;
-    const halfH = magnet.offsetHeight / 2;
-    let x = Math.max(halfW, Math.min(root.clientWidth - halfW, pos.x * root.clientWidth));
-    let y = Math.max(halfH, Math.min(root.clientHeight - halfH, pos.y * root.clientHeight));
+    let halfW = 0;
+    let halfH = 0;
+    let x = 0;
+    let y = 0;
     let r = pos.r;
-    setPos(magnet, x, y, r, 1);
+
+    const entry = {
+      el: magnet,
+      pos,
+      refit() {
+        const size = renderSize(pos.s);
+        magnet.style.width = `${size}px`;
+        magnet.style.height = `${size}px`;
+        halfW = size / 2;
+        halfH = size / 2;
+        x = Math.max(halfW, Math.min(root.clientWidth - halfW, pos.x * root.clientWidth));
+        y = Math.max(halfH, Math.min(root.clientHeight - halfH, pos.y * root.clientHeight));
+        setPos(magnet, x, y, r, 1);
+      },
+    };
+    magnets.push(entry);
+    entry.refit();
 
     function animateStroke(p: SVGPathElement, delay: number) {
       // Strokes use non-scaling-stroke, so dashes are measured in screen px: scale the path length to match.
@@ -378,6 +420,12 @@ export function initFridge(root: HTMLElement): void {
     return;
   }
   doodles.forEach(renderMagnet);
+  growFridge();
+
+  new ResizeObserver(() => {
+    growFridge();
+    magnets.forEach((m) => m.refit());
+  }).observe(root);
 
   new MutationObserver(() => {
     night = document.documentElement.dataset.theme === "dark";
