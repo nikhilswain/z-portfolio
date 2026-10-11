@@ -1,5 +1,6 @@
 interface Doodle { w: number; h: number; paths: string[]; at: number; }
 interface Position { x: number; y: number; r: number; s: number; }
+interface Particle { x: number; y: number; vx: number; vy: number; delay: number; life: number; }
 
 const DOODLES_KEY = "zerro-doodles";
 const FRIDGE_KEY = "zerro-fridge";
@@ -59,6 +60,7 @@ export function initFridge(root: HTMLElement): void {
 
   function setPos(el: HTMLElement, x: number, y: number, r: number, scale: number) {
     el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${r}deg) scale(${scale})`;
+    el.dataset.rot = String(r);
   }
   function applyBob(el: HTMLElement) {
     if (reduced) return;
@@ -75,21 +77,128 @@ export function initFridge(root: HTMLElement): void {
     saveJSON(FRIDGE_KEY, positions);
   }
 
+  function isArmed(clientX: number, clientY: number) {
+    const rect = bin.getBoundingClientRect();
+    return clientX >= rect.left && clientX <= rect.right &&
+           clientY >= rect.top && clientY <= rect.bottom;
+  }
+
   function remove(magnet: HTMLElement, doodle: Doodle) {
     doodles = doodles.filter((d) => d !== doodle);
     saveJSON(DOODLES_KEY, doodles);
     delete positions[String(doodle.at)];
     saveJSON(FRIDGE_KEY, positions);
-    const base = magnet.style.transform;
-    magnet.animate(
-      [{ transform: base, opacity: 1 }, { transform: `${base} scale(0)`, opacity: 0 }],
-      { duration: 200, easing: "ease-out" },
-    ).onfinish = () => {
-      magnet.remove();
-      if (doodles.length === 0) renderEmpty();
-    };
     dragging = false;
     bin.hidden = true;
+    bin.classList.remove("is-armed");
+    magnet.classList.remove("is-doomed");
+    root.style.overflow = "hidden";
+
+    if (reduced) {
+      const base = magnet.style.transform;
+      magnet.animate(
+        [{ transform: base, opacity: 1 }, { transform: `${base} scale(0)`, opacity: 0 }],
+        { duration: 200, easing: "ease-out" },
+      ).onfinish = () => {
+        magnet.remove();
+        if (doodles.length === 0) renderEmpty();
+      };
+      return;
+    }
+
+    snap(magnet, doodle, () => {
+      magnet.remove();
+      if (doodles.length === 0) renderEmpty();
+    });
+  }
+
+  function snap(magnet: HTMLElement, doodle: Doodle, done: () => void) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = magnet.getBoundingClientRect();
+    const cw = Math.max(1, Math.round(rect.width * dpr));
+    const ch = Math.max(1, Math.round(rect.height * dpr));
+    const color = getComputedStyle(magnet).color;
+
+    const off = document.createElement("canvas");
+    off.width = cw;
+    off.height = ch;
+    const ctx = off.getContext("2d")!;
+    ctx.scale(dpr, dpr);
+    const scale = Math.min(rect.width / doodle.w, rect.height / doodle.h);
+    ctx.translate(rect.width / 2, rect.height / 2);
+    ctx.rotate((Number(magnet.dataset.rot || 0) * Math.PI) / 180);
+    ctx.translate(-rect.width / 2, -rect.height / 2);
+    ctx.translate((rect.width - doodle.w * scale) / 2, (rect.height - doodle.h * scale) / 2);
+    ctx.scale(scale, scale);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5 / scale; // non-scaling-stroke: keep the same 2.5px width after the meet scale
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    for (const d of doodle.paths) ctx.stroke(new Path2D(d));
+
+    const data = ctx.getImageData(0, 0, cw, ch).data;
+    let particles: Particle[] = [];
+    for (let y = 0; y < ch; y += 3) {
+      for (let x = 0; x < cw; x += 3) {
+        if (data[(y * cw + x) * 4 + 3] > 0) {
+          particles.push({
+            x, y,
+            vx: 0.4 + Math.random() * 1.2,
+            vy: -(0.3 + Math.random() * 1.1),
+            delay: (x / cw) * 350,
+            life: 500 + Math.random() * 300,
+          });
+        }
+      }
+    }
+    if (particles.length === 0) {
+      done();
+      return;
+    }
+    if (particles.length > 900) {
+      const step = particles.length / 900;
+      const sampled: Particle[] = [];
+      for (let i = 0; i < 900; i++) sampled.push(particles[Math.floor(i * step)]);
+      particles = sampled;
+    }
+
+    magnet.style.visibility = "hidden";
+
+    const layer = document.createElement("canvas");
+    layer.style.position = "fixed";
+    layer.style.left = "0";
+    layer.style.top = "0";
+    layer.style.width = `${window.innerWidth}px`;
+    layer.style.height = `${window.innerHeight}px`;
+    layer.style.pointerEvents = "none";
+    layer.style.zIndex = "2147483647";
+    layer.width = Math.max(1, Math.round(window.innerWidth * dpr));
+    layer.height = Math.max(1, Math.round(window.innerHeight * dpr));
+    const lctx = layer.getContext("2d")!;
+    const offX = rect.left * dpr;
+    const offY = rect.top * dpr;
+    document.body.append(layer);
+
+    const start = performance.now();
+    const maxEnd = Math.max(...particles.map((p) => p.delay + p.life));
+    const frame = (now: number) => {
+      const t = now - start;
+      lctx.clearRect(0, 0, layer.width, layer.height);
+      for (const p of particles) {
+        p.x += p.vx + (Math.random() - 0.5) * 0.6;
+        p.y += p.vy + (Math.random() - 0.5) * 0.6;
+        if (t < p.delay || t >= p.delay + p.life) continue;
+        lctx.globalAlpha = 1 - (t - p.delay) / p.life;
+        lctx.fillStyle = color;
+        lctx.fillRect(offX + p.x, offY + p.y, 2, 2);
+      }
+      if (t < maxEnd) requestAnimationFrame(frame);
+      else {
+        layer.remove();
+        done();
+      }
+    };
+    requestAnimationFrame(frame);
   }
 
   function renderMagnet(doodle: Doodle, index: number) {
@@ -162,6 +271,7 @@ export function initFridge(root: HTMLElement): void {
       bob.style.animationPlayState = "paused";
       magnet.style.zIndex = "99";
       bin.hidden = false;
+      root.style.overflow = "visible";
       const rect = root.getBoundingClientRect();
       offX = event.clientX - rect.left - x;
       offY = event.clientY - rect.top - y;
@@ -173,8 +283,11 @@ export function initFridge(root: HTMLElement): void {
     magnet.addEventListener("pointermove", (event) => {
       if (!dragging) return;
       const rect = root.getBoundingClientRect();
-      x = Math.max(halfW, Math.min(rect.width - halfW, event.clientX - rect.left - offX));
-      y = Math.max(halfH, Math.min(rect.height - halfH, event.clientY - rect.top - offY));
+      x = event.clientX - rect.left - offX;
+      y = event.clientY - rect.top - offY;
+      const armed = isArmed(event.clientX, event.clientY);
+      bin.classList.toggle("is-armed", armed);
+      magnet.classList.toggle("is-doomed", armed);
       setPos(magnet, x, y, r, 1.06);
       samples.push({ x: event.clientX, y: event.clientY, t: performance.now() });
       if (samples.length > 5) samples.shift();
@@ -183,9 +296,17 @@ export function initFridge(root: HTMLElement): void {
     function release() {
       dragging = false;
       magnet.classList.remove("is-dragging");
+      magnet.classList.remove("is-doomed");
       magnet.style.cursor = "grab";
       bob.style.animationPlayState = "running";
       bin.hidden = true;
+      bin.classList.remove("is-armed");
+      root.style.overflow = "hidden";
+
+      const rect = root.getBoundingClientRect();
+      x = Math.max(halfW, Math.min(rect.width - halfW, x));
+      y = Math.max(halfH, Math.min(rect.height - halfH, y));
+      setPos(magnet, x, y, r, 1);
 
       let vx = 0;
       let vy = 0;
@@ -224,9 +345,7 @@ export function initFridge(root: HTMLElement): void {
 
     magnet.addEventListener("pointerup", (event) => {
       if (!dragging) return;
-      const rect = bin.getBoundingClientRect();
-      if (event.clientX >= rect.left && event.clientX <= rect.right &&
-          event.clientY >= rect.top && event.clientY <= rect.bottom) remove(magnet, doodle);
+      if (isArmed(event.clientX, event.clientY)) remove(magnet, doodle);
       else release();
     });
     magnet.addEventListener("pointercancel", () => {

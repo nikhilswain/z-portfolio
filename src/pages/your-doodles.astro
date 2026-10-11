@@ -4,7 +4,10 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 
 <SiteLayout title="Your doodles — zerro.dev" noindex>
   <div class="fridge" data-fridge>
-    <div class="fridge__bin" hidden>drop here to remove</div>
+    <div class="fridge__bin" hidden>
+      <span class="fridge__bin--idle">drop here to remove</span>
+      <span class="fridge__bin--armed">release to remove</span>
+    </div>
     <p class="fridge__note">
       <span class="fridge__note--fine">your doodles · drag or throw them around · drop at the bottom to remove · lives only in this browser · <a href="/#playground">draw more →</a></span>
       <span class="fridge__note--coarse">drag them around · drop at the bottom to remove · lives only in this browser · <a href="/#playground">draw more →</a></span>
@@ -55,14 +58,51 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 
   .fridge__bin {
     position: fixed;
-    left: 50%;
-    bottom: var(--blog-space-4);
-    translate: -50% 0;
-    padding-top: var(--blog-space-2);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 5.5rem;
+    display: grid;
+    place-items: center;
     border-top: 1px dashed var(--blog-border);
+    background: transparent;
     font-family: var(--blog-font-mono);
     font-size: var(--blog-text-meta);
     color: var(--blog-fg-muted);
+    z-index: 200;
+  }
+
+  .fridge__bin[hidden] {
+    display: none;
+  }
+
+  .fridge__bin--armed {
+    display: none;
+  }
+
+  .fridge__bin.is-armed {
+    color: var(--blog-callout-caution);
+    border-top-color: var(--blog-callout-caution);
+    background: color-mix(in srgb, var(--blog-callout-caution) 14%, transparent);
+  }
+
+  .fridge__bin.is-armed .fridge__bin--idle {
+    display: none;
+  }
+
+  .fridge__bin.is-armed .fridge__bin--armed {
+    display: inline;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fridge__bin:not([hidden]) {
+      animation: bin-in 150ms ease-out;
+    }
+  }
+
+  @keyframes bin-in {
+    from { translate: 0 100%; opacity: 0; }
+    to { translate: 0 0; opacity: 1; }
   }
 
   noscript {
@@ -81,6 +121,12 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
     color: var(--blog-accent);
     cursor: grab;
     touch-action: none;
+    transition: scale 150ms ease-out;
+  }
+
+  :global(.magnet.is-doomed) {
+    scale: 0.9;
+    color: var(--blog-callout-caution);
   }
 
   :global(.magnet__bob) {
