@@ -4,6 +4,7 @@ import Hero from "@/components/home/Hero.astro";
 import SectionHeading from "@/components/home/SectionHeading.astro";
 import ProjectGrid from "@/components/home/ProjectGrid.astro";
 import Experience from "@/components/home/Experience.astro";
+import Playground from "@/components/home/Playground.astro";
 import LatestWriting from "@/components/home/LatestWriting.astro";
 import { PERSON } from "@/data/profile";
 ---
@@ -22,6 +23,10 @@ import { PERSON } from "@/data/profile";
     <section aria-labelledby="experience" class="home-section">
       <SectionHeading eyebrow="Experience" title="Where I've worked" id="experience" />
       <Experience />
+    </section>
+    <section aria-labelledby="playground" class="home-section">
+      <SectionHeading eyebrow="Playground" title="Small things to poke at" id="playground" />
+      <Playground />
     </section>
     <section aria-labelledby="writing" class="home-section">
       <SectionHeading eyebrow="Writing" title="Latest from the blog" id="writing" />

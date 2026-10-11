@@ -1,0 +1,123 @@
+---
+import { PROJECTS } from "@/data/profile";
+
+const dmap = PROJECTS.find((project) => project.id === "dmap");
+const zketch = PROJECTS.find((project) => project.id === "zketch");
+---
+
+<div class="playground">
+  <figure class="tile reveal">
+    <div class="tile__stage" data-play="pixel-room">
+      <p class="tile__fallback">Needs JavaScript to run.</p>
+    </div>
+    <figcaption class="tile__caption">
+      <strong>Pixel room</strong>
+      <p>Walk around with the arrow keys or tap. A tiny taste of the 2D game work behind DMap.</p>
+      {dmap?.link && <a href={dmap.link}>Play DMap ↗</a>}
+    </figcaption>
+  </figure>
+
+  <figure class="tile reveal">
+    <div class="tile__stage" data-play="motion-grid">
+      <p class="tile__fallback">Needs JavaScript to run.</p>
+    </div>
+    <figcaption class="tile__caption">
+      <strong>Motion study</strong>
+      <p>A grid of dots that leans toward your pointer. Springs, no libraries.</p>
+    </figcaption>
+  </figure>
+
+  <figure class="tile reveal">
+    <div class="tile__stage" data-play="sketch">
+      <p class="tile__fallback">Needs JavaScript to run.</p>
+    </div>
+    <figcaption class="tile__caption">
+      <strong>Sketch</strong>
+      <p>Draw something, then hit replay. The idea behind Zketch, in a box.</p>
+      {zketch?.link && <a href={zketch.link}>Open Zketch ↗</a>}
+    </figcaption>
+  </figure>
+</div>
+
+<script>
+  const modules = {
+    "pixel-room": () => import("@/components/playground/pixel-room"),
+    "motion-grid": () => import("@/components/playground/motion-grid"),
+    sketch: () => import("@/components/playground/sketch"),
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.unobserve(entry.target);
+        const stage = entry.target as HTMLElement;
+        const name = stage.dataset.play;
+        if (!name) continue;
+        modules[name as keyof typeof modules]().then((mod) => mod.init(stage));
+      }
+    },
+    { rootMargin: "200px" },
+  );
+
+  document.querySelectorAll("[data-play]").forEach((el) => observer.observe(el));
+</script>
+
+<style>
+  .playground {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: var(--blog-space-5);
+  }
+
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: var(--blog-space-3);
+  }
+
+  .tile__stage {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--blog-border);
+    border-radius: var(--blog-radius);
+    background: var(--blog-surface);
+  }
+
+  @media (min-width: 768px) {
+    /* Two tiles side by side, the sketch gets the full row as a wider canvas. */
+    .tile:has([data-play="sketch"]) {
+      grid-column: 1 / -1;
+    }
+
+    [data-play="sketch"] {
+      aspect-ratio: 21 / 9;
+    }
+  }
+
+  .tile__fallback {
+    display: grid;
+    place-content: center;
+    height: 100%;
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  .tile__caption {
+    display: grid;
+    gap: var(--blog-space-1);
+    font-size: var(--blog-text-small);
+  }
+
+  .tile__caption p {
+    color: var(--blog-fg-muted);
+  }
+
+  .tile__caption a {
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-accent);
+  }
+</style>
