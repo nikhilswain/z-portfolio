@@ -1,8 +1,9 @@
-interface Dot { x: number; y: number; vx: number; vy: number; restX: number; restY: number; }
+interface Dot { x: number; y: number; vx: number; vy: number; restX: number; restY: number; phase: number; speed: number; star: boolean; }
 interface Point { x: number; y: number; t: number; }
 
 let accent = "#f472b6";
 let muted = "#a1a1ad";
+let night = true;
 
 export function init(field: HTMLElement): void {
   field.querySelector(".field__fallback")?.remove();
@@ -24,7 +25,6 @@ export function init(field: HTMLElement): void {
   let pointerX = 0;
   let pointerY = 0;
   let pointerActive = false;
-  let lastMove = -Infinity;
   let drawMode = false;
   let raf = 0;
   let visible = true;
@@ -41,6 +41,7 @@ export function init(field: HTMLElement): void {
     const styles = getComputedStyle(document.documentElement);
     accent = styles.getPropertyValue("--blog-accent").trim();
     muted = styles.getPropertyValue("--blog-fg-muted").trim();
+    night = document.documentElement.dataset.theme === "dark";
   }
 
   function layout() {
@@ -53,7 +54,10 @@ export function init(field: HTMLElement): void {
     dots = [];
     for (let y = 13; y < height; y += 26) {
       for (let x = 13; x < width; x += 26) {
-        dots.push({ x, y, vx: 0, vy: 0, restX: x, restY: y });
+        const phase = Math.random() * Math.PI * 2;
+        const speed = 0.6 + Math.random() * 0.8;
+        const star = Math.random() < 0.06;
+        dots.push({ x, y, vx: 0, vy: 0, restX: x, restY: y, phase, speed, star });
       }
     }
   }
@@ -64,7 +68,6 @@ export function init(field: HTMLElement): void {
     pointerX = point.x;
     pointerY = point.y;
     pointerActive = true;
-    lastMove = performance.now();
     return point;
   }
 
@@ -88,15 +91,13 @@ export function init(field: HTMLElement): void {
 
   function frame(now: number) {
     const t = now / 1000;
-    const idle = !reduced && now - lastMove > 2000;
     ctx.clearRect(0, 0, width, height);
     for (const dot of dots) {
       let ox = 0;
       let oy = 0;
-      if (idle) {
-        const wave = Math.sin(t + dot.restX * 0.02 + dot.restY * 0.02) * 3;
-        ox += wave;
-        oy += wave;
+      if (!reduced && !night) {
+        ox += Math.sin(t * 0.3 * dot.speed + dot.phase) * 2;
+        oy += Math.cos(t * 0.25 * dot.speed + dot.phase) * 2;
       }
       if (pointerActive) {
         const dx = dot.restX - pointerX;
@@ -115,12 +116,19 @@ export function init(field: HTMLElement): void {
       dot.x += dot.vx;
       dot.y += dot.vy;
 
+      let alpha = 0.7;
+      if (!reduced && night) {
+        alpha = 0.25 + 0.75 * (0.5 + 0.5 * Math.sin(t * dot.speed + dot.phase));
+        if (dot.star) alpha = Math.max(alpha, 0.6);
+      }
       const d = pointerActive ? Math.hypot(pointerX - dot.x, pointerY - dot.y) : Infinity;
+      ctx.globalAlpha = alpha;
       ctx.fillStyle = d < 70 ? accent : muted;
       ctx.beginPath();
-      ctx.arc(dot.x, dot.y, 1.5, 0, Math.PI * 2);
+      ctx.arc(dot.x, dot.y, dot.star && night ? 2.2 : 1.5, 0, Math.PI * 2);
       ctx.fill();
     }
+    ctx.globalAlpha = 1;
 
     if (replaying) {
       const elapsed = (now - replayStart) / replayScale;
