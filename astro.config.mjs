@@ -1,6 +1,5 @@
 // @ts-check
 import { defineConfig } from "astro/config";
-import tailwindcss from "@tailwindcss/vite";
 import react from "@astrojs/react";
 import cloudflare from "@astrojs/cloudflare";
 import sitemap, { ChangeFreqEnum } from "@astrojs/sitemap";
@@ -28,7 +27,6 @@ export default defineConfig({
     rehypePlugins: [rehypeFigure, rehypeImageText, rehypeTableScroll, rehypeTaskList],
   },
   vite: {
-    plugins: [tailwindcss()],
     resolve: {
       alias: import.meta.env.PROD
         ? { "react-dom/server": "react-dom/server.edge" }
@@ -49,7 +47,7 @@ export default defineConfig({
       },
     }),
     react({
-      include: ["**/react/*", "**/components/**/*.tsx"],
+      include: ["**/components/console/**"],
     }),
     sitemap({
       filter: (page) => !page.includes("/api/"),
