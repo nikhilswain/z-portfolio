@@ -1,7 +1,7 @@
 ---
-import content from "@/constants/content.json";
+import { MEDIUM } from "@/data/profile";
 
-const items = content.medium.map((item) => ({ ...item, year: new Date(item.date).getFullYear() }));
+const items = MEDIUM.map((item) => ({ ...item, year: new Date(item.date).getFullYear() }));
 ---
 
 {items.length > 0 && (

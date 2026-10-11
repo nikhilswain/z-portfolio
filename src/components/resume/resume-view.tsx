@@ -10,7 +10,7 @@ import resume from "@/constants/resume.json";
 export function ResumeView() {
   const handleDownload = () => {
     const link = document.createElement("a");
-    link.href = "/zero-resume.pdf";
+    link.href = "/nikhil-kumar-swain-resume.pdf";
     link.download = "Nikhil_Resume.pdf";
     document.body.appendChild(link);
     link.click();

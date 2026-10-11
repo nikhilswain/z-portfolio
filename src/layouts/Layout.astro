@@ -1,5 +1,5 @@
 ---
-import content from "../constants/content.json";
+import { EXPERIENCE, PERSON, SKILLS } from "../data/profile";
 import { serializeJsonLd } from "../lib/blog/seo";
 
 interface Props {
@@ -26,7 +26,7 @@ const IMAGE_TYPES: Record<string, string> = {
 
 const {
   title = "Nikhil Kumar Swain — Frontend Developer",
-  description = content.about.summary,
+  description = PERSON.summary,
   image = DEFAULT_IMAGE,
   imageSize,
   type = "website",
@@ -42,16 +42,20 @@ const canonical = new URL(Astro.url.pathname, siteURL).toString();
 const ogImage = new URL(image, siteURL).toString();
 const ogImageSize = imageSize ?? (image === DEFAULT_IMAGE ? { width: 1200, height: 630 } : undefined);
 const ogImageType = IMAGE_TYPES[image.split("?")[0].split(".").pop()?.toLowerCase() ?? ""];
-const personName = content.name;
-const jobTitle = content.title;
+const personName = PERSON.name;
+const jobTitle = PERSON.title;
 const twitterHandle = "@iamn1khil";
 const themeColor = "#0a0a0f";
 
 const socials = [
-  content.contact.github,
-  content.contact.linkedin,
-  content.contact.twitter,
+  PERSON.github,
+  PERSON.linkedin,
+  PERSON.twitter,
 ].filter(Boolean);
+
+const knowsAbout = SKILLS.filter((group) => group.group === "Frontend" || group.group === "Backend & APIs").flatMap(
+  (group) => group.items,
+);
 
 const personJsonLd = {
   "@context": "https://schema.org",
@@ -62,20 +66,17 @@ const personJsonLd = {
   url: siteURL.origin,
   image: new URL(DEFAULT_IMAGE, siteURL).toString(),
   jobTitle,
-  email: `mailto:${content.contact.email}`,
-  description: content.about.summary,
+  email: `mailto:${PERSON.email}`,
+  description: PERSON.summary,
   sameAs: socials,
-  knowsAbout: [
-    ...content.skills.frontend,
-    ...content.skills.backend,
-  ],
+  knowsAbout,
   alumniOf: {
     "@type": "CollegeOrUniversity",
     name: "Graphic Era University",
   },
   worksFor: {
     "@type": "Organization",
-    name: "Adstia Pvt. Ltd.",
+    name: EXPERIENCE[0].company,
   },
 };
 
