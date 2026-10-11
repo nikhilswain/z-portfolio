@@ -460,3 +460,65 @@ export function formatMonth(month: Month): string {
 export function formatRange(start: Month, end: Month | null, present: string): string {
   return `${formatMonth(start)} – ${end ? formatMonth(end) : present}`;
 }
+
+export interface Game {
+  title: string;
+  image: string;
+  url: string;
+  status: "playing" | "favourite";
+}
+
+export interface Track {
+  title: string;
+  artist: string;
+  image: string;
+  url: string;
+}
+
+export const GAMES: Game[] = [
+  {
+    title: "Hollow Knight: Silksong",
+    image: "/games/silksong.jpg",
+    url: "https://store.steampowered.com/app/1030300/",
+    status: "playing",
+  },
+  {
+    title: "NieR:Automata",
+    image: "/games/nier-automata.jpg",
+    url: "https://store.steampowered.com/app/524220/",
+    status: "favourite",
+  },
+  {
+    title: "NieR Replicant",
+    image: "/games/nier-replicant.jpg",
+    url: "https://store.steampowered.com/app/1113560/",
+    status: "favourite",
+  },
+  {
+    title: "Hollow Knight",
+    image: "/games/hollow-knight.jpg",
+    url: "https://store.steampowered.com/app/367520/",
+    status: "favourite",
+  },
+];
+
+export const TRACKS: Track[] = [
+  {
+    title: "NANIWAROTONNENN",
+    artist: "Yoshino",
+    image: "/music/naniwarotonnenn.jpg",
+    url: "https://open.spotify.com/track/0oFeqtKx3jf2Xq2RJEcR8L",
+  },
+  {
+    title: "Show",
+    artist: "Ado",
+    image: "/music/show.jpg",
+    url: "https://open.spotify.com/track/1rDgAHDX95RmylxjgVW9tN",
+  },
+  {
+    title: "Suzume",
+    artist: "RADWIMPS, Toaka",
+    image: "/music/suzume.jpg",
+    url: "https://open.spotify.com/track/1n1y2kFPISpF9WGD3JaFo5",
+  },
+];

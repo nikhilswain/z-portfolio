@@ -25,7 +25,7 @@ import { PERSON } from "@/data/profile";
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--blog-space-6);
-    padding-top: var(--blog-space-9);
+    padding-top: var(--blog-space-5);
   }
 
   .hero__avatar {
@@ -52,6 +52,7 @@ import { PERSON } from "@/data/profile";
 
   @media (min-width: 768px) {
     .hero {
+      padding-top: var(--blog-space-9);
       grid-template-columns: 1fr auto;
       align-items: center;
       gap: var(--blog-space-8);

@@ -6,6 +6,7 @@ import ProjectGrid from "@/components/home/ProjectGrid.astro";
 import Experience from "@/components/home/Experience.astro";
 import Playground from "@/components/home/Playground.astro";
 import LatestWriting from "@/components/home/LatestWriting.astro";
+import OffTheClock from "@/components/home/OffTheClock.astro";
 import { PERSON } from "@/data/profile";
 ---
 
@@ -32,6 +33,10 @@ import { PERSON } from "@/data/profile";
       <SectionHeading eyebrow="Writing" title="Latest from the blog" id="writing" />
       <LatestWriting />
     </section>
+    <section aria-labelledby="off-the-clock" class="home-section">
+      <SectionHeading eyebrow="Off the clock" title="What I'm playing and listening to" id="off-the-clock" />
+      <OffTheClock />
+    </section>
   </div>
 </SiteLayout>
 
@@ -42,7 +47,7 @@ import { PERSON } from "@/data/profile";
     padding: var(--blog-space-8) var(--blog-page-pad);
   }
 
-  .home > * + .home-section {
+  .home-section {
     margin-top: var(--blog-space-9);
   }
 </style>

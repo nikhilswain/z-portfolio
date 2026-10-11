@@ -1,0 +1,177 @@
+---
+import { GAMES, PROJECTS, TRACKS } from "@/data/profile";
+
+const playing = GAMES.filter((game) => game.status === "playing");
+const favourites = GAMES.filter((game) => game.status === "favourite");
+const dmap = PROJECTS.find((project) => project.id === "dmap");
+---
+
+<div class="clock">
+  <div class="clock__card clock__card--playing reveal">
+    <p class="clock__eyebrow">Now playing</p>
+    {playing.map((game) => (
+      <a class="clock__now" href={game.url} target="_blank" rel="noopener noreferrer">
+        <img src={game.image} alt="" width="460" height="215" loading="lazy" />
+        <strong>{game.title}</strong>
+        <span class="visually-hidden">(opens Steam)</span>
+      </a>
+    ))}
+    <p class="clock__eyebrow">All-time favourites</p>
+    <ul class="clock__favourites">
+      {favourites.map((game) => (
+        <li>
+          <a href={game.url} target="_blank" rel="noopener noreferrer">
+            <img src={game.image} alt="" width="460" height="215" loading="lazy" />
+            <span class="clock__favourite-title">{game.title}</span>
+            <span class="visually-hidden">(opens Steam)</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="clock__card reveal">
+    <p class="clock__eyebrow">On repeat</p>
+    <ul class="clock__tracks">
+      {TRACKS.map((track) => (
+        <li>
+          <a class="clock__track" href={track.url} target="_blank" rel="noopener noreferrer">
+            <img src={track.image} alt="" width="300" height="300" loading="lazy" />
+            <span class="clock__track-text">
+              <strong>{track.title}</strong>
+              <span class="clock__track-artist">{track.artist}</span>
+            </span>
+            <span class="visually-hidden">(opens Spotify)</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <div class="clock__card reveal">
+    <p class="clock__eyebrow">Building worlds</p>
+    <img class="clock__world" src="/dmap.png" alt="" width="1200" height="675" loading="lazy" />
+    <p class="clock__world-text">Procedural pixel worlds from Discord servers, in DMap.</p>
+    {dmap?.link && <a class="clock__more" href={dmap.link}>Visit DMap ↗</a>}
+  </div>
+</div>
+
+<style>
+  .clock {
+    display: grid;
+    gap: var(--blog-space-5);
+  }
+
+  @media (min-width: 768px) {
+    .clock {
+      grid-template-columns: 3fr 2fr;
+    }
+
+    .clock__card--playing {
+      grid-row: span 2;
+    }
+  }
+
+  .clock__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--blog-space-4);
+    padding: var(--blog-space-4);
+    border: 1px solid var(--blog-border);
+    border-radius: var(--blog-radius);
+    background: var(--blog-surface);
+    transition: border-color 250ms ease-out;
+  }
+
+  .clock__card:hover {
+    border-color: var(--blog-accent);
+  }
+
+  .clock__eyebrow {
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-accent);
+  }
+
+  .clock__now {
+    display: grid;
+    gap: var(--blog-space-2);
+  }
+
+  .clock__now img,
+  .clock__favourites img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 460 / 215;
+    object-fit: cover;
+    border-radius: var(--blog-radius-sm);
+  }
+
+  .clock__favourites {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--blog-space-3);
+  }
+
+  .clock__favourites a {
+    display: grid;
+    gap: var(--blog-space-1);
+  }
+
+  .clock__favourite-title {
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  .clock__tracks {
+    display: grid;
+    gap: var(--blog-space-2);
+  }
+
+  .clock__track {
+    display: flex;
+    align-items: center;
+    gap: var(--blog-space-3);
+    padding: var(--blog-space-1) var(--blog-space-2);
+    border-radius: var(--blog-radius-sm);
+  }
+
+  .clock__track:hover {
+    background: var(--blog-code-inline-bg);
+  }
+
+  .clock__track img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: var(--blog-radius-sm);
+  }
+
+  .clock__track-text {
+    display: grid;
+  }
+
+  .clock__track-artist {
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  .clock__world {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: 70% 60%;
+    border-radius: var(--blog-radius-sm);
+  }
+
+  .clock__world-text {
+    font-size: var(--blog-text-small);
+  }
+
+  .clock__more {
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-accent);
+  }
+</style>
