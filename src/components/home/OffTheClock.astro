@@ -1,177 +1,236 @@
 ---
-import { GAMES, PROJECTS, TRACKS } from "@/data/profile";
+import { GAMES, TRACKS } from "@/data/profile";
 
-const playing = GAMES.filter((game) => game.status === "playing");
-const favourites = GAMES.filter((game) => game.status === "favourite");
-const dmap = PROJECTS.find((project) => project.id === "dmap");
+const shelf = [
+  ...GAMES.filter((game) => game.status === "playing"),
+  ...GAMES.filter((game) => game.status === "favourite"),
+];
 ---
 
 <div class="clock">
-  <div class="clock__card clock__card--playing reveal">
-    <p class="clock__eyebrow">Now playing</p>
-    {playing.map((game) => (
-      <a class="clock__now" href={game.url} target="_blank" rel="noopener noreferrer">
-        <img src={game.image} alt="" width="460" height="215" loading="lazy" />
-        <strong>{game.title}</strong>
-        <span class="visually-hidden">(opens Steam)</span>
-      </a>
-    ))}
-    <p class="clock__eyebrow">All-time favourites</p>
-    <ul class="clock__favourites">
-      {favourites.map((game) => (
-        <li>
-          <a href={game.url} target="_blank" rel="noopener noreferrer">
-            <img src={game.image} alt="" width="460" height="215" loading="lazy" />
-            <span class="clock__favourite-title">{game.title}</span>
-            <span class="visually-hidden">(opens Steam)</span>
+  <div class="clock__block">
+    <p class="clock__label">Playing</p>
+    <ul class="shelf">
+      {shelf.map((game) => (
+        <li class={`shelf__item${game.status === "playing" ? " shelf__item--playing" : ""}`}>
+          <a class="shelf__cover" href={game.url} target="_blank" rel="noopener noreferrer">
+            <img src={game.image} alt="" width="460" height="215" />
           </a>
+          <p class="shelf__tag">{game.status === "playing" ? "now playing" : "favourite"}</p>
+          <p class="shelf__title">
+            {game.title}<span class="visually-hidden"> (opens Steam)</span>
+          </p>
         </li>
       ))}
     </ul>
   </div>
 
-  <div class="clock__card reveal">
-    <p class="clock__eyebrow">On repeat</p>
-    <ul class="clock__tracks">
+  <div class="clock__block">
+    <p class="clock__label">On repeat</p>
+    <ul class="vinyls">
       {TRACKS.map((track) => (
         <li>
-          <a class="clock__track" href={track.url} target="_blank" rel="noopener noreferrer">
-            <img src={track.image} alt="" width="300" height="300" loading="lazy" />
-            <span class="clock__track-text">
-              <strong>{track.title}</strong>
-              <span class="clock__track-artist">{track.artist}</span>
+          <a class="vinyl" href={track.url} target="_blank" rel="noopener noreferrer">
+            <span class="vinyl__disc">
+              <img src={track.image} alt="" width="96" height="96" />
             </span>
-            <span class="visually-hidden">(opens Spotify)</span>
+            <span class="vinyl__text">
+              <strong>{track.title}</strong>
+              <span>{track.artist}</span>
+              <span class="visually-hidden"> (opens Spotify)</span>
+            </span>
           </a>
         </li>
       ))}
     </ul>
-  </div>
-
-  <div class="clock__card reveal">
-    <p class="clock__eyebrow">Building worlds</p>
-    <img class="clock__world" src="/dmap.png" alt="" width="1200" height="675" loading="lazy" />
-    <p class="clock__world-text">Procedural pixel worlds from Discord servers, in DMap.</p>
-    {dmap?.link && <a class="clock__more" href={dmap.link}>Visit DMap ↗</a>}
   </div>
 </div>
 
+<script>
+  const fine = window.matchMedia("(hover: hover) and (pointer: fine)");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  if (fine.matches && !reduced.matches) {
+    for (const cover of document.querySelectorAll<HTMLElement>(".shelf__cover")) {
+      cover.addEventListener("pointermove", (event) => {
+        const { left, top, width, height } = cover.getBoundingClientRect();
+        cover.style.setProperty("--ry", `${((event.clientX - left) / width - 0.5) * 14}deg`);
+        cover.style.setProperty("--rx", `${-((event.clientY - top) / height - 0.5) * 10}deg`);
+      });
+      cover.addEventListener("pointerleave", () => {
+        cover.style.setProperty("--ry", "0deg");
+        cover.style.setProperty("--rx", "0deg");
+      });
+    }
+  }
+</script>
+
 <style>
-  .clock {
+  .clock__block + .clock__block {
+    margin-top: var(--blog-space-7);
+  }
+
+  .clock__label {
+    margin-bottom: var(--blog-space-4);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  .shelf {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--blog-space-5);
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: var(--blog-space-3);
+  }
+
+  .shelf__item {
+    flex: none;
+    scroll-snap-align: start;
+    width: min(13rem, 46vw);
+  }
+
+  .shelf__item--playing {
+    width: min(24rem, 78vw);
+  }
+
+  /* Wide enough for the whole shelf: share the row instead of scrolling. */
+  @media (min-width: 768px) {
+    .shelf {
+      overflow-x: visible;
+    }
+
+    .shelf__item {
+      flex: 1 1 0;
+      width: auto;
+      min-width: 0;
+    }
+
+    .shelf__item--playing {
+      flex-grow: 2;
+    }
+  }
+
+  .shelf__cover {
+    display: block;
+    transform: perspective(800px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--s, 1));
+    transition: transform 400ms ease-out;
+    transform-style: preserve-3d;
+  }
+
+  .shelf__cover img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--blog-radius-sm);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .shelf__cover:hover {
+      --s: 1.03;
+      transition-duration: 120ms;
+    }
+  }
+
+  .shelf__tag {
+    margin-top: var(--blog-space-2);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  .shelf__item--playing .shelf__tag {
+    color: var(--blog-accent);
+  }
+
+  .shelf__title {
+    margin-top: var(--blog-space-1);
+    font-size: var(--blog-text-small);
+    color: var(--blog-fg);
+  }
+
+  .vinyls {
     display: grid;
     gap: var(--blog-space-5);
   }
 
-  @media (min-width: 768px) {
-    .clock {
-      grid-template-columns: 3fr 2fr;
-    }
-
-    .clock__card--playing {
-      grid-row: span 2;
+  @media (min-width: 640px) {
+    .vinyls {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 
-  .clock__card {
-    display: flex;
-    flex-direction: column;
-    gap: var(--blog-space-4);
-    padding: var(--blog-space-4);
-    border: 1px solid var(--blog-border);
-    border-radius: var(--blog-radius);
-    background: var(--blog-surface);
-    transition: border-color 250ms ease-out;
-  }
-
-  .clock__card:hover {
-    border-color: var(--blog-accent);
-  }
-
-  .clock__eyebrow {
-    font-family: var(--blog-font-mono);
-    font-size: var(--blog-text-meta);
-    color: var(--blog-accent);
-  }
-
-  .clock__now {
-    display: grid;
-    gap: var(--blog-space-2);
-  }
-
-  .clock__now img,
-  .clock__favourites img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 460 / 215;
-    object-fit: cover;
-    border-radius: var(--blog-radius-sm);
-  }
-
-  .clock__favourites {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--blog-space-3);
-  }
-
-  .clock__favourites a {
-    display: grid;
-    gap: var(--blog-space-1);
-  }
-
-  .clock__favourite-title {
-    font-size: var(--blog-text-meta);
-    color: var(--blog-fg-muted);
-  }
-
-  .clock__tracks {
-    display: grid;
-    gap: var(--blog-space-2);
-  }
-
-  .clock__track {
+  .vinyl {
     display: flex;
     align-items: center;
-    gap: var(--blog-space-3);
-    padding: var(--blog-space-1) var(--blog-space-2);
-    border-radius: var(--blog-radius-sm);
+    gap: var(--blog-space-4);
   }
 
-  .clock__track:hover {
-    background: var(--blog-code-inline-bg);
+  .vinyl__disc {
+    position: relative;
+    flex: none;
+    width: 5.5rem;
+    height: 5.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    outline: 1px solid var(--blog-border);
+    outline-offset: 3px;
   }
 
-  .clock__track img {
-    width: 48px;
-    height: 48px;
+  .vinyl__disc img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: var(--blog-radius-sm);
   }
 
-  .clock__track-text {
+  .vinyl__disc::after {
+    content: "";
+    position: absolute;
+    inset: 50%;
+    width: 0.9rem;
+    height: 0.9rem;
+    translate: -50% -50%;
+    border-radius: 50%;
+    background: var(--blog-bg);
+    box-shadow: 0 0 0 1px var(--blog-border);
+  }
+
+  .vinyl__text {
     display: grid;
   }
 
-  .clock__track-artist {
+  .vinyl__text strong {
+    color: var(--blog-fg-strong);
+  }
+
+  .vinyl__text span {
+    font-family: var(--blog-font-mono);
     font-size: var(--blog-text-meta);
     color: var(--blog-fg-muted);
   }
 
-  .clock__world {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    object-position: 70% 60%;
-    border-radius: var(--blog-radius-sm);
-  }
-
-  .clock__world-text {
-    font-size: var(--blog-text-small);
-  }
-
-  .clock__more {
-    font-family: var(--blog-font-mono);
-    font-size: var(--blog-text-meta);
+  .vinyl:hover .vinyl__text strong,
+  .vinyl:focus-visible .vinyl__text strong {
     color: var(--blog-accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .vinyl__disc {
+      animation: vinyl-spin 2.4s linear infinite;
+      animation-play-state: paused;
+    }
+
+    .vinyl:hover .vinyl__disc,
+    .vinyl:focus-visible .vinyl__disc {
+      animation-play-state: running;
+    }
+  }
+
+  @keyframes vinyl-spin {
+    to {
+      rotate: 1turn;
+    }
   }
 </style>
