@@ -1,123 +1,80 @@
----
-import { PROJECTS } from "@/data/profile";
-
-const dmap = PROJECTS.find((project) => project.id === "dmap");
-const zketch = PROJECTS.find((project) => project.id === "zketch");
----
-
-<div class="playground">
-  <figure class="tile reveal">
-    <div class="tile__stage" data-play="pixel-room">
-      <p class="tile__fallback">Needs JavaScript to run.</p>
-    </div>
-    <figcaption class="tile__caption">
-      <strong>Pixel room</strong>
-      <p>Walk around with the arrow keys or tap. A tiny taste of the 2D game work behind DMap.</p>
-      {dmap?.link && <a href={dmap.link}>Play DMap ↗</a>}
-    </figcaption>
-  </figure>
-
-  <figure class="tile reveal">
-    <div class="tile__stage" data-play="motion-grid">
-      <p class="tile__fallback">Needs JavaScript to run.</p>
-    </div>
-    <figcaption class="tile__caption">
-      <strong>Motion study</strong>
-      <p>A grid of dots that leans toward your pointer. Springs, no libraries.</p>
-    </figcaption>
-  </figure>
-
-  <figure class="tile reveal">
-    <div class="tile__stage" data-play="sketch">
-      <p class="tile__fallback">Needs JavaScript to run.</p>
-    </div>
-    <figcaption class="tile__caption">
-      <strong>Sketch</strong>
-      <p>Draw something, then hit replay. The idea behind Zketch, in a box.</p>
-      {zketch?.link && <a href={zketch.link}>Open Zketch ↗</a>}
-    </figcaption>
-  </figure>
+<div class="field" data-field>
+  <p class="field__fallback">A field of dots that react to your pointer, and a place to draw. Needs JavaScript.</p>
 </div>
+<p class="field__controls">
+  <span class="field__hint">move to disturb · drag to draw</span>
+  <span aria-hidden="true">·</span>
+  <button type="button" data-field-replay>replay</button>
+  <span aria-hidden="true">·</span>
+  <button type="button" data-field-clear>clear</button>
+  <span class="field__touch" hidden>
+    <span aria-hidden="true">·</span>
+    <button type="button" data-field-draw aria-pressed="false">draw: off</button>
+  </span>
+</p>
 
 <script>
-  const modules = {
-    "pixel-room": () => import("@/components/playground/pixel-room"),
-    "motion-grid": () => import("@/components/playground/motion-grid"),
-    sketch: () => import("@/components/playground/sketch"),
-  };
-
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
         observer.unobserve(entry.target);
-        const stage = entry.target as HTMLElement;
-        const name = stage.dataset.play;
-        if (!name) continue;
-        modules[name as keyof typeof modules]().then((mod) => mod.init(stage));
+        const field = entry.target as HTMLElement;
+        import("@/components/playground/field").then((mod) => mod.init(field));
       }
     },
     { rootMargin: "200px" },
   );
 
-  document.querySelectorAll("[data-play]").forEach((el) => observer.observe(el));
+  document.querySelectorAll("[data-field]").forEach((el) => observer.observe(el));
 </script>
 
 <style>
-  .playground {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: var(--blog-space-5);
-  }
-
-  .tile {
-    display: flex;
-    flex-direction: column;
-    gap: var(--blog-space-3);
-  }
-
-  .tile__stage {
+  .field {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+    height: clamp(18rem, 42vh, 28rem);
     position: relative;
-    overflow: hidden;
-    aspect-ratio: 4 / 3;
-    border: 1px solid var(--blog-border);
-    border-radius: var(--blog-radius);
-    background: var(--blog-surface);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);
   }
 
-  @media (min-width: 768px) {
-    /* Two tiles side by side, the sketch gets the full row as a wider canvas. */
-    .tile:has([data-play="sketch"]) {
-      grid-column: 1 / -1;
-    }
-
-    [data-play="sketch"] {
-      aspect-ratio: 21 / 9;
-    }
+  .field :global(canvas) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: pan-y;
   }
 
-  .tile__fallback {
+  .field__fallback {
     display: grid;
     place-content: center;
     height: 100%;
+    padding: var(--blog-space-4);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+    text-align: center;
+  }
+
+  .field__controls {
+    margin-top: var(--blog-space-3);
     font-family: var(--blog-font-mono);
     font-size: var(--blog-text-meta);
     color: var(--blog-fg-muted);
   }
 
-  .tile__caption {
-    display: grid;
-    gap: var(--blog-space-1);
-    font-size: var(--blog-text-small);
+  .field__controls [aria-hidden="true"] {
+    margin-inline: var(--blog-space-2);
   }
 
-  .tile__caption p {
-    color: var(--blog-fg-muted);
-  }
-
-  .tile__caption a {
-    font-family: var(--blog-font-mono);
-    font-size: var(--blog-text-meta);
+  .field__controls button {
+    font: inherit;
     color: var(--blog-accent);
+    cursor: pointer;
+  }
+
+  .field__controls button:hover {
+    text-decoration: underline;
   }
 </style>
