@@ -5,7 +5,8 @@ import { PERSON } from "@/data/profile";
 
 <div class="hero">
   <div class="hero__avatar">
-    <img src={PERSON.avatar} alt="Luffy — zero's avatar" width="128" height="128" />
+    <img class="hero__img" src={PERSON.avatar} alt="Luffy — zero's avatar" width="128" height="128" draggable="false" />
+    <p class="hero__shout" aria-hidden="true">gomu gomu no…</p>
   </div>
   <div class="hero__content">
     <p class="hero__eyebrow">Frontend developer · Cuttack, India</p>
@@ -19,6 +20,11 @@ import { PERSON } from "@/data/profile";
     </div>
   </div>
 </div>
+
+<script>
+  import { initGumGum } from "./gum-gum";
+  initGumGum();
+</script>
 
 <style>
   .hero {
@@ -48,6 +54,25 @@ import { PERSON } from "@/data/profile";
     width: 100%;
     height: 100%;
     border-radius: var(--blog-radius);
+  }
+
+  .hero__shout {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    translate: -50% 0;
+    margin-top: var(--blog-space-2);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-accent);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 200ms;
+    pointer-events: none;
+  }
+
+  .hero__shout.is-shouting {
+    opacity: 1;
   }
 
   @media (min-width: 768px) {
