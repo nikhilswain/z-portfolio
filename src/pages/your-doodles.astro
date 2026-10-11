@@ -1,0 +1,111 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="Your doodles — zerro.dev" noindex>
+  <div class="fridge" data-fridge>
+    <div class="fridge__bin" hidden>drop here to remove</div>
+    <p class="fridge__note">your doodles · lives only in this browser · <a href="/#playground">draw more →</a></p>
+  </div>
+  <noscript>Your doodles are stored in your browser and need JavaScript to show.</noscript>
+</SiteLayout>
+
+<script>
+  import { initFridge } from "@/components/doodles/fridge";
+  initFridge(document.querySelector("[data-fridge]")!);
+</script>
+
+<style>
+  .fridge {
+    position: relative;
+    min-height: calc(100svh - var(--blog-header-h) - 6rem);
+    overflow: hidden;
+  }
+
+  .fridge__note {
+    position: absolute;
+    left: var(--blog-page-pad);
+    bottom: var(--blog-space-4);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  .fridge__note a {
+    color: var(--blog-accent);
+  }
+
+  .fridge__bin {
+    position: fixed;
+    left: 50%;
+    bottom: var(--blog-space-4);
+    translate: -50% 0;
+    padding-top: var(--blog-space-2);
+    border-top: 1px dashed var(--blog-border);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  noscript {
+    display: block;
+    margin: 0;
+    padding: 0 var(--blog-page-pad) var(--blog-space-4);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  :global(.magnet) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--blog-accent);
+    cursor: grab;
+    touch-action: none;
+  }
+
+  :global(.magnet__bob) {
+    width: 100%;
+    height: 100%;
+  }
+
+  :global(.magnet svg) {
+    width: 100%;
+    height: 100%;
+  }
+
+  :global(.fridge__empty) {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--blog-space-3);
+    text-align: center;
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  :global(.fridge__empty svg) {
+    width: 6rem;
+    height: 6rem;
+    opacity: 0.5;
+  }
+
+  :global(.fridge__empty a) {
+    color: var(--blog-accent);
+  }
+
+  @keyframes fridge-float {
+    from { translate: 0 -4px; }
+    to { translate: 0 4px; }
+  }
+
+  @keyframes fridge-flutter {
+    from { rotate: -1.5deg; }
+    to { rotate: 1.5deg; }
+  }
+</style>

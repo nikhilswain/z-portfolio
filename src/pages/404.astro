@@ -11,78 +11,9 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
       <a href="/blog/">Blog</a>
     </p>
   </div>
-
-  <section class="doodle-wall" hidden aria-labelledby="DoodleWallHeading">
-    <p id="DoodleWallHeading" class="doodle-wall__title">…but your doodles do.</p>
-    <ul class="doodle-wall__list"></ul>
-    <p class="doodle-wall__note">Saved only in this browser.</p>
-  </section>
 </SiteLayout>
 
-<script>
-  const KEY = "zerro-doodles";
-  const wall = document.querySelector<HTMLElement>(".doodle-wall")!;
-  const list = wall.querySelector<HTMLUListElement>(".doodle-wall__list")!;
-
-  let doodles: { w: number; h: number; paths: string[]; at: number }[];
-  try {
-    const raw = localStorage.getItem(KEY);
-    doodles = raw ? JSON.parse(raw) : [];
-    if (!Array.isArray(doodles)) doodles = [];
-  } catch {
-    doodles = [];
-  }
-  if (doodles.length > 0) {
-    wall.hidden = false;
-    doodles.forEach(render);
-  }
-
-  function render(doodle: (typeof doodles)[number], index: number) {
-    const li = document.createElement("li");
-    li.className = "doodle";
-    li.style.setProperty("--tilt", `${(Math.random() * 14 - 7).toFixed(1)}deg`);
-    li.style.animationDelay = `${index * 60}ms`;
-
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", `0 0 ${doodle.w} ${doodle.h}`);
-    svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", "Your doodle");
-    for (const d of doodle.paths) {
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path.setAttribute("d", d);
-      path.setAttribute("fill", "none");
-      path.setAttribute("stroke", "currentColor");
-      path.setAttribute("stroke-width", "2.5");
-      path.setAttribute("stroke-linecap", "round");
-      path.setAttribute("stroke-linejoin", "round");
-      path.setAttribute("vector-effect", "non-scaling-stroke");
-      svg.append(path);
-    }
-
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.className = "doodle__remove";
-    remove.setAttribute("aria-label", "Remove doodle");
-    remove.textContent = "×";
-    remove.addEventListener("click", () => {
-      const i = doodles.indexOf(doodle);
-      if (i !== -1) doodles.splice(i, 1);
-      try {
-        localStorage.setItem(KEY, JSON.stringify(doodles));
-      } catch {
-        // storage may be unavailable
-      }
-      li.remove();
-      if (doodles.length === 0) wall.hidden = true;
-    });
-
-    li.append(svg, remove);
-    list.append(li);
-  }
-</script>
-
 <style>
-  /* .doodle elements are created in the script, so they need global (unscoped) selectors. */
   .not-found {
     min-height: 60vh;
     display: grid;
@@ -108,80 +39,5 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 
   .not-found__links a {
     color: var(--blog-accent);
-  }
-
-  .doodle-wall__title {
-    font-size: var(--blog-text-h3);
-    color: var(--blog-fg-strong);
-    text-align: center;
-    margin-top: var(--blog-space-7);
-  }
-
-  .doodle-wall__list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--blog-space-5);
-    list-style: none;
-    margin: var(--blog-space-5) 0 0;
-    padding: 0;
-  }
-
-  :global(.doodle) {
-    position: relative;
-    width: 7.5rem;
-    height: 7.5rem;
-    color: var(--blog-accent);
-    rotate: var(--tilt);
-    animation: doodle-in 300ms ease-out both;
-  }
-
-  :global(.doodle svg) {
-    width: 100%;
-    height: 100%;
-  }
-
-  :global(.doodle__remove) {
-    position: absolute;
-    top: 0;
-    right: 0;
-    font-family: var(--blog-font-mono);
-    font-size: var(--blog-text-meta);
-    color: var(--blog-fg-muted);
-    background: none;
-    border: none;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 200ms;
-  }
-
-  :global(.doodle):hover :global(.doodle__remove),
-  :global(.doodle):focus-within :global(.doodle__remove) {
-    opacity: 1;
-  }
-
-  .doodle-wall__note {
-    font-family: var(--blog-font-mono);
-    font-size: var(--blog-text-meta);
-    color: var(--blog-fg-muted);
-    text-align: center;
-    margin-top: var(--blog-space-3);
-  }
-
-  @keyframes doodle-in {
-    from {
-      scale: 0.8;
-      opacity: 0;
-    }
-    to {
-      scale: 1;
-      opacity: 1;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    :global(.doodle) {
-      animation: none;
-    }
   }
 </style>
