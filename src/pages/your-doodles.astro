@@ -4,9 +4,14 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 
 <SiteLayout title="Your doodles — zerro.dev" noindex>
   <div class="fridge" data-fridge>
-    <div class="fridge__bin" hidden>
-      <span class="fridge__bin--idle">drop here to remove</span>
-      <span class="fridge__bin--armed">release to remove</span>
+    <div class="hole" aria-hidden="true">
+      <div class="hole__disc"></div>
+      <svg class="hole__swirl" viewBox="0 0 100 100">
+        <path d="M50 6 A44 44 0 0 1 81 19" />
+        <path d="M19 81 A44 44 0 0 1 50 94" />
+        <path d="M94 50 A44 44 0 0 1 81 81" />
+      </svg>
+      <span class="hole__label">let go</span>
     </div>
     <p class="fridge__note">
       <span class="fridge__note--fine">your doodles · drag or throw them around · drop at the bottom to remove · lives only in this browser · <a href="/#playground">draw more →</a></span>
@@ -56,53 +61,81 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
     color: var(--blog-accent);
   }
 
-  .fridge__bin {
+  .hole {
     position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 5.5rem;
-    display: grid;
-    place-items: center;
-    border-top: 1px dashed var(--blog-border);
-    background: transparent;
+    left: 50%;
+    bottom: 2.5rem;
+    translate: -50% 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    opacity: 0;
+    scale: 0.4;
+    pointer-events: none;
+    z-index: 250;
+    transition: opacity 150ms ease-in, scale 150ms ease-in;
+  }
+
+  .hole.is-open {
+    opacity: 1;
+    scale: 1;
+    transition: opacity 200ms ease-out, scale 200ms ease-out;
+  }
+
+  .hole__disc {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: color-mix(in srgb, #000 60%, var(--blog-bg));
+    border: 1.5px solid color-mix(in srgb, var(--blog-callout-caution) 70%, transparent);
+  }
+
+  .hole__swirl {
+    position: absolute;
+    inset: 0;
+    animation: hole-spin 6s linear infinite;
+  }
+
+  .hole__swirl path {
+    fill: none;
+    stroke: var(--blog-callout-caution);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: 0.3;
+  }
+
+  .hole.is-armed .hole__disc {
+    border-color: var(--blog-callout-caution);
+  }
+
+  .hole.is-armed .hole__swirl {
+    animation-duration: 2s;
+  }
+
+  .hole__label {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    left: 50%;
+    translate: -50% 0;
     font-family: var(--blog-font-mono);
     font-size: var(--blog-text-meta);
-    color: var(--blog-fg-muted);
-    z-index: 200;
-  }
-
-  .fridge__bin[hidden] {
-    display: none;
-  }
-
-  .fridge__bin--armed {
-    display: none;
-  }
-
-  .fridge__bin.is-armed {
     color: var(--blog-callout-caution);
-    border-top-color: var(--blog-callout-caution);
-    background: color-mix(in srgb, var(--blog-callout-caution) 14%, transparent);
+    opacity: 0;
+    transition: opacity 150ms ease-out;
+    white-space: nowrap;
   }
 
-  .fridge__bin.is-armed .fridge__bin--idle {
-    display: none;
+  .hole.is-armed .hole__label {
+    opacity: 1;
   }
 
-  .fridge__bin.is-armed .fridge__bin--armed {
-    display: inline;
+  @keyframes hole-spin {
+    to { rotate: 1turn; }
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .fridge__bin:not([hidden]) {
-      animation: bin-in 150ms ease-out;
+  @media (prefers-reduced-motion: reduce) {
+    .hole__swirl {
+      animation: none;
     }
-  }
-
-  @keyframes bin-in {
-    from { translate: 0 100%; opacity: 0; }
-    to { translate: 0 0; opacity: 1; }
   }
 
   noscript {
@@ -121,11 +154,10 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
     color: var(--blog-accent);
     cursor: grab;
     touch-action: none;
-    transition: scale 150ms ease-out;
+    transition: scale 150ms ease-out, color 150ms ease-out;
   }
 
   :global(.magnet.is-doomed) {
-    scale: 0.9;
     color: var(--blog-callout-caution);
   }
 
@@ -154,10 +186,9 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
   :global(.fridge__empty) {
     position: absolute;
     inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    justify-items: center;
+    align-content: center;
     gap: var(--blog-space-3);
     text-align: center;
     font-family: var(--blog-font-mono);
@@ -165,14 +196,29 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
     color: var(--blog-fg-muted);
   }
 
-  :global(.fridge__empty svg) {
-    width: 6rem;
-    height: 6rem;
-    opacity: 0.5;
+  :global(.fridge__scribble) {
+    width: 10rem;
+    height: auto;
   }
 
   :global(.fridge__empty a) {
     color: var(--blog-accent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.fridge__scribble path) {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: scribble-loop 4s ease-in-out infinite;
+    }
+  }
+
+  @keyframes scribble-loop {
+    0% { stroke-dashoffset: 1; opacity: 1; }
+    40% { stroke-dashoffset: 0; opacity: 1; }
+    70% { stroke-dashoffset: 0; opacity: 1; }
+    85% { stroke-dashoffset: 0; opacity: 0; }
+    100% { stroke-dashoffset: 0; opacity: 0; }
   }
 
   @keyframes fridge-float {

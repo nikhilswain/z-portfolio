@@ -8,7 +8,7 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 
 export function initFridge(root: HTMLElement): void {
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const bin = root.querySelector<HTMLElement>(".fridge__bin")!;
+  const hole = root.querySelector<HTMLElement>(".hole")!;
   let dragging = false;
   let night = document.documentElement.dataset.theme === "dark";
   const magnets: { el: HTMLElement; pos: Position; refit: () => void }[] = [];
@@ -53,9 +53,16 @@ export function initFridge(root: HTMLElement): void {
     const empty = document.createElement("div");
     empty.className = "fridge__empty";
     const svg = document.createElementNS(SVG_NS, "svg");
-    svg.setAttribute("viewBox", "0 0 100 100");
-    const path = makePath("M 50 22 a 28 28 0 1 0 0.1 0 M 40 36 h 6 M 54 36 h 6 M 38 46 q 12 12 24 0");
-    path.setAttribute("stroke-dasharray", "2 6");
+    svg.setAttribute("viewBox", "0 0 170 60");
+    svg.classList.add("fridge__scribble");
+    const path = document.createElementNS(SVG_NS, "path");
+    path.setAttribute("d", "M 10 40 C 30 10, 50 10, 45 35 S 30 55, 55 40 S 85 10, 80 35 S 65 55, 90 40 S 120 10, 115 35 S 100 55, 125 40 C 140 30, 150 35, 160 38");
+    path.setAttribute("pathLength", "1");
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke", "currentColor");
+    path.setAttribute("stroke-width", "2.5");
+    path.setAttribute("stroke-linecap", "round");
+    path.setAttribute("stroke-linejoin", "round");
     svg.append(path);
     const text = document.createElement("p");
     text.textContent = "nothing on the fridge yet";
@@ -66,8 +73,8 @@ export function initFridge(root: HTMLElement): void {
     root.append(empty);
   }
 
-  function setPos(el: HTMLElement, x: number, y: number, r: number, scale: number) {
-    el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${r}deg) scale(${scale})`;
+  function setPos(el: HTMLElement, x: number, y: number, r: number) {
+    el.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%) rotate(${r}deg)`;
     el.dataset.rot = String(r);
   }
   function applyBob(el: HTMLElement) {
@@ -85,44 +92,82 @@ export function initFridge(root: HTMLElement): void {
     saveJSON(FRIDGE_KEY, positions);
   }
 
-  function isArmed(clientX: number, clientY: number) {
-    const rect = bin.getBoundingClientRect();
-    return clientX >= rect.left && clientX <= rect.right &&
-           clientY >= rect.top && clientY <= rect.bottom;
+  function holeCenter() {
+    const rect = hole.getBoundingClientRect();
+    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+  }
+  function updateHoleSize(d: number) {
+    const t = Math.max(0, Math.min(1, (320 - d) / (320 - 80)));
+    const diameter = (2.5 + 3 * t) * remPx();
+    hole.style.width = `${diameter}px`;
+    hole.style.height = `${diameter}px`;
   }
 
-  function remove(magnet: HTMLElement, doodle: Doodle) {
+  function finish(doodle: Doodle) {
     doodles = doodles.filter((d) => d !== doodle);
     saveJSON(DOODLES_KEY, doodles);
     delete positions[String(doodle.at)];
     saveJSON(FRIDGE_KEY, positions);
-    dragging = false;
-    bin.hidden = true;
-    bin.classList.remove("is-armed");
-    magnet.classList.remove("is-doomed");
-    root.style.overflow = "hidden";
+    if (doodles.length === 0) renderEmpty();
+  }
 
-    if (reduced) {
-      const base = magnet.style.transform;
-      magnet.animate(
-        [{ transform: base, opacity: 1 }, { transform: `${base} scale(0)`, opacity: 0 }],
-        { duration: 200, easing: "ease-out" },
-      ).onfinish = () => {
+  function remove(magnet: HTMLElement, doodle: Doodle) {
+    dragging = false;
+    root.style.overflow = "hidden";
+    const wasOpen = hole.classList.contains("is-open");
+    hole.classList.remove("is-armed");
+
+    if (reduced || !wasOpen) {
+      hole.classList.remove("is-open");
+      magnet.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: "ease-out" }).onfinish = () => {
         magnet.remove();
-        if (doodles.length === 0) renderEmpty();
+        finish(doodle);
       };
       return;
     }
 
-    snap(magnet, doodle, () => {
-      magnet.remove();
-      if (doodles.length === 0) renderEmpty();
-    });
+    const c = holeCenter();
+    const rect = root.getBoundingClientRect();
+    const magnetRect = magnet.getBoundingClientRect();
+    const rot = Number(magnet.dataset.rot || 0);
+    const startTransform = magnet.style.transform;
+    // Scale lives in the transform here: the separate `scale` property would also scale the translate.
+    const startScale = parseFloat(magnet.querySelector<HTMLElement>(".magnet__bob")?.style.scale || "1") || 1;
+    const tx = c.x - rect.left;
+    const ty = c.y - rect.top;
+
+    magnet.animate(
+      [
+        { transform: `${startTransform} scale(${startScale})` },
+        { transform: `translate(${tx}px, ${ty}px) translate(-50%, -50%) rotate(${rot + 270}deg) scale(0.1)` },
+      ],
+      { duration: 350, easing: "ease-in", fill: "forwards" },
+    ).onfinish = () => {
+      implode(magnet, doodle, magnetRect, rot, c, () => {
+        gulp(() => {
+          magnet.remove();
+          finish(doodle);
+        });
+      });
+    };
   }
 
-  function snap(magnet: HTMLElement, doodle: Doodle, done: () => void) {
+  function gulp(done: () => void) {
+    hole.animate(
+      [
+        { scale: 1, opacity: 1 },
+        { scale: 1.25, opacity: 1 },
+        { scale: 0, opacity: 0 },
+      ],
+      { duration: 300, easing: "ease-in" },
+    ).onfinish = () => {
+      hole.classList.remove("is-open");
+      done();
+    };
+  }
+
+  function implode(magnet: HTMLElement, doodle: Doodle, rect: DOMRect, rot: number, c: { x: number; y: number }, done: () => void) {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const rect = magnet.getBoundingClientRect();
     const cw = Math.max(1, Math.round(rect.width * dpr));
     const ch = Math.max(1, Math.round(rect.height * dpr));
     const color = getComputedStyle(magnet).color;
@@ -134,7 +179,7 @@ export function initFridge(root: HTMLElement): void {
     ctx.scale(dpr, dpr);
     const scale = Math.min(rect.width / doodle.w, rect.height / doodle.h);
     ctx.translate(rect.width / 2, rect.height / 2);
-    ctx.rotate((Number(magnet.dataset.rot || 0) * Math.PI) / 180);
+    ctx.rotate((rot * Math.PI) / 180);
     ctx.translate(-rect.width / 2, -rect.height / 2);
     ctx.translate((rect.width - doodle.w * scale) / 2, (rect.height - doodle.h * scale) / 2);
     ctx.scale(scale, scale);
@@ -145,14 +190,17 @@ export function initFridge(root: HTMLElement): void {
     for (const d of doodle.paths) ctx.stroke(new Path2D(d));
 
     const data = ctx.getImageData(0, 0, cw, ch).data;
+    const offX = rect.left * dpr;
+    const offY = rect.top * dpr;
+    const tx = c.x * dpr;
+    const ty = c.y * dpr;
     let particles: Particle[] = [];
     for (let y = 0; y < ch; y += 3) {
       for (let x = 0; x < cw; x += 3) {
         if (data[(y * cw + x) * 4 + 3] > 0) {
           particles.push({
-            x, y,
-            vx: 0.4 + Math.random() * 1.2,
-            vy: -(0.3 + Math.random() * 1.1),
+            x: offX + x, y: offY + y,
+            vx: 0, vy: 0,
             delay: (x / cw) * 350,
             life: 500 + Math.random() * 300,
           });
@@ -183,8 +231,6 @@ export function initFridge(root: HTMLElement): void {
     layer.width = Math.max(1, Math.round(window.innerWidth * dpr));
     layer.height = Math.max(1, Math.round(window.innerHeight * dpr));
     const lctx = layer.getContext("2d")!;
-    const offX = rect.left * dpr;
-    const offY = rect.top * dpr;
     document.body.append(layer);
 
     const start = performance.now();
@@ -193,12 +239,16 @@ export function initFridge(root: HTMLElement): void {
       const t = now - start;
       lctx.clearRect(0, 0, layer.width, layer.height);
       for (const p of particles) {
-        p.x += p.vx + (Math.random() - 0.5) * 0.6;
-        p.y += p.vy + (Math.random() - 0.5) * 0.6;
         if (t < p.delay || t >= p.delay + p.life) continue;
+        p.vx += (tx - p.x) * 0.006;
+        p.vy += (ty - p.y) * 0.006;
+        p.vx *= 0.95;
+        p.vy *= 0.95;
+        p.x += p.vx;
+        p.y += p.vy;
         lctx.globalAlpha = 1 - (t - p.delay) / p.life;
         lctx.fillStyle = color;
-        lctx.fillRect(offX + p.x, offY + p.y, 2, 2);
+        lctx.fillRect(p.x, p.y, 2, 2);
       }
       if (t < maxEnd) requestAnimationFrame(frame);
       else {
@@ -229,7 +279,8 @@ export function initFridge(root: HTMLElement): void {
       const col = index % cols;
       const row = Math.floor(index / cols);
       const x = Math.max(0.05, Math.min(0.95, (col + 0.5) / cols + (Math.random() * 0.16 - 0.08)));
-      const y = Math.max(0.05, Math.min(0.95, (row + 0.5) / rows + (Math.random() * 0.1 - 0.05)));
+      const maxY = Math.min(0.95, 1 - (4.5 * remPx()) / root.clientHeight);
+      const y = Math.max(0.05, Math.min(maxY, (row + 0.5) / rows + (Math.random() * 0.1 - 0.05)));
       pos = { x, y, r: Math.random() * 24 - 12, s: 0.22 + Math.random() * 0.12 };
       positions[key] = pos;
       saveJSON(FRIDGE_KEY, positions);
@@ -272,8 +323,8 @@ export function initFridge(root: HTMLElement): void {
         halfW = size / 2;
         halfH = size / 2;
         x = Math.max(halfW, Math.min(root.clientWidth - halfW, pos.x * root.clientWidth));
-        y = Math.max(halfH, Math.min(root.clientHeight - halfH, pos.y * root.clientHeight));
-        setPos(magnet, x, y, r, 1);
+        y = Math.max(halfH, Math.min(root.clientHeight - halfH - 4.5 * remPx(), pos.y * root.clientHeight));
+        setPos(magnet, x, y, r);
       },
     };
     magnets.push(entry);
@@ -312,13 +363,18 @@ export function initFridge(root: HTMLElement): void {
       magnet.style.cursor = "grabbing";
       bob.style.animationPlayState = "paused";
       magnet.style.zIndex = "99";
-      bin.hidden = false;
+      hole.classList.add("is-open");
       root.style.overflow = "visible";
       const rect = root.getBoundingClientRect();
+      // Re-fitting on resize moves magnets without updating x/y here, so start from where it really is.
+      const box = magnet.getBoundingClientRect();
+      x = box.left + box.width / 2 - rect.left;
+      y = box.top + box.height / 2 - rect.top;
       offX = event.clientX - rect.left - x;
       offY = event.clientY - rect.top - y;
       samples = [{ x: event.clientX, y: event.clientY, t: performance.now() }];
-      setPos(magnet, x, y, r, 1.06);
+      setPos(magnet, x, y, r);
+      bob.style.scale = "1.06";
       event.preventDefault();
     });
 
@@ -327,10 +383,24 @@ export function initFridge(root: HTMLElement): void {
       const rect = root.getBoundingClientRect();
       x = event.clientX - rect.left - offX;
       y = event.clientY - rect.top - offY;
-      const armed = isArmed(event.clientX, event.clientY);
-      bin.classList.toggle("is-armed", armed);
+      const c = holeCenter();
+      const d = Math.hypot(event.clientX - c.x, event.clientY - c.y);
+      updateHoleSize(d);
+      const armed = d < 90;
+      hole.classList.toggle("is-armed", armed);
       magnet.classList.toggle("is-doomed", armed);
-      setPos(magnet, x, y, r, 1.06);
+      if (armed) {
+        const mx = rect.left + x;
+        const my = rect.top + y;
+        const px = mx + (c.x - mx) * 0.25;
+        const py = my + (c.y - my) * 0.25;
+        const tilt = (Math.atan2(c.y - my, c.x - mx) * 180) / Math.PI * 0.4;
+        setPos(magnet, px - rect.left, py - rect.top, tilt);
+        bob.style.scale = "0.7";
+      } else {
+        setPos(magnet, x, y, r);
+        bob.style.scale = "1.06";
+      }
       samples.push({ x: event.clientX, y: event.clientY, t: performance.now() });
       if (samples.length > 5) samples.shift();
     });
@@ -341,14 +411,16 @@ export function initFridge(root: HTMLElement): void {
       magnet.classList.remove("is-doomed");
       magnet.style.cursor = "grab";
       bob.style.animationPlayState = "running";
-      bin.hidden = true;
-      bin.classList.remove("is-armed");
+      hole.classList.remove("is-open");
+      hole.classList.remove("is-armed");
       root.style.overflow = "hidden";
 
       const rect = root.getBoundingClientRect();
+      const floor = 4.5 * remPx();
       x = Math.max(halfW, Math.min(rect.width - halfW, x));
-      y = Math.max(halfH, Math.min(rect.height - halfH, y));
-      setPos(magnet, x, y, r, 1);
+      y = Math.max(halfH, Math.min(rect.height - halfH - floor, y));
+      setPos(magnet, x, y, r);
+      bob.style.scale = "";
 
       let vx = 0;
       let vy = 0;
@@ -374,11 +446,11 @@ export function initFridge(root: HTMLElement): void {
         if (x < halfW) { x = halfW; vx = -vx * 0.6; }
         else if (x > rect.width - halfW) { x = rect.width - halfW; vx = -vx * 0.6; }
         if (y < halfH) { y = halfH; vy = -vy * 0.6; }
-        else if (y > rect.height - halfH) { y = rect.height - halfH; vy = -vy * 0.6; }
+        else if (y > rect.height - halfH - floor) { y = rect.height - halfH - floor; vy = -vy * 0.6; }
         r = Math.max(-20, Math.min(20, r + vx * 0.05));
         vx *= 0.92;
         vy *= 0.92;
-        setPos(magnet, x, y, r, 1);
+        setPos(magnet, x, y, r);
         if (Math.abs(vx) < 0.05 && Math.abs(vy) < 0.05) return savePosition(doodle, x, y, r);
         requestAnimationFrame(step);
       };
@@ -387,7 +459,8 @@ export function initFridge(root: HTMLElement): void {
 
     magnet.addEventListener("pointerup", (event) => {
       if (!dragging) return;
-      if (isArmed(event.clientX, event.clientY)) remove(magnet, doodle);
+      const c = holeCenter();
+      if (Math.hypot(event.clientX - c.x, event.clientY - c.y) < 90) remove(magnet, doodle);
       else release();
     });
     magnet.addEventListener("pointercancel", () => {
@@ -407,8 +480,8 @@ export function initFridge(root: HTMLElement): void {
         if (event.key === "ArrowLeft") x = Math.max(halfW, x - stepX);
         if (event.key === "ArrowRight") x = Math.min(rect.width - halfW, x + stepX);
         if (event.key === "ArrowUp") y = Math.max(halfH, y - stepY);
-        if (event.key === "ArrowDown") y = Math.min(rect.height - halfH, y + stepY);
-        setPos(magnet, x, y, r, 1);
+        if (event.key === "ArrowDown") y = Math.min(rect.height - halfH - 4.5 * remPx(), y + stepY);
+        setPos(magnet, x, y, r);
         savePosition(doodle, x, y, r);
         event.preventDefault();
       }
