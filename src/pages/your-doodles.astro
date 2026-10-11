@@ -4,15 +4,6 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 
 <SiteLayout title="Your doodles — zerro.dev" noindex>
   <div class="fridge" data-fridge>
-    <div class="hole" aria-hidden="true">
-      <div class="hole__disc"></div>
-      <svg class="hole__swirl" viewBox="0 0 100 100">
-        <path d="M50 6 A44 44 0 0 1 81 19" />
-        <path d="M19 81 A44 44 0 0 1 50 94" />
-        <path d="M94 50 A44 44 0 0 1 81 81" />
-      </svg>
-      <span class="hole__label">let go</span>
-    </div>
     <p class="fridge__note">
       <span class="fridge__note--fine">your doodles · drag or throw them around · drop at the bottom to remove · lives only in this browser · <a href="/#playground">draw more →</a></span>
       <span class="fridge__note--coarse">drag · drop at the bottom to remove<br><a href="/#playground">draw more →</a></span>
@@ -59,83 +50,6 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
 
   .fridge__note a {
     color: var(--blog-accent);
-  }
-
-  .hole {
-    position: fixed;
-    left: 50%;
-    bottom: 2.5rem;
-    translate: -50% 0;
-    width: 2.5rem;
-    height: 2.5rem;
-    opacity: 0;
-    scale: 0.4;
-    pointer-events: none;
-    z-index: 250;
-    transition: opacity 150ms ease-in, scale 150ms ease-in;
-  }
-
-  .hole.is-open {
-    opacity: 1;
-    scale: 1;
-    transition: opacity 200ms ease-out, scale 200ms ease-out;
-  }
-
-  .hole__disc {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-    background: color-mix(in srgb, #000 60%, var(--blog-bg));
-    border: 1.5px solid color-mix(in srgb, var(--blog-callout-caution) 70%, transparent);
-  }
-
-  .hole__swirl {
-    position: absolute;
-    inset: 0;
-    animation: hole-spin 6s linear infinite;
-  }
-
-  .hole__swirl path {
-    fill: none;
-    stroke: var(--blog-callout-caution);
-    stroke-width: 2;
-    stroke-linecap: round;
-    opacity: 0.3;
-  }
-
-  .hole.is-armed .hole__disc {
-    border-color: var(--blog-callout-caution);
-  }
-
-  .hole.is-armed .hole__swirl {
-    animation-duration: 2s;
-  }
-
-  .hole__label {
-    position: absolute;
-    top: calc(100% + 0.4rem);
-    left: 50%;
-    translate: -50% 0;
-    font-family: var(--blog-font-mono);
-    font-size: var(--blog-text-meta);
-    color: var(--blog-callout-caution);
-    opacity: 0;
-    transition: opacity 150ms ease-out;
-    white-space: nowrap;
-  }
-
-  .hole.is-armed .hole__label {
-    opacity: 1;
-  }
-
-  @keyframes hole-spin {
-    to { rotate: 1turn; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hole__swirl {
-      animation: none;
-    }
   }
 
   noscript {

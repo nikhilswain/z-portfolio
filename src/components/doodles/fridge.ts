@@ -1,6 +1,7 @@
+import { absorb, center, close, open, setPointer } from "./vortex";
+
 interface Doodle { w: number; h: number; paths: string[]; at: number; }
 interface Position { x: number; y: number; r: number; s: number; }
-interface Particle { x: number; y: number; vx: number; vy: number; delay: number; life: number; }
 
 const DOODLES_KEY = "zerro-doodles";
 const FRIDGE_KEY = "zerro-fridge";
@@ -8,7 +9,6 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 
 export function initFridge(root: HTMLElement): void {
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const hole = root.querySelector<HTMLElement>(".hole")!;
   let dragging = false;
   let night = document.documentElement.dataset.theme === "dark";
   const magnets: { el: HTMLElement; pos: Position; refit: () => void }[] = [];
@@ -92,17 +92,6 @@ export function initFridge(root: HTMLElement): void {
     saveJSON(FRIDGE_KEY, positions);
   }
 
-  function holeCenter() {
-    const rect = hole.getBoundingClientRect();
-    return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-  }
-  function updateHoleSize(d: number) {
-    const t = Math.max(0, Math.min(1, (320 - d) / (320 - 80)));
-    const diameter = (2.5 + 3 * t) * remPx();
-    hole.style.width = `${diameter}px`;
-    hole.style.height = `${diameter}px`;
-  }
-
   function finish(doodle: Doodle) {
     doodles = doodles.filter((d) => d !== doodle);
     saveJSON(DOODLES_KEY, doodles);
@@ -111,62 +100,14 @@ export function initFridge(root: HTMLElement): void {
     if (doodles.length === 0) renderEmpty();
   }
 
-  function remove(magnet: HTMLElement, doodle: Doodle) {
-    dragging = false;
-    root.style.overflow = "hidden";
-    const wasOpen = hole.classList.contains("is-open");
-    hole.classList.remove("is-armed");
-
-    if (reduced || !wasOpen) {
-      hole.classList.remove("is-open");
-      magnet.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: "ease-out" }).onfinish = () => {
-        magnet.remove();
-        finish(doodle);
-      };
-      return;
-    }
-
-    const c = holeCenter();
-    const rect = root.getBoundingClientRect();
-    const magnetRect = magnet.getBoundingClientRect();
-    const rot = Number(magnet.dataset.rot || 0);
-    const startTransform = magnet.style.transform;
-    // Scale lives in the transform here: the separate `scale` property would also scale the translate.
-    const startScale = parseFloat(magnet.querySelector<HTMLElement>(".magnet__bob")?.style.scale || "1") || 1;
-    const tx = c.x - rect.left;
-    const ty = c.y - rect.top;
-
-    magnet.animate(
-      [
-        { transform: `${startTransform} scale(${startScale})` },
-        { transform: `translate(${tx}px, ${ty}px) translate(-50%, -50%) rotate(${rot + 270}deg) scale(0.1)` },
-      ],
-      { duration: 350, easing: "ease-in", fill: "forwards" },
-    ).onfinish = () => {
-      implode(magnet, doodle, magnetRect, rot, c, () => {
-        gulp(() => {
-          magnet.remove();
-          finish(doodle);
-        });
-      });
+  function fadeRemove(magnet: HTMLElement, doodle: Doodle) {
+    magnet.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 150, easing: "ease-out" }).onfinish = () => {
+      magnet.remove();
+      finish(doodle);
     };
   }
 
-  function gulp(done: () => void) {
-    hole.animate(
-      [
-        { scale: 1, opacity: 1 },
-        { scale: 1.25, opacity: 1 },
-        { scale: 0, opacity: 0 },
-      ],
-      { duration: 300, easing: "ease-in" },
-    ).onfinish = () => {
-      hole.classList.remove("is-open");
-      done();
-    };
-  }
-
-  function implode(magnet: HTMLElement, doodle: Doodle, rect: DOMRect, rot: number, c: { x: number; y: number }, done: () => void) {
+  function sampleDoodle(magnet: HTMLElement, doodle: Doodle, rect: DOMRect, rot: number) {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const cw = Math.max(1, Math.round(rect.width * dpr));
     const ch = Math.max(1, Math.round(rect.height * dpr));
@@ -190,73 +131,36 @@ export function initFridge(root: HTMLElement): void {
     for (const d of doodle.paths) ctx.stroke(new Path2D(d));
 
     const data = ctx.getImageData(0, 0, cw, ch).data;
-    const offX = rect.left * dpr;
-    const offY = rect.top * dpr;
-    const tx = c.x * dpr;
-    const ty = c.y * dpr;
-    let particles: Particle[] = [];
+    const particles: { x: number; y: number }[] = [];
     for (let y = 0; y < ch; y += 3) {
       for (let x = 0; x < cw; x += 3) {
-        if (data[(y * cw + x) * 4 + 3] > 0) {
-          particles.push({
-            x: offX + x, y: offY + y,
-            vx: 0, vy: 0,
-            delay: (x / cw) * 350,
-            life: 500 + Math.random() * 300,
-          });
-        }
+        if (data[(y * cw + x) * 4 + 3] > 0) particles.push({ x: rect.left + x / dpr, y: rect.top + y / dpr });
       }
     }
-    if (particles.length === 0) {
-      done();
+    if (particles.length <= 600) return particles;
+    const step = particles.length / 600;
+    const sampled: { x: number; y: number }[] = [];
+    for (let i = 0; i < 600; i++) sampled.push(particles[Math.floor(i * step)]);
+    return sampled;
+  }
+
+  function absorbRemove(magnet: HTMLElement, doodle: Doodle) {
+    dragging = false;
+    root.style.overflow = "hidden";
+    magnet.classList.remove("is-doomed");
+    if (reduced) {
+      fadeRemove(magnet, doodle);
       return;
     }
-    if (particles.length > 900) {
-      const step = particles.length / 900;
-      const sampled: Particle[] = [];
-      for (let i = 0; i < 900; i++) sampled.push(particles[Math.floor(i * step)]);
-      particles = sampled;
+    const magnetRect = magnet.getBoundingClientRect();
+    const rot = Number(magnet.dataset.rot || 0);
+    const particles = sampleDoodle(magnet, doodle, magnetRect, rot);
+    magnet.remove();
+    if (particles.length === 0) {
+      finish(doodle);
+      return;
     }
-
-    magnet.style.visibility = "hidden";
-
-    const layer = document.createElement("canvas");
-    layer.style.position = "fixed";
-    layer.style.left = "0";
-    layer.style.top = "0";
-    layer.style.width = `${window.innerWidth}px`;
-    layer.style.height = `${window.innerHeight}px`;
-    layer.style.pointerEvents = "none";
-    layer.style.zIndex = "2147483647";
-    layer.width = Math.max(1, Math.round(window.innerWidth * dpr));
-    layer.height = Math.max(1, Math.round(window.innerHeight * dpr));
-    const lctx = layer.getContext("2d")!;
-    document.body.append(layer);
-
-    const start = performance.now();
-    const maxEnd = Math.max(...particles.map((p) => p.delay + p.life));
-    const frame = (now: number) => {
-      const t = now - start;
-      lctx.clearRect(0, 0, layer.width, layer.height);
-      for (const p of particles) {
-        if (t < p.delay || t >= p.delay + p.life) continue;
-        p.vx += (tx - p.x) * 0.006;
-        p.vy += (ty - p.y) * 0.006;
-        p.vx *= 0.95;
-        p.vy *= 0.95;
-        p.x += p.vx;
-        p.y += p.vy;
-        lctx.globalAlpha = 1 - (t - p.delay) / p.life;
-        lctx.fillStyle = color;
-        lctx.fillRect(p.x, p.y, 2, 2);
-      }
-      if (t < maxEnd) requestAnimationFrame(frame);
-      else {
-        layer.remove();
-        done();
-      }
-    };
-    requestAnimationFrame(frame);
+    absorb(particles, () => finish(doodle));
   }
 
   function growFridge() {
@@ -363,7 +267,7 @@ export function initFridge(root: HTMLElement): void {
       magnet.style.cursor = "grabbing";
       bob.style.animationPlayState = "paused";
       magnet.style.zIndex = "99";
-      hole.classList.add("is-open");
+      open();
       root.style.overflow = "visible";
       const rect = root.getBoundingClientRect();
       // Re-fitting on resize moves magnets without updating x/y here, so start from where it really is.
@@ -383,23 +287,25 @@ export function initFridge(root: HTMLElement): void {
       const rect = root.getBoundingClientRect();
       x = event.clientX - rect.left - offX;
       y = event.clientY - rect.top - offY;
-      const c = holeCenter();
+      const c = center();
       const d = Math.hypot(event.clientX - c.x, event.clientY - c.y);
-      updateHoleSize(d);
-      const armed = d < 90;
-      hole.classList.toggle("is-armed", armed);
-      magnet.classList.toggle("is-doomed", armed);
-      if (armed) {
-        const mx = rect.left + x;
-        const my = rect.top + y;
-        const px = mx + (c.x - mx) * 0.25;
-        const py = my + (c.y - my) * 0.25;
-        const tilt = (Math.atan2(c.y - my, c.x - mx) * 180) / Math.PI * 0.4;
-        setPos(magnet, px - rect.left, py - rect.top, tilt);
-        bob.style.scale = "0.7";
+      magnet.classList.toggle("is-doomed", d < 90);
+      if (!reduced) {
+        const k = setPointer(event.clientX, event.clientY);
+        if (k > 0) {
+          const mx = rect.left + x;
+          const my = rect.top + y;
+          const px = mx + (c.x - mx) * 0.25 * k;
+          const py = my + (c.y - my) * 0.25 * k;
+          const ang = Math.atan2(c.y - my, c.x - mx);
+          bob.style.transform = `rotate(${ang}rad) scale(${1 + 0.3 * k}, ${1 - 0.4 * k}) rotate(${-ang}rad)`;
+          setPos(magnet, px - rect.left, py - rect.top, r);
+        } else {
+          bob.style.transform = "";
+          setPos(magnet, x, y, r);
+        }
       } else {
         setPos(magnet, x, y, r);
-        bob.style.scale = "1.06";
       }
       samples.push({ x: event.clientX, y: event.clientY, t: performance.now() });
       if (samples.length > 5) samples.shift();
@@ -411,9 +317,8 @@ export function initFridge(root: HTMLElement): void {
       magnet.classList.remove("is-doomed");
       magnet.style.cursor = "grab";
       bob.style.animationPlayState = "running";
-      hole.classList.remove("is-open");
-      hole.classList.remove("is-armed");
       root.style.overflow = "hidden";
+      close();
 
       const rect = root.getBoundingClientRect();
       const floor = 4.5 * remPx();
@@ -421,6 +326,7 @@ export function initFridge(root: HTMLElement): void {
       y = Math.max(halfH, Math.min(rect.height - halfH - floor, y));
       setPos(magnet, x, y, r);
       bob.style.scale = "";
+      bob.style.transform = "";
 
       let vx = 0;
       let vy = 0;
@@ -459,8 +365,8 @@ export function initFridge(root: HTMLElement): void {
 
     magnet.addEventListener("pointerup", (event) => {
       if (!dragging) return;
-      const c = holeCenter();
-      if (Math.hypot(event.clientX - c.x, event.clientY - c.y) < 90) remove(magnet, doodle);
+      const c = center();
+      if (Math.hypot(event.clientX - c.x, event.clientY - c.y) < 90) absorbRemove(magnet, doodle);
       else release();
     });
     magnet.addEventListener("pointercancel", () => {
@@ -469,7 +375,7 @@ export function initFridge(root: HTMLElement): void {
 
     magnet.addEventListener("keydown", (event) => {
       if (event.key === "Delete" || event.key === "Backspace") {
-        remove(magnet, doodle);
+        fadeRemove(magnet, doodle);
         event.preventDefault();
         return;
       }
