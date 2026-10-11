@@ -30,7 +30,7 @@ const {
   image = DEFAULT_IMAGE,
   imageSize,
   type = "website",
-  noindex = false,
+  noindex = true,
   article,
   jsonLd = [],
   rssUrl,
@@ -168,10 +168,29 @@ const websiteJsonLd = {
     <div>
       <slot />
     </div>
+    <a class="v1-banner" href="https://zerro.dev/">v1 · 2025 — the neon build, kept for history. Current site →</a>
   </body>
 </html>
 
 <style>
+  .v1-banner {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    z-index: 2147483647;
+    transform: translateX(-50%);
+    padding: 0.5rem 0.875rem;
+    border: 1px solid #26262f;
+    border-radius: 999px;
+    background: #0a0a0f;
+    color: #e2e2e8;
+    font: 500 0.8125rem/1.3 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    text-decoration: none;
+    width: max-content;
+    max-width: calc(100vw - 2rem);
+    text-align: center;
+  }
+
   html,
   body {
     margin: 0;
