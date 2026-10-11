@@ -2,7 +2,7 @@
 import SiteLayout from "@/layouts/SiteLayout.astro";
 import Hero from "@/components/home/Hero.astro";
 import SectionHeading from "@/components/home/SectionHeading.astro";
-import ProjectList from "@/components/home/ProjectList.astro";
+import ProjectGrid from "@/components/home/ProjectGrid.astro";
 import Experience from "@/components/home/Experience.astro";
 import LatestWriting from "@/components/home/LatestWriting.astro";
 import { PERSON } from "@/data/profile";
@@ -17,7 +17,7 @@ import { PERSON } from "@/data/profile";
     <Hero />
     <section aria-labelledby="work" class="home-section">
       <SectionHeading eyebrow="Selected work" title="Things I've built" id="work" />
-      <ProjectList />
+      <ProjectGrid />
     </section>
     <section aria-labelledby="experience" class="home-section">
       <SectionHeading eyebrow="Experience" title="Where I've worked" id="experience" />
