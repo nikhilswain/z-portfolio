@@ -18,28 +18,58 @@ import { PERSON } from "@/data/profile";
 >
   <div class="home">
     <Hero />
-    <section aria-labelledby="work" class="home-section">
-      <SectionHeading eyebrow="Selected work" title="Things I've built" id="work" />
-      <ProjectShowcase />
-      <ProjectIndex />
-    </section>
-    <section aria-labelledby="experience" class="home-section">
-      <SectionHeading eyebrow="Experience" title="Where I've worked" id="experience" />
-      <Experience />
-    </section>
-    <section aria-labelledby="playground" class="home-section">
-      <SectionHeading eyebrow="Playground" title="Small things to poke at" id="playground" />
-      <Playground />
-    </section>
-    <section aria-labelledby="writing" class="home-section">
-      <SectionHeading eyebrow="Writing" title="Latest from the blog" id="writing" />
-      <LatestWriting />
-    </section>
-    <section aria-labelledby="off-the-clock" class="home-section">
-      <SectionHeading eyebrow="Off the clock" title="What I'm playing and listening to" id="off-the-clock" />
-      <OffTheClock />
-    </section>
+    <div class="home-sections" data-sections>
+      <section aria-labelledby="work" class="home-section" data-section="work">
+        <SectionHeading eyebrow="Selected work" title="Things I've built" id="work" />
+        <ProjectShowcase />
+        <ProjectIndex />
+      </section>
+      <section aria-labelledby="experience" class="home-section" data-section="experience">
+        <SectionHeading eyebrow="Experience" title="Where I've worked" id="experience" />
+        <Experience />
+      </section>
+      <section aria-labelledby="playground" class="home-section" data-section="playground">
+        <SectionHeading eyebrow="Playground" title="Small things to poke at" id="playground" />
+        <Playground />
+      </section>
+      <section aria-labelledby="writing" class="home-section" data-section="writing">
+        <SectionHeading eyebrow="Writing" title="Latest from the blog" id="writing" />
+        <LatestWriting />
+      </section>
+      <section aria-labelledby="off-the-clock" class="home-section" data-section="off-the-clock">
+        <SectionHeading eyebrow="Off the clock" title="What I'm playing and listening to" id="off-the-clock" />
+        <OffTheClock />
+      </section>
+    </div>
+    <p class="layout-note" hidden>You rearranged this page — it stays that way in this browser. <button type="button" data-layout-reset>Reset to Nikhil's layout</button></p>
   </div>
+
+  <script is:inline>
+    try {
+      const wrapper = document.querySelector("[data-sections]");
+      const saved = JSON.parse(localStorage.getItem("zerro-home-order") || "[]");
+      if (wrapper && Array.isArray(saved)) {
+        const sections = Array.from(wrapper.children);
+        const byId = new Map(sections.map((s) => [s.getAttribute("data-section"), s]));
+        const placed = new Set();
+        for (const id of saved) {
+          const section = byId.get(id);
+          if (section) {
+            wrapper.append(section);
+            placed.add(section);
+          }
+        }
+        for (const section of sections) {
+          if (!placed.has(section)) wrapper.append(section);
+        }
+      }
+    } catch {}
+  </script>
+
+  <script>
+    import { initLayoutOrder } from "@/components/home/layout-order";
+    initLayoutOrder();
+  </script>
 </SiteLayout>
 
 <style>
@@ -51,6 +81,23 @@ import { PERSON } from "@/data/profile";
 
   .home-section {
     margin-top: var(--blog-space-9);
+  }
+
+  .layout-note {
+    margin-top: var(--blog-space-5);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  .layout-note button {
+    font: inherit;
+    color: var(--blog-accent);
+    cursor: pointer;
+  }
+
+  .layout-note button:hover {
+    text-decoration: underline;
   }
 </style>
 
