@@ -1,0 +1,43 @@
+---
+import SiteLayout from "@/layouts/SiteLayout.astro";
+---
+
+<SiteLayout title="Not found — zerro.dev" noindex>
+  <div class="not-found">
+    <h1 class="not-found__title">#404 · SAVE FILE NOT FOUND</h1>
+    <p>This page doesn't exist (yet).</p>
+    <p class="not-found__links">
+      <a href="/">Load last save</a>
+      <a href="/blog/">Blog</a>
+    </p>
+  </div>
+</SiteLayout>
+
+<style>
+  .not-found {
+    min-height: 60vh;
+    display: grid;
+    place-content: center;
+    gap: var(--blog-space-3);
+    padding: var(--blog-space-7) var(--blog-page-pad);
+    text-align: center;
+  }
+
+  .not-found__title {
+    font-family: var(--blog-font-pixel);
+    font-size: var(--blog-text-h2);
+    color: var(--blog-fg-strong);
+  }
+
+  .not-found__links {
+    display: flex;
+    justify-content: center;
+    gap: var(--blog-space-5);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+  }
+
+  .not-found__links a {
+    color: var(--blog-accent);
+  }
+</style>

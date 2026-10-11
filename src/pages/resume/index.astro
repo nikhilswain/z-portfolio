@@ -1,13 +1,209 @@
 ---
-import '../../styles/global.css';
-import Layout from '../../layouts/Layout.astro';
-import { ResumePage } from '@/components/resume/resume-page'; 
---- 
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import { EDUCATION, EXPERIENCE, PERSON, PROJECTS, SKILLS, formatRange } from "@/data/profile";
 
-<Layout
-  title="Resume — Nikhil Kumar Swain | Frontend Developer"
-  description="Resume of Nikhil Kumar Swain, a frontend developer with 5+ years of experience in React, TypeScript, Next.js, and Node.js. View experience, skills, and projects."
-  type="profile"
->
-  <ResumePage client:only="react" />
-</Layout> 
+const projects = PROJECTS.filter((project) => project.bullets).sort(
+  (a, b) => (a.featured ?? 0) - (b.featured ?? 0),
+);
+---
+
+<SiteLayout current="resume" title="Resume — Nikhil Kumar Swain" description={PERSON.summary} type="profile">
+  <article class="resume">
+    <header class="resume__header">
+      <h1>{PERSON.name}</h1>
+      <p class="resume__title">{PERSON.title}</p>
+      <p class="resume__contact">
+        {PERSON.location}
+        <span aria-hidden="true">·</span>
+        <a href={`mailto:${PERSON.email}`}>{PERSON.email}</a>
+        <span aria-hidden="true">·</span>
+        <a href={PERSON.linkedin}>LinkedIn</a>
+        <span aria-hidden="true">·</span>
+        <a href={PERSON.github}>GitHub</a>
+        <span aria-hidden="true">·</span>
+        <a href={PERSON.site}>zerro.dev</a>
+      </p>
+      <a class="resume__pdf" href={PERSON.resumePdf} download>Download PDF</a>
+    </header>
+
+    <section class="resume__section">
+      <h2>Summary</h2>
+      <p>{PERSON.summary}</p>
+    </section>
+
+    <section class="resume__section">
+      <h2>Skills</h2>
+      {SKILLS.map((skill) => (
+        <p><strong>{skill.group}:</strong> {skill.items.join(", ")}</p>
+      ))}
+    </section>
+
+    <section class="resume__section">
+      <h2>Experience</h2>
+      {EXPERIENCE.map((job) => (
+        <div class="resume__job">
+          <p class="resume__job-line">
+            <strong>{job.company}</strong>
+            <span>{formatRange(job.start, job.end, "Present")}</span>
+          </p>
+          <p class="resume__job-line">
+            <em>{job.role}</em>
+            <em>{job.location}</em>
+          </p>
+          <ul>
+            {job.bullets.map((bullet) => <li>{bullet}</li>)}
+          </ul>
+        </div>
+      ))}
+    </section>
+
+    <section class="resume__section">
+      <h2>Projects</h2>
+      {projects.map((project) => (
+        <div class="resume__project">
+          <p>
+            <strong>{project.title}</strong> — <a href={project.link}>{project.link?.replace(/^https?:\/\//, "")}</a> —{" "}
+            {project.stack.join(", ")}
+          </p>
+          <ul>
+            {project.bullets?.map((bullet) => <li>{bullet}</li>)}
+          </ul>
+        </div>
+      ))}
+    </section>
+
+    <section class="resume__section">
+      <h2>Education</h2>
+      {EDUCATION.map((edu) => (
+        <p class="resume__edu">
+          <span>{edu.degree}, {edu.school}</span>
+          <span>{edu.start}–{edu.end}</span>
+        </p>
+      ))}
+    </section>
+  </article>
+</SiteLayout>
+
+<style>
+  .resume {
+    max-width: var(--blog-measure);
+    margin-inline: auto;
+    padding: var(--blog-space-7) var(--blog-page-pad);
+    font-size: var(--blog-text-small);
+    line-height: var(--blog-leading-snug);
+  }
+
+  .resume a {
+    color: var(--blog-accent);
+  }
+
+  .resume__header h1 {
+    font-size: var(--blog-text-title);
+    line-height: var(--blog-leading-title);
+    font-weight: var(--blog-weight-title);
+    letter-spacing: -0.02em;
+    color: var(--blog-fg-strong);
+  }
+
+  .resume__title {
+    margin-top: var(--blog-space-2);
+    font-size: var(--blog-text-lead);
+    color: var(--blog-fg-muted);
+  }
+
+  .resume__contact {
+    margin-top: var(--blog-space-4);
+    color: var(--blog-fg-muted);
+  }
+
+  .resume__contact span {
+    margin-inline: var(--blog-space-2);
+  }
+
+  .resume__pdf {
+    display: inline-block;
+    margin-top: var(--blog-space-4);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+  }
+
+  .resume__section {
+    margin-top: var(--blog-space-6);
+  }
+
+  .resume__section h2 {
+    padding-bottom: var(--blog-space-2);
+    border-bottom: 1px solid var(--blog-border);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    font-weight: var(--blog-weight-heading);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--blog-fg-strong);
+  }
+
+  .resume__section > * + * {
+    margin-top: var(--blog-space-3);
+  }
+
+  .resume__job + .resume__job,
+  .resume__project + .resume__project {
+    margin-top: var(--blog-space-4);
+  }
+
+  .resume__job-line,
+  .resume__edu {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--blog-space-4);
+  }
+
+  .resume__job-line em {
+    color: var(--blog-fg-muted);
+  }
+
+  .resume__job ul,
+  .resume__project ul {
+    margin-top: var(--blog-space-2);
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+
+  .resume__job ul li + li,
+  .resume__project ul li + li {
+    margin-top: var(--blog-space-1);
+  }
+
+  @media print {
+    :global(.site-header),
+    :global(.site-footer),
+    .resume__pdf,
+    :global(.skip-link) {
+      display: none;
+    }
+
+    :global(:root[data-theme]) {
+      --blog-bg: #fff;
+      --blog-fg: #000;
+      --blog-fg-strong: #000;
+      --blog-fg-muted: #000;
+      --blog-border: #000;
+      --blog-accent: #000;
+    }
+
+    :global(.blog),
+    body {
+      background: #fff;
+      color: #000;
+    }
+
+    .resume__job {
+      break-inside: avoid;
+    }
+
+    .resume a {
+      color: #000;
+      text-decoration: none;
+    }
+  }
+</style>
