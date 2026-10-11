@@ -7,6 +7,14 @@
   <button type="button" data-field-replay>replay</button>
   <span aria-hidden="true">·</span>
   <button type="button" data-field-clear>clear</button>
+  <span class="field__pin" hidden>
+    <span aria-hidden="true">·</span>
+    <button type="button" data-field-pin>pin</button>
+  </span>
+  <span class="field__wall" hidden>
+    <span aria-hidden="true">·</span>
+    <a href="/your-doodles/">your wall →</a>
+  </span>
   <span class="field__touch" hidden>
     <span aria-hidden="true">·</span>
     <button type="button" data-field-draw aria-pressed="false">draw: off</button>
@@ -68,13 +76,15 @@
     margin-inline: var(--blog-space-2);
   }
 
-  .field__controls button {
+  .field__controls button,
+  .field__controls a {
     font: inherit;
     color: var(--blog-accent);
     cursor: pointer;
   }
 
-  .field__controls button:hover {
+  .field__controls button:hover,
+  .field__controls a:hover {
     text-decoration: underline;
   }
 </style>

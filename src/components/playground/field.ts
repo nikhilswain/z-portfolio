@@ -1,5 +1,8 @@
 interface Dot { x: number; y: number; vx: number; vy: number; restX: number; restY: number; phase: number; speed: number; star: boolean; }
 interface Point { x: number; y: number; t: number; }
+interface Doodle { w: number; h: number; paths: string[]; at: number; }
+
+const STORAGE_KEY = "zerro-doodles";
 
 let accent = "#f472b6";
 let muted = "#a1a1ad";
@@ -14,6 +17,9 @@ export function init(field: HTMLElement): void {
   const replayBtn = controls.querySelector<HTMLButtonElement>("[data-field-replay]")!;
   const clearBtn = controls.querySelector<HTMLButtonElement>("[data-field-clear]")!;
   const drawBtn = controls.querySelector<HTMLButtonElement>("[data-field-draw]")!;
+  const pinEl = controls.querySelector<HTMLElement>(".field__pin")!;
+  const wallEl = controls.querySelector<HTMLElement>(".field__wall")!;
+  const pinBtn = controls.querySelector<HTMLButtonElement>("[data-field-pin]")!;
   const canvas = document.createElement("canvas");
   field.append(canvas);
   const ctx = canvas.getContext("2d")!;
@@ -42,6 +48,30 @@ export function init(field: HTMLElement): void {
     accent = styles.getPropertyValue("--blog-accent").trim();
     muted = styles.getPropertyValue("--blog-fg-muted").trim();
     night = document.documentElement.dataset.theme === "dark";
+  }
+
+  function readDoodles(): Doodle[] {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+
+  function saveDoodles(doodles: Doodle[]) {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(doodles));
+    } catch {
+      // storage may be unavailable
+    }
+  }
+
+  function updateDoodleUI() {
+    pinEl.hidden = strokes.length === 0;
+    wallEl.hidden = readDoodles().length === 0;
   }
 
   function layout() {
@@ -189,6 +219,7 @@ export function init(field: HTMLElement): void {
     if (current) {
       strokes.push(current);
       current = null;
+      updateDoodleUI();
     }
   });
   canvas.addEventListener("pointercancel", () => {
@@ -201,6 +232,52 @@ export function init(field: HTMLElement): void {
   clearBtn.addEventListener("click", () => {
     strokes.length = 0;
     replaying = false;
+    updateDoodleUI();
+  });
+  pinBtn.addEventListener("click", () => {
+    if (strokes.length === 0) return;
+    const points = strokes.flat();
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+    for (const p of points) {
+      minX = Math.min(minX, p.x);
+      minY = Math.min(minY, p.y);
+      maxX = Math.max(maxX, p.x);
+      maxY = Math.max(maxY, p.y);
+    }
+    const longest = Math.max(maxX - minX, maxY - minY);
+    if (longest === 0) return;
+    const scale = 100 / longest;
+    const w = Math.round((maxX - minX) * scale * 10) / 10;
+    const h = Math.round((maxY - minY) * scale * 10) / 10;
+    const paths = strokes.map((stroke) => {
+      let d = "";
+      let px = 0;
+      let py = 0;
+      let has = false;
+      for (const p of stroke) {
+        const x = Math.round((p.x - minX) * scale * 10) / 10;
+        const y = Math.round((p.y - minY) * scale * 10) / 10;
+        if (has && Math.hypot(x - px, y - py) < 1.5) continue;
+        d += `${has ? "L" : "M"}${x} ${y} `;
+        px = x;
+        py = y;
+        has = true;
+      }
+      return d.trim();
+    });
+    const doodles = readDoodles();
+    doodles.push({ w, h, paths, at: Date.now() });
+    saveDoodles(doodles.slice(-12));
+    strokes.length = 0;
+    replaying = false;
+    pinBtn.textContent = "pinned ✓";
+    setTimeout(() => {
+      pinBtn.textContent = "pin";
+    }, 1500);
+    updateDoodleUI();
   });
   drawBtn.addEventListener("click", () => {
     drawMode = !drawMode;
@@ -224,5 +301,6 @@ export function init(field: HTMLElement): void {
     update();
   }).observe(field);
   document.addEventListener("visibilitychange", update);
+  updateDoodleUI();
   update();
 }
