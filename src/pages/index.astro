@@ -1,9 +1,9 @@
 ---
 import SiteLayout from "@/layouts/SiteLayout.astro";
-import SaveSlot from "@/components/home/SaveSlot.astro";
-import CopyEmail from "@/components/home/CopyEmail.astro";
+import Hero from "@/components/home/Hero.astro";
+import SectionHeading from "@/components/home/SectionHeading.astro";
 import ProjectList from "@/components/home/ProjectList.astro";
-import PatchNotes from "@/components/home/PatchNotes.astro";
+import Experience from "@/components/home/Experience.astro";
 import LatestWriting from "@/components/home/LatestWriting.astro";
 import { PERSON } from "@/data/profile";
 ---
@@ -14,18 +14,19 @@ import { PERSON } from "@/data/profile";
   type="profile"
 >
   <div class="home">
-    <SaveSlot />
-    <h1 class="home__name">{PERSON.name}</h1>
-    <p class="home__intro">{PERSON.intro}</p>
-    <div class="home__links">
-      <CopyEmail />
-      <a class="home__link" href={PERSON.github}>GitHub</a>
-      <a class="home__link" href={PERSON.linkedin}>LinkedIn</a>
-      <a class="home__link" href="/resume/">Resume</a>
-    </div>
-    <ProjectList />
-    <PatchNotes />
-    <LatestWriting />
+    <Hero />
+    <section aria-labelledby="work" class="home-section">
+      <SectionHeading eyebrow="Selected work" title="Things I've built" id="work" />
+      <ProjectList />
+    </section>
+    <section aria-labelledby="experience" class="home-section">
+      <SectionHeading eyebrow="Experience" title="Where I've worked" id="experience" />
+      <Experience />
+    </section>
+    <section aria-labelledby="writing" class="home-section">
+      <SectionHeading eyebrow="Writing" title="Latest from the blog" id="writing" />
+      <LatestWriting />
+    </section>
   </div>
 </SiteLayout>
 
@@ -36,36 +37,64 @@ import { PERSON } from "@/data/profile";
     padding: var(--blog-space-8) var(--blog-page-pad);
   }
 
-  .home__name {
-    margin: var(--blog-space-6) 0 0;
-    font-size: var(--blog-text-index-title);
-    line-height: var(--blog-leading-title);
-    font-weight: var(--blog-weight-title);
-    letter-spacing: -0.02em;
-    color: var(--blog-fg-strong);
+  .home > * + .home-section {
+    margin-top: var(--blog-space-9);
+  }
+</style>
+
+<style is:global>
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .home .reveal {
+        animation: reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 40%;
+      }
+    }
   }
 
-  .home__intro {
-    margin: var(--blog-space-4) 0 0;
-    font-size: var(--blog-text-lead);
-    line-height: var(--blog-leading-snug);
-    color: var(--blog-fg);
-    max-width: 60ch;
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      translate: 0 16px;
+    }
   }
 
-  .home__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--blog-space-4);
+  .home .home__links a,
+  .home .home__more {
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 0.25em;
+    transition: text-decoration-color 200ms ease-out;
+  }
+
+  .home .home__links a:hover,
+  .home .home__links a:focus-visible,
+  .home .home__more:hover,
+  .home .home__more:focus-visible {
+    text-decoration-color: currentColor;
+  }
+
+  .home .home__more {
+    display: inline-block;
     margin-top: var(--blog-space-5);
+    font-family: var(--blog-font-mono);
     font-size: var(--blog-text-meta);
-  }
-
-  .home__link {
     color: var(--blog-accent);
   }
 
-  .home :global(.section-label) {
-    margin-top: var(--blog-space-8);
+  .home .home__more span {
+    display: inline-block;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .home .home__more span {
+      transition: translate 200ms ease-out;
+    }
+
+    .home .home__more:hover span,
+    .home .home__more:focus-visible span {
+      translate: 3px 0;
+    }
   }
 </style>

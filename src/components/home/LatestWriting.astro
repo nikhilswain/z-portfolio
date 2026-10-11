@@ -1,6 +1,7 @@
 ---
 import { getBlogPosts } from "@/lib/blog/collection";
 import { formatDate, isoDate } from "@/lib/blog/dates";
+import { tagSlug } from "@/lib/blog/tags";
 import { compareTopLevel } from "@/lib/blog/tree";
 
 const posts = (await getBlogPosts())
@@ -9,7 +10,6 @@ const posts = (await getBlogPosts())
   .slice(0, 3);
 ---
 
-<h2 class="section-label">Writing</h2>
 <ol class="post-list">
   {posts.map((post) => (
     <li class="post-row">
@@ -17,18 +17,14 @@ const posts = (await getBlogPosts())
       <div>
         <h3 class="post-row__title"><a href={`/blog/${post.slug}/`}>{post.title}</a></h3>
         <p class="post-row__desc">{post.description}</p>
+        <p class="post-row__meta">
+          <span>{post.readingTime} min</span>
+          {post.tags.map((tag) => (
+            <span class="tag"><span aria-hidden="true">#{tagSlug(tag)}</span><span class="visually-hidden">{tag}</span></span>
+          ))}
+        </p>
       </div>
     </li>
   ))}
 </ol>
-<a class="writing-all" href="/blog/">All posts →</a>
-
-<style>
-  .writing-all {
-    display: inline-block;
-    margin-top: var(--blog-space-5);
-    font-family: var(--blog-font-mono);
-    font-size: var(--blog-text-meta);
-    color: var(--blog-accent);
-  }
-</style>
+<a class="home__more" href="/blog/">All posts <span aria-hidden="true">→</span></a>
