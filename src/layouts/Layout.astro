@@ -30,7 +30,7 @@ const {
   image = DEFAULT_IMAGE,
   imageSize,
   type = "website",
-  noindex = true,
+  noindex = false,
   article,
   jsonLd = [],
   rssUrl,
@@ -103,7 +103,7 @@ const websiteJsonLd = {
     <meta name="author" content={personName} />
     <meta
       name="robots"
-      content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}
+      content="noindex, nofollow"
     />
     <meta name="theme-color" content={themeColor} />
     <meta name="color-scheme" content="dark light" />
