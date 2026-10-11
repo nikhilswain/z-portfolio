@@ -24,6 +24,11 @@ const projects = PROJECTS.filter((project) => project.bullets).sort(
         <a href={PERSON.site}>zerro.dev</a>
       </p>
       <a class="resume__pdf" href={PERSON.resumePdf} download>Download PDF</a>
+      <aside class="resume__print-mark" aria-hidden="true">
+        <img src="/luffy-pixel.png" alt="" width="24" height="24" />
+        <img src="/qr-zerro.svg" alt="" width="72" height="72" />
+        <p>printed this? hi. → zerro.dev</p>
+      </aside>
     </header>
 
     <section class="resume__section">
@@ -127,6 +132,10 @@ const projects = PROJECTS.filter((project) => project.bullets).sort(
     font-size: var(--blog-text-meta);
   }
 
+  .resume__print-mark {
+    display: none;
+  }
+
   .resume__section {
     margin-top: var(--blog-space-6);
   }
@@ -199,6 +208,46 @@ const projects = PROJECTS.filter((project) => project.bullets).sort(
 
     .resume__job {
       break-inside: avoid;
+    }
+
+    .resume__header {
+      position: relative;
+    }
+
+    /* Only the name and title sit beside the print mark; the contact line runs full width below it. */
+    .resume__header > h1,
+    .resume__header > h1 + p {
+      padding-right: 215pt;
+    }
+
+    .resume__header > h1 {
+      font-size: 24pt;
+    }
+
+    .resume__print-mark {
+      display: flex;
+      align-items: center;
+      gap: 6pt;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+
+    .resume__print-mark img:first-of-type {
+      width: 48pt;
+      height: 48pt;
+      image-rendering: pixelated;
+    }
+
+    .resume__print-mark img:last-of-type {
+      width: 54pt;
+      height: 54pt;
+    }
+
+    .resume__print-mark p {
+      font: 7pt var(--blog-font-mono);
+      max-width: 9em;
+      color: #000;
     }
 
     .resume a {
