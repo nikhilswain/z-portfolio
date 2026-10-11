@@ -1,0 +1,98 @@
+---
+import { EXPERIENCE, formatRange } from "@/data/profile";
+---
+
+<h2 class="section-label">Patch notes</h2>
+<ol class="patch-notes">
+  {EXPERIENCE.map((job, i) => (
+    <li class="patch">
+      <div class="patch__meta">
+        <span class="patch__version">v{EXPERIENCE.length - i}.0</span>
+        <span class="patch__date">{formatRange(job.start, job.end, "now")}</span>
+      </div>
+      <div class="patch__body">
+        <p class="patch__role"><strong>{job.company}</strong> · {job.role}</p>
+        <ul class="patch__notes">
+          {job.notes.map((note) => (
+            <li>
+              <span class="patch__kind" aria-hidden="true">{note.kind}</span>
+              <span class="visually-hidden">{note.kind === "+" ? "Added" : note.kind === "~" ? "Improved" : "Removed"}: </span>
+              {note.text}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </li>
+  ))}
+  <li class="patch">
+    <div class="patch__meta">
+      <span class="patch__version">v0.1</span>
+      <span class="patch__date">2019</span>
+    </div>
+    <div class="patch__body">
+      <p class="patch__role">Started BCA, Graphic Era University</p>
+    </div>
+  </li>
+</ol>
+
+<style>
+  .patch-notes {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .patch {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--blog-space-2);
+    padding-block: var(--blog-space-5);
+    border-bottom: 1px solid var(--blog-border);
+  }
+
+  @media (min-width: 768px) {
+    .patch {
+      grid-template-columns: 8rem minmax(0, 1fr);
+      column-gap: var(--blog-space-6);
+    }
+  }
+
+  .patch__meta {
+    display: grid;
+    align-content: start;
+    gap: var(--blog-space-1);
+  }
+
+  .patch__version,
+  .patch__date {
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-fg-muted);
+  }
+
+  .patch__role {
+    color: var(--blog-fg);
+  }
+
+  .patch__role strong {
+    color: var(--blog-fg-strong);
+    font-weight: var(--blog-weight-heading);
+  }
+
+  .patch__notes {
+    margin: var(--blog-space-3) 0 0;
+    display: grid;
+    gap: var(--blog-space-2);
+  }
+
+  .patch__notes li {
+    display: grid;
+    grid-template-columns: 1.5ch minmax(0, 1fr);
+    column-gap: var(--blog-space-2);
+  }
+
+  .patch__kind {
+    font-family: var(--blog-font-mono);
+    color: var(--blog-accent);
+  }
+</style>

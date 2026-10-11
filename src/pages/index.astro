@@ -1,17 +1,71 @@
 ---
-import '../styles/global.css';
-import Layout from '../layouts/Layout.astro';
-import { PortfolioRoot } from '@/components/portfolio-root';
-import { getBlogPosts } from '@/lib/blog/collection';
-import { toHomepagePost } from '@/lib/blog/homepage';
-
-const posts = (await getBlogPosts()).map(toHomepagePost);
+import SiteLayout from "@/layouts/SiteLayout.astro";
+import SaveSlot from "@/components/home/SaveSlot.astro";
+import CopyEmail from "@/components/home/CopyEmail.astro";
+import ProjectList from "@/components/home/ProjectList.astro";
+import PatchNotes from "@/components/home/PatchNotes.astro";
+import LatestWriting from "@/components/home/LatestWriting.astro";
+import { PERSON } from "@/data/profile";
 ---
 
-<Layout
-  title="Nikhil Kumar Swain — Frontend Developer & React Engineer"
-  description="Nikhil Kumar Swain (zero) is a frontend developer specializing in React, TypeScript, and Next.js — building fast, accessible, production-ready web applications."
+<SiteLayout
+  title="Nikhil Kumar Swain — Frontend Developer"
+  description={PERSON.summary}
   type="profile"
 >
-  <PortfolioRoot posts={posts} client:only="react" />
-</Layout>
+  <div class="home">
+    <SaveSlot />
+    <h1 class="home__name">{PERSON.name}</h1>
+    <p class="home__intro">{PERSON.intro}</p>
+    <div class="home__links">
+      <CopyEmail />
+      <a class="home__link" href={PERSON.github}>GitHub</a>
+      <a class="home__link" href={PERSON.linkedin}>LinkedIn</a>
+      <a class="home__link" href="/resume/">Resume</a>
+    </div>
+    <ProjectList />
+    <PatchNotes />
+    <LatestWriting />
+  </div>
+</SiteLayout>
+
+<style>
+  .home {
+    max-width: var(--blog-index-width);
+    margin-inline: auto;
+    padding: var(--blog-space-8) var(--blog-page-pad);
+  }
+
+  .home__name {
+    margin: var(--blog-space-6) 0 0;
+    font-size: var(--blog-text-index-title);
+    line-height: var(--blog-leading-title);
+    font-weight: var(--blog-weight-title);
+    letter-spacing: -0.02em;
+    color: var(--blog-fg-strong);
+  }
+
+  .home__intro {
+    margin: var(--blog-space-4) 0 0;
+    font-size: var(--blog-text-lead);
+    line-height: var(--blog-leading-snug);
+    color: var(--blog-fg);
+    max-width: 60ch;
+  }
+
+  .home__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--blog-space-4);
+    margin-top: var(--blog-space-5);
+    font-size: var(--blog-text-meta);
+  }
+
+  .home__link {
+    color: var(--blog-accent);
+  }
+
+  .home :global(.section-label) {
+    margin-top: var(--blog-space-8);
+  }
+</style>

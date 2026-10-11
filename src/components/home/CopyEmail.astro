@@ -1,0 +1,38 @@
+---
+import { PERSON } from "@/data/profile";
+---
+
+<a class="copy-email" href={`mailto:${PERSON.email}`} data-email={PERSON.email}>
+  {PERSON.email}
+  <span class="copy-email__label">Copy</span>
+</a>
+
+<script>
+  const link = document.querySelector<HTMLAnchorElement>("[data-email]");
+  const label = link?.querySelector<HTMLElement>(".copy-email__label");
+
+  link?.addEventListener("click", (event) => {
+    if (!navigator.clipboard) return;
+    event.preventDefault();
+    navigator.clipboard.writeText(link.dataset.email ?? "").then(() => {
+      if (label) label.textContent = "Copied";
+      setTimeout(() => {
+        if (label) label.textContent = "Copy";
+      }, 2000);
+    });
+  });
+</script>
+
+<style>
+  .copy-email {
+    color: var(--blog-fg);
+    overflow-wrap: anywhere;
+  }
+
+  .copy-email__label {
+    margin-left: var(--blog-space-2);
+    font-family: var(--blog-font-mono);
+    font-size: var(--blog-text-meta);
+    color: var(--blog-accent);
+  }
+</style>
