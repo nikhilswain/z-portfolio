@@ -257,7 +257,7 @@ export const PROJECTS: Project[] = [
     pitch: "Canvas drawing app with freehand sketching, zoom/pan and undo/redo.",
     stack: ["React", "TypeScript", "Astro", "IndexedDB", "Dexie.js", "Tailwind CSS", "Canvas API"],
     image: "/zketch.png",
-    link: "https://zketch.pages.dev",
+    link: "https://zketch.zerro.dev",
     github: "https://github.com/nikhilswain/zketch",
     featured: 2,
     bullets: [
@@ -295,7 +295,7 @@ export const PROJECTS: Project[] = [
     pitch: "Interactive algorithm visualizer pairing step-by-step execution with code.",
     stack: ["React", "TypeScript", "Tailwind CSS"],
     image: "/algo-visualizer.png",
-    link: "https://algo-visualizer.ze-ro.workers.dev/",
+    link: "https://algovisualiser.zerro.dev",
     github: "https://github.com/nikhilswain/algo-visualizer",
   },
   {
@@ -306,7 +306,7 @@ export const PROJECTS: Project[] = [
     pitch: "Local-first gallery for images, videos and links with hidden vaults.",
     stack: ["React", "Astro", "TypeScript", "Tailwind CSS", "Framer Motion"],
     image: "/previewz.png",
-    link: "https://previewz.ze-ro.workers.dev/",
+    link: "https://previewz.zerro.dev/",
     github: "https://github.com/nikhilswain/Previewz",
   },
   {
