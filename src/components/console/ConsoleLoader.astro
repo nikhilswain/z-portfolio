@@ -1,0 +1,11 @@
+<script>
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "`" || event.ctrlKey || event.metaKey || event.altKey) return;
+    const target = event.target as HTMLElement;
+    const typing = target.closest("input, textarea, select, [contenteditable='true']");
+    // Inside the console's own input, ` closes it; anywhere else that takes text, it types a backtick.
+    if (typing && !target.closest("[data-console]")) return;
+    event.preventDefault();
+    import("@/components/console/mount").then((m) => m.toggleConsole());
+  });
+</script>

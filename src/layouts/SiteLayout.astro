@@ -12,6 +12,7 @@ import type { ComponentProps } from "astro/types";
 import Layout from "./Layout.astro";
 import SiteHeader from "../components/blog/SiteHeader.astro";
 import SiteFooter from "../components/blog/SiteFooter.astro";
+import ConsoleLoader from "../components/console/ConsoleLoader.astro";
 
 type Props = Omit<ComponentProps<typeof Layout>, "dataTheme" | "rssUrl"> & {
   current?: "blog" | "resume";
@@ -48,4 +49,5 @@ const { current, progress = false, ...layoutProps } = Astro.props;
     </main>
     <SiteFooter />
   </div>
+  <ConsoleLoader />
 </Layout>

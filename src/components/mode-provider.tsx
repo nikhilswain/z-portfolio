@@ -2,13 +2,11 @@
 
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 import portfolioData from "@/constants/content.json";
-import cliData from "@/constants/cli.json";
 import type { HomepagePost } from "@/lib/blog/homepage";
 import { MODE_STORAGE_KEY, resolveInitialMode } from "@/lib/mode-storage";
 
 interface ModeContextType {
   portfolioData: any;
-  cliData: any;
   posts: HomepagePost[];
   currentMode: string;
   setCurrentMode: (mode: string) => void;
@@ -39,7 +37,6 @@ export function ModeProvider({ children, posts = [] }: { children: ReactNode; po
 
   const value = {
     portfolioData,
-    cliData,
     posts,
     currentMode,
     setCurrentMode,

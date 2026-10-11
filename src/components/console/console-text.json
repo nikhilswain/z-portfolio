@@ -1,6 +1,6 @@
 {
   "welcome": "Welcome to Nikhil Kumar Swain's Portfolio CLI!\nType '/help' to see available commands.",
-  "help": "Available commands:\n\n- /help: Show this help message\n- /about: Display information about me\n- /resume: Redirect to resume page\n- /projects: List all projects\n- /project [number]: Show details for a specific project\n- /blog: Browse blog articles (j/k to move, enter to open, q to quit)\n- /blog [number]: Open the article on that line of /blog\n- /skills: List my skills by category\n- /contact: Show contact information\n- /clear: Clear the terminal\n- /gui: Switch to GUI mode\n\nEaster Egg Commands:\n- /joke: Tell a random joke\n- /ascii: Display ASCII art\n- /quote: Get a random quote\n- /game: Play a simple game",
+  "help": "Available commands:\n\n- /help: Show this help message\n- /about: Display information about me\n- /resume: Show work history and resume PDF\n- /projects: List all projects\n- /project [number]: Show details for a specific project\n- /blog: Browse blog articles (j/k to move, enter to open, q to quit)\n- /blog [number]: Open the article on that line of /blog\n- /skills: List my skills by category\n- /contact: Show contact information\n- /clear: Clear the terminal\n\nEaster Egg Commands:\n- /joke: Tell a random joke\n- /ascii: Display ASCII art\n- /quote: Get a random quote\n- /game: Play a simple game",
   "commands": {
     "help": {
       "description": "Show available commands",
@@ -11,7 +11,7 @@
       "usage": "/about"
     },
     "resume": {
-      "description": "Visit my resume page",
+      "description": "Show work history and resume PDF",
       "usage": "/resume"
     },
     "projects": {
@@ -39,10 +39,6 @@
     "clear": {
       "description": "Clear the terminal",
       "usage": "/clear"
-    },
-    "gui": {
-      "description": "Switch to GUI mode",
-      "usage": "/gui"
     }
   },
   "loading": {
@@ -50,7 +46,7 @@
     "skills": "Analyzing skill matrix",
     "about": "Retrieving personal information",
     "contact": "Fetching contact details",
-    "resume": "Redirecting to resume page"
+    "resume": "Loading resume"
   },
   "customFunctions": {
     "joke": {

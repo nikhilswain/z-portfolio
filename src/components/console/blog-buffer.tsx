@@ -31,8 +31,8 @@ export function BlogBuffer({ posts, onClose }: BlogBufferProps) {
   };
 
   return (
-    <div className="flex h-full flex-col font-mono text-sm" onKeyDown={handleKeyDown}>
-      <ol className="min-h-0 overflow-auto" aria-label="Blog articles">
+    <div className="console-blog" onKeyDown={handleKeyDown}>
+      <ol className="console-blog__list" aria-label="Blog articles">
         {rows.map(({ post, depth }, index) => {
           const active = index === cursor;
           return (
@@ -44,33 +44,29 @@ export function BlogBuffer({ posts, onClose }: BlogBufferProps) {
                 href={`/blog/${post.slug}/`}
                 tabIndex={active ? 0 : -1}
                 onFocus={() => setCursor(index)}
-                className={`grid grid-cols-[3ch_1fr_auto] sm:grid-cols-[3ch_11ch_1fr_auto] gap-3 px-2 py-0.5 outline-none ${
-                  active ? "bg-zinc-800 text-white" : "text-cyan-500 hover:bg-zinc-900"
-                }`}
+                className={`console-blog__row${active ? " console-blog__row--active" : ""}`}
               >
-                <span aria-hidden="true" className={`text-right ${active ? "text-pink-400" : "text-zinc-600"}`}>
+                <span aria-hidden="true" className="console-blog__num">
                   {relativeLineNumber(index, cursor)}
                 </span>
-                <span className="hidden sm:block text-zinc-500">{isoDate(post.publishedAt)}</span>
-                <span className="truncate">
-                  {depth === 1 && <span aria-hidden="true" className="text-zinc-600">└─ </span>}
+                <span className="console-blog__date">{isoDate(post.publishedAt)}</span>
+                <span className="console-blog__title">
+                  {depth === 1 && <span aria-hidden="true" className="console-blog__child">└─ </span>}
                   {post.title}
                 </span>
-                <span className="text-zinc-500">{post.readingTime} min</span>
+                <span className="console-blog__time">{post.readingTime} min</span>
               </a>
             </li>
           );
         })}
       </ol>
       {/* Neovim-style `~` lines fill whatever height is left; clipped, so they never cause scrolling. */}
-      <div aria-hidden="true" className="min-h-0 flex-1 overflow-hidden text-zinc-700">
+      <div aria-hidden="true" className="console-blog__filler">
         {Array.from({ length: FILLER_LINES }, (_, index) => (
-          <div key={index} className="px-2">
-            ~
-          </div>
+          <div key={index}>~</div>
         ))}
       </div>
-      <div className="flex justify-between bg-pink-500 px-2 text-black">
+      <div className="console-blog__status">
         <span>
           <b>BLOG</b> blog://zerro.dev
         </span>
@@ -78,7 +74,7 @@ export function BlogBuffer({ posts, onClose }: BlogBufferProps) {
           {cursor + 1}/{rows.length}
         </span>
       </div>
-      <p className="px-2 py-1 text-zinc-500">j/k ↑/↓ move · enter open · g/G top/bottom · q esc quit</p>
+      <p className="console-blog__hint">j/k ↑/↓ move · enter open · g/G top/bottom · q esc quit</p>
     </div>
   );
 }

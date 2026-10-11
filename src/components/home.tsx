@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { ModeSelector } from "@/components/mode-selector";
 import { GuiMode } from "@/components/gui-mode";
-import { CliMode } from "@/components/cli-mode";
 import { useMode } from "./mode-provider";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -35,17 +34,6 @@ export default function Home() {
           transition={{ duration: 0.3 }}
         >
           <GuiMode />
-        </motion.div>
-      )}
-      {currentMode === "cli" && (
-        <motion.div
-          key="cli"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <CliMode />
         </motion.div>
       )}
     </AnimatePresence>

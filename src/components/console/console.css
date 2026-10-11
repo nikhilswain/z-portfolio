@@ -1,0 +1,292 @@
+/* Dev console — the client-only React drawer opened by the backtick key. Tokens come from blog.css. */
+
+.console__panel {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: min(60vh, 520px);
+  display: flex;
+  flex-direction: column;
+  background: var(--blog-surface);
+  color: var(--blog-fg);
+  border-bottom: 1px solid var(--blog-border);
+  font-family: var(--blog-font-mono);
+  z-index: 100;
+  transform: translateY(-100%);
+  transition: transform 150ms ease-out;
+}
+
+.console__panel--open {
+  transform: translateY(0);
+}
+
+.console__panel--maximized {
+  height: 100dvh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .console__panel {
+    transform: none;
+    transition: none;
+  }
+}
+
+.console__titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--blog-space-4);
+  padding: var(--blog-space-2) var(--blog-space-3);
+  border-bottom: 1px solid var(--blog-border);
+  background: var(--blog-bg);
+}
+
+.console__title {
+  font-size: var(--blog-text-meta);
+  color: var(--blog-fg-muted);
+}
+
+.console__controls {
+  display: flex;
+  gap: var(--blog-space-1);
+}
+
+.console__btn {
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--blog-radius-sm);
+  color: var(--blog-fg-muted);
+  cursor: pointer;
+}
+
+.console__btn:hover {
+  border-color: var(--blog-border);
+  color: var(--blog-fg-strong);
+}
+
+.console__body {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+  padding: var(--blog-space-4);
+  font-size: var(--blog-text-small);
+  line-height: var(--blog-leading-snug);
+}
+
+.console__entry {
+  margin-bottom: var(--blog-space-3);
+}
+
+.console__command {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--blog-space-2);
+  color: var(--blog-fg-strong);
+}
+
+.console__output {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.console__output--error {
+  color: var(--blog-callout-caution);
+}
+
+.console__output--loading {
+  color: var(--blog-fg-muted);
+}
+
+.console__loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.console__dots span {
+  animation: console-blink 1s infinite;
+}
+
+.console__dots span:nth-child(2) {
+  animation-delay: 200ms;
+}
+
+.console__dots span:nth-child(3) {
+  animation-delay: 400ms;
+}
+
+@keyframes console-blink {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .console__dots span {
+    animation: none;
+  }
+}
+
+.console__input-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--blog-space-2);
+}
+
+.console__input {
+  flex: 1;
+  min-width: 8ch;
+  border: none;
+  background: transparent;
+  color: var(--blog-fg-strong);
+  caret-color: var(--blog-accent);
+  outline: none;
+}
+
+.console__input::placeholder {
+  color: var(--blog-fg-muted);
+}
+
+.console__prompt {
+  flex: none;
+}
+
+.console__prompt-user {
+  color: var(--blog-accent);
+}
+
+.console__prompt-sep,
+.console__prompt-path {
+  color: var(--blog-fg-muted);
+}
+
+.console__hint {
+  padding: var(--blog-space-2) var(--blog-space-4);
+  border-top: 1px solid var(--blog-border);
+  font-size: var(--blog-text-meta);
+  color: var(--blog-fg-muted);
+}
+
+.console__dock {
+  position: fixed;
+  inset-inline: 0;
+  bottom: var(--blog-space-6);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+}
+
+.console__dock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--blog-space-2);
+  padding: var(--blog-space-2) var(--blog-space-4);
+  border: 1px solid var(--blog-border);
+  border-radius: var(--blog-radius);
+  background: var(--blog-surface);
+  color: var(--blog-fg);
+  cursor: pointer;
+}
+
+.console__dock-btn:hover {
+  border-color: var(--blog-accent);
+}
+
+/* Blog buffer shown by `/blog` inside the console. */
+.console-blog {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-size: var(--blog-text-small);
+}
+
+.console-blog__list {
+  min-height: 0;
+  overflow: auto;
+}
+
+.console-blog__row {
+  display: grid;
+  grid-template-columns: 3ch 1fr auto;
+  gap: var(--blog-space-3);
+  padding: var(--blog-space-1) var(--blog-space-2);
+  outline: none;
+  color: var(--blog-fg);
+}
+
+.console-blog__row--active {
+  background: var(--blog-code-inline-bg);
+  color: var(--blog-fg-strong);
+}
+
+@media (min-width: 640px) {
+  .console-blog__row {
+    grid-template-columns: 3ch 11ch 1fr auto;
+  }
+}
+
+.console-blog__num {
+  text-align: right;
+  color: var(--blog-fg-subtle);
+}
+
+.console-blog__row--active .console-blog__num {
+  color: var(--blog-accent);
+}
+
+.console-blog__date {
+  display: none;
+  color: var(--blog-fg-muted);
+}
+
+@media (min-width: 640px) {
+  .console-blog__date {
+    display: block;
+  }
+}
+
+.console-blog__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.console-blog__child {
+  color: var(--blog-fg-subtle);
+}
+
+.console-blog__time {
+  color: var(--blog-fg-muted);
+}
+
+.console-blog__filler {
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+  color: var(--blog-fg-subtle);
+}
+
+.console-blog__filler div {
+  padding-inline: var(--blog-space-2);
+}
+
+.console-blog__status {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 var(--blog-space-2);
+  background: var(--blog-accent);
+  color: var(--blog-bg);
+}
+
+.console-blog__hint {
+  padding: var(--blog-space-1) var(--blog-space-2);
+  color: var(--blog-fg-muted);
+}
