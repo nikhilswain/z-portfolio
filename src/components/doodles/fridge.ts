@@ -235,7 +235,6 @@ export function initFridge(root: HTMLElement): void {
     entry.refit();
 
     function animateStroke(p: SVGPathElement, delay: number) {
-      // Strokes use non-scaling-stroke, so dashes are measured in screen px: scale the path length to match.
       const len = p.getTotalLength() * Math.min(svg.clientWidth / doodle.w, svg.clientHeight / doodle.h);
       p.style.strokeDasharray = String(len);
       p.style.strokeDashoffset = String(len);
@@ -270,7 +269,6 @@ export function initFridge(root: HTMLElement): void {
       open();
       root.style.overflow = "visible";
       const rect = root.getBoundingClientRect();
-      // Re-fitting on resize moves magnets without updating x/y here, so start from where it really is.
       const box = magnet.getBoundingClientRect();
       x = box.left + box.width / 2 - rect.left;
       y = box.top + box.height / 2 - rect.top;

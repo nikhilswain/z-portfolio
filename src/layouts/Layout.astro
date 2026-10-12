@@ -74,7 +74,6 @@ const personJsonLd = {
     "@type": "CollegeOrUniversity",
     name: "Graphic Era University",
   },
-  // Only claim a current employer while the latest job is still running.
   ...(EXPERIENCE[0].end === null && {
     worksFor: {
       "@type": "Organization",

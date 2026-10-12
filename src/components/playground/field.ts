@@ -65,7 +65,6 @@ export function init(field: HTMLElement): void {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(doodles));
     } catch {
-      // storage may be unavailable
     }
   }
 

@@ -83,7 +83,6 @@ export function initLayoutOrder(): void {
       const direction = event.key === "ArrowUp" ? -1 : 1;
       const target = siblings[siblings.indexOf(section) + direction];
       if (!target) return;
-      // View transitions run the update asynchronously, so persist from inside it.
       transition(() => {
         place(section, target, direction === -1);
         save();
