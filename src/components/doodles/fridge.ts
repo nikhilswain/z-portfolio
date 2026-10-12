@@ -1,10 +1,38 @@
 interface Doodle { w: number; h: number; paths: string[]; at: number; }
 interface Position { x: number; y: number; r: number; s: number; }
-interface Particle { x: number; y: number; vx: number; vy: number; delay: number; life: number; }
+interface FloorCube { x: number; y: number; restX: number; restY: number; z: number; a: number; dir: number; vy: number; }
+interface SnapCube { x: number; y: number; vx: number; vy: number; size: number; a: number; spin: number; delay: number; life: number; floorY: number; bounced: boolean; }
 
 const DOODLES_KEY = "zerro-doodles";
 const FRIDGE_KEY = "zerro-fridge";
 const SVG_NS = "http://www.w3.org/2000/svg";
+
+function drawCube(ctx: CanvasRenderingContext2D, x: number, y: number, s: number, a: number, z: number, ink: string, accent: string): void {
+  const far = z < 0.35;
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(a);
+  if (z > 0.6) {
+    ctx.shadowBlur = 6 * z;
+    ctx.shadowColor = accent;
+  } else if (far) {
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = accent;
+  }
+  ctx.globalAlpha = far ? 0.35 : 1;
+  ctx.fillStyle = ink;
+  ctx.fillRect(-s / 2, -s / 2, s, s);
+  if (!far) {
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 1;
+    ctx.strokeRect(-s / 2, -s / 2, s, s);
+  }
+  ctx.globalAlpha = far ? 0.35 * 0.85 : 0.85;
+  ctx.fillStyle = accent;
+  const inner = s * 0.45;
+  ctx.fillRect(-inner / 2, -inner / 2, inner, inner);
+  ctx.restore();
+}
 
 export function initFridge(root: HTMLElement): void {
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -98,76 +126,93 @@ export function initFridge(root: HTMLElement): void {
   let zoneRaf = 0;
   let zoneW = 0;
   let zoneH = 0;
+  let extraH = 0;
   let zoneLeft = 0;
-  let zoneColor = "";
-  let zoneLean = 0;
-  let zoneSpeed = 1;
+  let zoneTop = 0;
+  let zoneLeanX = 0;
+  let zoneLeanY = 0;
   let zoneArmed = false;
-  let dust: { x: number; y: number; z: number; phase: number }[] = [];
+  let hopAcc = 0;
+  let accent = "";
+  let cubes: FloorCube[] = [];
 
-  function spawnDust(spread: boolean) {
-    const r = Math.random() + Math.random() - 1;
-    return {
-      x: zoneW / 2 + r * (zoneW / 2),
-      y: spread ? Math.random() * zoneH : zoneH,
-      z: Math.random(),
-      phase: Math.random() * Math.PI * 2,
-    };
-  }
-
-  function drawDust(ctx: CanvasRenderingContext2D, t: number) {
-    ctx.clearRect(0, 0, zoneW, zoneH);
-    for (const p of dust) {
-      p.y -= (0.15 + p.z * 0.45) * zoneSpeed;
-      p.x += Math.sin(t * 0.8 + p.phase) * 0.15;
-      if (zoneArmed) p.x += (zoneLean - p.x) * 0.004 * p.z;
-      if (p.y < -4) Object.assign(p, spawnDust(false));
-      let a = 1;
-      if (p.y > zoneH * 0.8) a = (zoneH - p.y) / (zoneH * 0.2);
-      else if (p.y < zoneH * 0.4) a = p.y / (zoneH * 0.4);
-      ctx.globalAlpha = Math.max(0, Math.min(1, (0.25 + p.z * 0.55) * a * (zoneArmed ? 1.4 : 1)));
-      ctx.fillStyle = zoneColor;
-      const size = Math.round(1 + p.z * 3);
-      ctx.fillRect(Math.round(p.x), Math.round(p.y), size, size);
+  function spawnCubes(count: number) {
+    const arr: FloorCube[] = [];
+    for (let i = 0; i < count; i++) {
+      const z = Math.random();
+      const restY = extraH + zoneH * (0.3 + 0.62 * z);
+      const restX = zoneW / 2 + (Math.random() + Math.random() - 1) * zoneW * (0.15 + 0.35 * z);
+      arr.push({ x: restX, y: restY, restX, restY, z, a: Math.random() * Math.PI * 2, dir: Math.random() < 0.5 ? -1 : 1, vy: 0 });
     }
-    ctx.globalAlpha = 1;
+    return arr.sort((a, b) => a.z - b.z);
   }
 
-  function startDust() {
+  function drawFloor(ctx: CanvasRenderingContext2D) {
+    ctx.clearRect(0, 0, zoneW, zoneH + extraH);
+    const ink = night ? "#2b0a10" : "#2a0d12";
+    for (const p of cubes) drawCube(ctx, p.x, p.y, 4 + p.z * 10, p.a, p.z, ink, accent);
+  }
+
+  function stepFloor(dt: number) {
+    hopAcc += dt;
+    if (hopAcc >= 1.5) {
+      hopAcc -= 1.5;
+      const c = cubes[Math.floor(Math.random() * cubes.length)];
+      c.vy = -1.5 - Math.random() * 1.5;
+    }
+    for (const p of cubes) {
+      p.a += (0.002 + p.z * 0.004) * p.dir * (zoneArmed ? 8 : 1);
+      if (zoneArmed && Math.abs(p.x - zoneLeanX) < 120) {
+        p.x += (zoneLeanX - p.x) * 0.06 * p.z;
+        p.y += (zoneLeanY - p.y) * 0.06 * p.z;
+      } else {
+        p.vy += 0.4;
+        p.y += p.vy;
+        p.x += (p.restX - p.x) * 0.06;
+        if (p.y >= p.restY) { p.y = p.restY; p.vy = 0; }
+      }
+    }
+  }
+
+  function startFloor() {
     const rect = zone.getBoundingClientRect();
     zoneW = rect.width;
     zoneH = rect.height;
     zoneLeft = rect.left;
+    zoneTop = rect.top;
+    extraH = 10 * remPx();
+    accent = getComputedStyle(document.documentElement).getPropertyValue("--blog-callout-caution").trim();
     zoneCanvas.width = Math.max(1, Math.round(zoneW * zoneDpr));
-    zoneCanvas.height = Math.max(1, Math.round(zoneH * zoneDpr));
+    zoneCanvas.height = Math.max(1, Math.round((zoneH + extraH) * zoneDpr));
     zoneCanvas.style.width = `${zoneW}px`;
-    zoneCanvas.style.height = `${zoneH}px`;
+    zoneCanvas.style.height = `${zoneH + extraH}px`;
     const ctx = zoneCanvas.getContext("2d")!;
     ctx.setTransform(zoneDpr, 0, 0, zoneDpr, 0, 0);
-    zoneColor = getComputedStyle(document.documentElement).getPropertyValue("--blog-callout-caution").trim();
-    zoneSpeed = 1;
-    zoneLean = zoneW / 2;
     zoneArmed = false;
-    dust = [];
-    for (let i = 0; i < 70; i++) dust.push(spawnDust(true));
+    zoneLeanX = zoneW / 2;
+    zoneLeanY = extraH + zoneH / 2;
+    hopAcc = 0;
+    cubes = spawnCubes(120);
     if (reduced) {
-      drawDust(ctx, 0);
+      drawFloor(ctx);
       return;
     }
-    const start = performance.now();
+    let last = performance.now();
     const frame = (now: number) => {
-      zoneSpeed += ((zoneArmed ? 2.6 : 1) - zoneSpeed) * 0.08;
-      drawDust(ctx, (now - start) / 1000);
+      const dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+      stepFloor(dt);
+      drawFloor(ctx);
       zoneRaf = requestAnimationFrame(frame);
     };
     zoneRaf = requestAnimationFrame(frame);
   }
 
-  function stopDust() {
+  function stopFloor() {
     if (zoneRaf) cancelAnimationFrame(zoneRaf);
     zoneRaf = 0;
     const ctx = zoneCanvas.getContext("2d");
-    if (ctx) ctx.clearRect(0, 0, zoneW, zoneH);
+    if (ctx) ctx.clearRect(0, 0, zoneW, zoneH + extraH);
   }
 
   function isArmed(clientX: number, clientY: number) {
@@ -181,7 +226,7 @@ export function initFridge(root: HTMLElement): void {
     magnet.classList.remove("is-doomed");
     zone.classList.remove("is-armed");
     zone.classList.remove("is-open");
-    stopDust();
+    stopFloor();
     zoneLabel.textContent = "drop to remove";
     root.style.overflow = "hidden";
 
@@ -213,7 +258,8 @@ export function initFridge(root: HTMLElement): void {
     const rect = magnet.getBoundingClientRect();
     const cw = Math.max(1, Math.round(rect.width * dpr));
     const ch = Math.max(1, Math.round(rect.height * dpr));
-    const color = getComputedStyle(magnet).color;
+    const accent = getComputedStyle(document.documentElement).getPropertyValue("--blog-callout-caution").trim();
+    const ink = night ? "#2b0a10" : "#2a0d12";
 
     const off = document.createElement("canvas");
     off.width = cw;
@@ -226,24 +272,40 @@ export function initFridge(root: HTMLElement): void {
     ctx.translate(-rect.width / 2, -rect.height / 2);
     ctx.translate((rect.width - doodle.w * scale) / 2, (rect.height - doodle.h * scale) / 2);
     ctx.scale(scale, scale);
-    ctx.strokeStyle = color;
+    ctx.strokeStyle = accent;
     ctx.lineWidth = 2.5 / scale;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     for (const d of doodle.paths) ctx.stroke(new Path2D(d));
 
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const zr = zone.getBoundingClientRect();
+    const floorY = rect.bottom > zr.top && rect.top < zr.bottom ? window.innerHeight - 1.5 * remPx() : rect.bottom + 80;
+
     const data = ctx.getImageData(0, 0, cw, ch).data;
-    let particles: Particle[] = [];
+    let particles: SnapCube[] = [];
     for (let y = 0; y < ch; y += 3) {
       for (let x = 0; x < cw; x += 3) {
         if (data[(y * cw + x) * 4 + 3] > 0) {
+          const px = rect.left + x / dpr;
+          const py = rect.top + y / dpr;
+          const dx = px - cx;
+          const dy = py - cy;
+          const dist = Math.hypot(dx, dy) || 1;
+          const mag = 1 + Math.random() * 2;
           particles.push({
-            x: rect.left + x / dpr,
-            y: rect.top + y / dpr,
-            vx: 0.4 + Math.random() * 1.2,
-            vy: -(0.3 + Math.random() * 1.1),
+            x: px,
+            y: py,
+            vx: (dx / dist) * mag,
+            vy: (dy / dist) * mag - 0.6,
+            size: 4 + Math.random() * 4,
+            a: Math.random() * Math.PI * 2,
+            spin: (Math.random() - 0.5) * 0.4,
             delay: (x / cw) * 350,
-            life: 500 + Math.random() * 300,
+            life: 600,
+            floorY,
+            bounced: false,
           });
         }
       }
@@ -252,10 +314,10 @@ export function initFridge(root: HTMLElement): void {
       done();
       return;
     }
-    if (particles.length > 900) {
-      const step = particles.length / 900;
-      const sampled: Particle[] = [];
-      for (let i = 0; i < 900; i++) sampled.push(particles[Math.floor(i * step)]);
+    if (particles.length > 220) {
+      const step = particles.length / 220;
+      const sampled: SnapCube[] = [];
+      for (let i = 0; i < 220; i++) sampled.push(particles[Math.floor(i * step)]);
       particles = sampled;
     }
 
@@ -281,13 +343,26 @@ export function initFridge(root: HTMLElement): void {
       lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       lctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       for (const p of particles) {
-        p.x += p.vx + (Math.random() - 0.5) * 0.6;
-        p.y += p.vy + (Math.random() - 0.5) * 0.6;
-        if (t < p.delay || t >= p.delay + p.life) continue;
-        lctx.globalAlpha = 1 - (t - p.delay) / p.life;
-        lctx.fillStyle = color;
-        lctx.fillRect(p.x, p.y, 2, 2);
+        const life = t - p.delay;
+        if (life < 0 || life >= p.life) continue;
+        p.vy += 0.25;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.a += p.spin;
+        if (p.y >= p.floorY) {
+          if (!p.bounced) {
+            p.y = p.floorY;
+            p.vy = -p.vy * 0.3;
+            p.bounced = true;
+          } else {
+            p.y = p.floorY;
+            p.vy = 0;
+          }
+        }
+        lctx.globalAlpha = 1 - life / p.life;
+        drawCube(lctx, p.x, p.y, p.size, p.a, 0.5, ink, accent);
       }
+      lctx.globalAlpha = 1;
       if (t < maxEnd) requestAnimationFrame(frame);
       else {
         layer.remove();
@@ -401,7 +476,7 @@ export function initFridge(root: HTMLElement): void {
       bob.style.animationPlayState = "paused";
       magnet.style.zIndex = "99";
       zone.classList.add("is-open");
-      startDust();
+      startFloor();
       root.style.overflow = "visible";
       const rect = root.getBoundingClientRect();
       const box = magnet.getBoundingClientRect();
@@ -421,7 +496,8 @@ export function initFridge(root: HTMLElement): void {
       y = event.clientY - rect.top - offY;
       const armed = isArmed(event.clientX, event.clientY);
       zoneArmed = armed;
-      zoneLean = event.clientX - zoneLeft;
+      zoneLeanX = event.clientX - zoneLeft;
+      zoneLeanY = event.clientY - zoneTop + extraH;
       zone.classList.toggle("is-armed", armed);
       magnet.classList.toggle("is-doomed", armed);
       zoneLabel.textContent = armed ? "release to remove" : "drop to remove";
@@ -438,7 +514,7 @@ export function initFridge(root: HTMLElement): void {
       bob.style.animationPlayState = "running";
       zone.classList.remove("is-armed");
       zone.classList.remove("is-open");
-      stopDust();
+      stopFloor();
       zoneLabel.textContent = "drop to remove";
       root.style.overflow = "hidden";
 
