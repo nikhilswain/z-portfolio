@@ -8,7 +8,7 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
       <span class="fridge__note--fine">your doodles · drag or throw them around · drop at the bottom to remove · lives only in this browser · <a href="/#playground">draw more →</a></span>
       <span class="fridge__note--coarse">drag · drop at the bottom to remove<br><a href="/#playground">draw more →</a></span>
     </p>
-    <div class="zone" aria-hidden="true"><span class="zone__label">drop to remove</span></div>
+    <div class="zone" aria-hidden="true"><canvas class="zone__dust"></canvas><span class="zone__label">drop to remove</span></div>
   </div>
   <noscript>Your doodles are stored in your browser and need JavaScript to show.</noscript>
 </SiteLayout>
@@ -135,8 +135,6 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
     translate: -50% 1.5rem;
     width: min(36rem, 92vw);
     height: 7rem;
-    --zone-strength: 20%;
-    background: radial-gradient(ellipse 50% 100% at 50% 100%, color-mix(in srgb, var(--blog-callout-caution) var(--zone-strength), transparent), transparent 75%);
     pointer-events: none;
     z-index: 100;
     display: grid;
@@ -146,13 +144,16 @@ import SiteLayout from "@/layouts/SiteLayout.astro";
     transition: opacity 200ms ease-out, translate 200ms ease-out;
   }
 
+  :global(.zone__dust) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
   :global(.zone.is-open) {
     opacity: 1;
     translate: -50% 0;
-  }
-
-  :global(.zone.is-armed) {
-    --zone-strength: 38%;
   }
 
   :global(.zone__label) {

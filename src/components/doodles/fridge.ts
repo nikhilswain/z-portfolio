@@ -93,6 +93,83 @@ export function initFridge(root: HTMLElement): void {
     saveJSON(FRIDGE_KEY, positions);
   }
 
+  const zoneCanvas = zone.querySelector<HTMLCanvasElement>(".zone__dust")!;
+  const zoneDpr = Math.min(window.devicePixelRatio || 1, 2);
+  let zoneRaf = 0;
+  let zoneW = 0;
+  let zoneH = 0;
+  let zoneLeft = 0;
+  let zoneColor = "";
+  let zoneLean = 0;
+  let zoneSpeed = 1;
+  let zoneArmed = false;
+  let dust: { x: number; y: number; z: number; phase: number }[] = [];
+
+  function spawnDust(spread: boolean) {
+    const r = Math.random() + Math.random() - 1;
+    return {
+      x: zoneW / 2 + r * (zoneW / 2),
+      y: spread ? Math.random() * zoneH : zoneH,
+      z: Math.random(),
+      phase: Math.random() * Math.PI * 2,
+    };
+  }
+
+  function drawDust(ctx: CanvasRenderingContext2D, t: number) {
+    ctx.clearRect(0, 0, zoneW, zoneH);
+    for (const p of dust) {
+      p.y -= (0.15 + p.z * 0.45) * zoneSpeed;
+      p.x += Math.sin(t * 0.8 + p.phase) * 0.15;
+      if (zoneArmed) p.x += (zoneLean - p.x) * 0.004 * p.z;
+      if (p.y < -4) Object.assign(p, spawnDust(false));
+      let a = 1;
+      if (p.y > zoneH * 0.8) a = (zoneH - p.y) / (zoneH * 0.2);
+      else if (p.y < zoneH * 0.4) a = p.y / (zoneH * 0.4);
+      ctx.globalAlpha = Math.max(0, Math.min(1, (0.25 + p.z * 0.55) * a * (zoneArmed ? 1.4 : 1)));
+      ctx.fillStyle = zoneColor;
+      const size = Math.round(1 + p.z * 3);
+      ctx.fillRect(Math.round(p.x), Math.round(p.y), size, size);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function startDust() {
+    const rect = zone.getBoundingClientRect();
+    zoneW = rect.width;
+    zoneH = rect.height;
+    zoneLeft = rect.left;
+    zoneCanvas.width = Math.max(1, Math.round(zoneW * zoneDpr));
+    zoneCanvas.height = Math.max(1, Math.round(zoneH * zoneDpr));
+    zoneCanvas.style.width = `${zoneW}px`;
+    zoneCanvas.style.height = `${zoneH}px`;
+    const ctx = zoneCanvas.getContext("2d")!;
+    ctx.setTransform(zoneDpr, 0, 0, zoneDpr, 0, 0);
+    zoneColor = getComputedStyle(document.documentElement).getPropertyValue("--blog-callout-caution").trim();
+    zoneSpeed = 1;
+    zoneLean = zoneW / 2;
+    zoneArmed = false;
+    dust = [];
+    for (let i = 0; i < 70; i++) dust.push(spawnDust(true));
+    if (reduced) {
+      drawDust(ctx, 0);
+      return;
+    }
+    const start = performance.now();
+    const frame = (now: number) => {
+      zoneSpeed += ((zoneArmed ? 2.6 : 1) - zoneSpeed) * 0.08;
+      drawDust(ctx, (now - start) / 1000);
+      zoneRaf = requestAnimationFrame(frame);
+    };
+    zoneRaf = requestAnimationFrame(frame);
+  }
+
+  function stopDust() {
+    if (zoneRaf) cancelAnimationFrame(zoneRaf);
+    zoneRaf = 0;
+    const ctx = zoneCanvas.getContext("2d");
+    if (ctx) ctx.clearRect(0, 0, zoneW, zoneH);
+  }
+
   function isArmed(clientX: number, clientY: number) {
     const rect = zone.getBoundingClientRect();
     return clientX >= rect.left - 24 && clientX <= rect.right + 24 &&
@@ -104,6 +181,7 @@ export function initFridge(root: HTMLElement): void {
     magnet.classList.remove("is-doomed");
     zone.classList.remove("is-armed");
     zone.classList.remove("is-open");
+    stopDust();
     zoneLabel.textContent = "drop to remove";
     root.style.overflow = "hidden";
 
@@ -323,6 +401,7 @@ export function initFridge(root: HTMLElement): void {
       bob.style.animationPlayState = "paused";
       magnet.style.zIndex = "99";
       zone.classList.add("is-open");
+      startDust();
       root.style.overflow = "visible";
       const rect = root.getBoundingClientRect();
       const box = magnet.getBoundingClientRect();
@@ -341,6 +420,8 @@ export function initFridge(root: HTMLElement): void {
       x = event.clientX - rect.left - offX;
       y = event.clientY - rect.top - offY;
       const armed = isArmed(event.clientX, event.clientY);
+      zoneArmed = armed;
+      zoneLean = event.clientX - zoneLeft;
       zone.classList.toggle("is-armed", armed);
       magnet.classList.toggle("is-doomed", armed);
       zoneLabel.textContent = armed ? "release to remove" : "drop to remove";
@@ -357,6 +438,7 @@ export function initFridge(root: HTMLElement): void {
       bob.style.animationPlayState = "running";
       zone.classList.remove("is-armed");
       zone.classList.remove("is-open");
+      stopDust();
       zoneLabel.textContent = "drop to remove";
       root.style.overflow = "hidden";
 
