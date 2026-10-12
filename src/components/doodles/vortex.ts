@@ -73,6 +73,9 @@ function size() {
   H = window.innerHeight;
   canvas!.width = Math.max(1, Math.round(W * dpr));
   canvas!.height = Math.max(1, Math.round(H * dpr));
+  // Pin the CSS size; otherwise the canvas displays at its device-pixel size on scaled screens.
+  canvas!.style.width = `${W}px`;
+  canvas!.style.height = `${H}px`;
 }
 
 function ensureCanvas() {
