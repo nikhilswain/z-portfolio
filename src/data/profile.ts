@@ -60,7 +60,7 @@ export const PERSON: {
   resumePdf: "/nikhil-kumar-swain-resume.pdf",
   careerStart: "2022-02",
   intro:
-    "Frontend developer with 4+ years of experience building web applications, SaaS products, and developer tools. I enjoy pulling apart problems and turning random ideas into working products. Most of my learning happens by making things, whether it’s a tool I wish existed, an experiment that got out of hand, or a side project that probably deserves more attention than it gets.",
+    "Frontend developer with 4+ years building web apps, SaaS products and developer tools. I learn by making things: tools I wish existed, experiments that got out of hand, and side projects that deserve more attention than they get.",
   summary:
     "Frontend Developer with 4+ years of hands-on experience across SaaS products, client platforms, and independent software projects. Strong in React.js, Next.js, and TypeScript, with a broad understanding of product development across UI engineering, APIs, architecture, performance, and deployment. Comfortable owning complex requirements end to end and turning them into reliable, maintainable software.",
 };
