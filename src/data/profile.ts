@@ -221,6 +221,18 @@ export const EDUCATION: { degree: string; school: string; start: number; end: nu
 
 export const PROJECTS: Project[] = [
   {
+    id: "zicons",
+    title: "zicons",
+    description:
+      "A brush-drawn icon set with one even line, rounded corners and a little wobble, generated from pen-stroke definitions. Ships as plain SVG, a sprite, and React, Vue and Svelte packages with an optional line-boil animation.",
+    pitch: "Brush-drawn SVG icons for React, Vue, Svelte and plain HTML.",
+    stack: ["SVG", "JavaScript", "Astro", "React", "Vue", "Svelte"],
+    image: "/zicons.png",
+    link: "https://zicons.zerro.dev",
+    github: "https://github.com/nikhilswain/zicons",
+    featured: 1,
+  },
+  {
     id: "vidscroll",
     title: "vidscroll",
     description:
@@ -230,7 +242,7 @@ export const PROJECTS: Project[] = [
     image: "/vidscroll.jpg",
     link: "https://vidscroll.js.org/",
     github: "https://github.com/nikhilswain/vidscroll",
-    featured: 5,
+    featured: 6,
   },
   {
     id: "zist",
@@ -242,7 +254,7 @@ export const PROJECTS: Project[] = [
     image: "/zist.png",
     link: "https://zist.zerro.dev",
     github: "https://github.com/nikhilswain/zist",
-    featured: 3,
+    featured: 4,
     bullets: [
       "Built a local-first Kanban application with workspaces, boards, rich task cards, drag-and-drop across columns, checklists, activity history, saved views, command palette, and JSON backup/restore.",
       "Engineered a browser-local data architecture using hand-rolled IndexedDB persistence with optimistic state updates, supporting nested boards, task data, compressed images, and offline-first usage without a backend.",
@@ -259,7 +271,7 @@ export const PROJECTS: Project[] = [
     image: "/zketch.png",
     link: "https://zketch.zerro.dev",
     github: "https://github.com/nikhilswain/zketch",
-    featured: 2,
+    featured: 3,
     bullets: [
       "Built a browser-based canvas editor with freehand and shape drawing, image insertion, selection, manipulation, zoom/pan, export, and shareable drawings.",
       "Optimized stroke generation and rendering using interpolation and typed-array data structures, supporting drawings with thousands of strokes while improving memory and history handling.",
@@ -388,7 +400,7 @@ export const PROJECTS: Project[] = [
     stack: ["React", "TypeScript", "Micro Frontends"],
     image: "/creazilla-editor.png",
     link: "https://creazilla.com/editor",
-    featured: 1,
+    featured: 2,
     bullets: [
       "Built and shipped a full-featured visual website editor for creating multi-page websites with 10+ interactive element types, responsive layouts, animations, reusable components, live preview, and publishing workflows.",
       "Developed the editor and connected it to a JSON-driven renderer supporting text, images, GIFs, video, vectors, visual effects, and animations across responsive layouts.",
@@ -405,23 +417,12 @@ export const PROJECTS: Project[] = [
     image: "/zlate.png",
     link: "https://zlate.zerro.dev",
     github: "https://github.com/nikhilswain/zlate",
-    featured: 4,
+    featured: 5,
     bullets: [
       "Built a visual project tracker for managing 2-5 concurrent client projects through custom month, week, and year calendar views with per-day notes, focus filters, themes, and progress visualization.",
       "Engineered the calendar UI from scratch using date-fns, including timezone-safe date handling, responsive heatmap rendering, gesture-based navigation, anchored popovers, and adaptive mobile layouts across 370+ rendered year-view cells.",
       "Designed a local-first persistence and sync architecture using Dexie/IndexedDB and Zustand, with last-write-wins conflict resolution, delta synchronization, offline handling, and anonymous pairing-based account sync through Supabase.",
     ],
-  },
-  {
-    id: "zicons",
-    title: "zicons",
-    description:
-      "A brush-drawn icon set with one even line, rounded corners and a little wobble, generated from pen-stroke definitions. Ships as plain SVG, a sprite, and React, Vue and Svelte packages with an optional line-boil animation.",
-    pitch: "Brush-drawn SVG icons for React, Vue, Svelte and plain HTML.",
-    stack: ["SVG", "JavaScript", "Astro", "React", "Vue", "Svelte"],
-    image: "/zicons.png",
-    link: "https://zicons.zerro.dev",
-    github: "https://github.com/nikhilswain/zicons",
   },
 ];
 
