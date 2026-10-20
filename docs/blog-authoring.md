@@ -38,10 +38,10 @@ If you wrote the article inside a project repo (`docs/articles/<slug>/`), copy t
 
 Reading time is calculated automatically (230 words per minute, code blocks excluded), so don't write it.
 
-**Allowed tags:** React, TypeScript, JavaScript, Frontend, Architecture, Performance, Canvas, Browser APIs, IndexedDB, CSS, Accessibility, Astro, Animation, Testing, Tooling.
+**Allowed tags:** React, TypeScript, JavaScript, Frontend, Architecture, Performance, Canvas, Browser APIs, IndexedDB, CSS, Accessibility, Astro, Animation, Testing, Tooling, SVG.
 To add one, add a line to `src/lib/blog/tags.ts`.
 
-**Project ids:** vidscroll, zist, zketch, z-color-picker, yoink, algo-visualizer, previewz, token-portfolio, shape-editor, css-shorthands, 10days10design, lyricsfinder.
+**Project ids:** vidscroll, zist, zketch, z-color-picker, yoink, algo-visualizer, previewz, token-portfolio, shape-editor, css-shorthands, 10days10design, lyricsfinder, dmap, creazilla-editor, zlate, zicons.
 They live in `src/constants/content.json` as `"id"` on each project, and match the repo or package name in lowercase.
 
 To write about a project that isn't shown on the portfolio, add it to `projects` in `content.json` with `"listed": false`. The blog can then use it for the project card and related articles, while the homepage and the CLI `/projects` command hide it.

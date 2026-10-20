@@ -412,6 +412,17 @@ export const PROJECTS: Project[] = [
       "Designed a local-first persistence and sync architecture using Dexie/IndexedDB and Zustand, with last-write-wins conflict resolution, delta synchronization, offline handling, and anonymous pairing-based account sync through Supabase.",
     ],
   },
+  {
+    id: "zicons",
+    title: "zicons",
+    description:
+      "A brush-drawn icon set with one even line, rounded corners and a little wobble, generated from pen-stroke definitions. Ships as plain SVG, a sprite, and React, Vue and Svelte packages with an optional line-boil animation.",
+    pitch: "Brush-drawn SVG icons for React, Vue, Svelte and plain HTML.",
+    stack: ["SVG", "JavaScript", "Astro", "React", "Vue", "Svelte"],
+    image: "/zicons.png",
+    link: "https://zicons.zerro.dev",
+    github: "https://github.com/nikhilswain/zicons",
+  },
 ];
 
 export const MEDIUM: { title: string; description?: string; date: string; link: string; image?: string }[] = [

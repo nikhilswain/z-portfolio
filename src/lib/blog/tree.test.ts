@@ -33,7 +33,7 @@ describe("tags and projects", () => {
     expect(PROJECT_IDS).toEqual([
       "vidscroll", "zist", "zketch", "z-color-picker", "yoink", "algo-visualizer", "previewz",
       "token-portfolio", "shape-editor", "css-shorthands", "10days10design", "lyricsfinder",
-      "dmap", "creazilla-editor", "zlate",
+      "dmap", "creazilla-editor", "zlate", "zicons",
     ]);
     expect(getProject("zketch")?.title).toBe("zketch");
     expect(getProject(undefined)).toBeUndefined();

@@ -15,6 +15,7 @@ export const BLOG_TAGS = [
   "Animation",
   "Testing",
   "Tooling",
+  "SVG",
 ] as const;
 
 export type BlogTag = (typeof BLOG_TAGS)[number];
