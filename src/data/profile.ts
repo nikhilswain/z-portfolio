@@ -268,7 +268,7 @@ export const PROJECTS: Project[] = [
       "Zketch is a canvas based drawing app with freehand sketching, multiple brush types, zoom/pan, and undo/redo support. You can save your work in a local vault or export it as images for easy sharing.",
     pitch: "Canvas drawing app with freehand sketching, zoom/pan and undo/redo.",
     stack: ["React", "TypeScript", "Astro", "IndexedDB", "Dexie.js", "Tailwind CSS", "Canvas API"],
-    image: "/zketch.png",
+    image: "/zketch-cover.png",
     link: "https://zketch.zerro.dev",
     github: "https://github.com/nikhilswain/zketch",
     featured: 3,
